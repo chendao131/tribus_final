@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	 layout="absolute"
+	 paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+	 backgroundColor="#FFFFFF" backgroundGradientAlphas="0"
+	 creationComplete="init();">
+<mx:Style>
+    global {
+     fontSize : 12;
+    }	
+</mx:Style>
+<mx:Script>
+	<![CDATA[
+		import mx.controls.MenuBar;
+		import mx.controls.Menu;
+		import mx.messaging.AbstractConsumer;
+        import flash.net.FileReference;   
+        import mx.controls.Alert;   
+        import mx.events.CloseEvent;   
+        import flash.events.*; 
+		import flash.external.ExternalInterface; 
+
+        private var file : FileReference;   
+        private var uploadURL : URLRequest;   
+        private var uploadFileTypes : Array;
+        private var maxFileSize : Number;
+		/**
+		*
+		**/         
+		private function init():void{
+           Security.allowDomain("*");    
+           file = new FileReference();   
+           file.addEventListener(ProgressEvent.PROGRESS, onProgress);    
+           file.addEventListener(Event.SELECT, onSelect); 
+           file.addEventListener(Event.COMPLETE, onSendComplete); 
+           file.addEventListener(IOErrorEvent.IO_ERROR, onIOError);   
+           file.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA,onUploadComplete);
+           uploadURL = new URLRequest();
+           uploadFileTypes = [];
+           pBar.visible = false;
+           maxFileSize = 100000;
+           
+           var helpMenu : ContextMenuItem = new ContextMenuItem("");
+           helpMenu.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,function(e : Event) : void{
+           		ExternalInterface.call("window.open","http://kingthy.cnblogs.com/");
+           });
+           this.contextMenu.customItems.push(helpMenu);
+           this.contextMenu.hideBuiltInItems();
+           
+           if(ExternalInterface.available){
+           		//
+           		ExternalInterface.addCallback("selectLocalFile",selectLocalFile);
+           		ExternalInterface.addCallback("setUploadFileUrl",setUploadFileUrl);
+           		ExternalInterface.addCallback("setUploadFileType",setUploadFileType);
+           		ExternalInterface.addCallback("setMaxFileSize",setMaxFileSize);
+           		ExternalInterface.addCallback("resetUpload",resetUpload);
+           		ExternalInterface.addCallback("setBgColor",setBgColor);
+           		ExternalInterface.addCallback("setButtonColor",setButtonColor);
+           		ExternalInterface.addCallback("setProgressBarColor",setProgressBarColor);
+           		ExternalInterface.addCallback("setProgressBarBgColor",setProgressBarBgColor);
+           		ExternalInterface.addCallback("setButtonText",setButtonText);
+           		ExternalInterface.call(ExternalInterface.objectID + "_onInit");
+           }
+		}
+		/**
+		 *
+		 **/
+		public function resetUpload():void{
+			this.pBar.visible = false;
+			this.upButton.visible = true;
+		}
+		public function setBgColor(color : String):void{
+			this.setStyle("backgroundColor",color);
+		}
+		public function setButtonColor(color : String):void{
+			this.upButton.setStyle("color",color);
+		}
+		public function setProgressBarColor(color : String):void{
+			this.pBar.setStyle("color",color);
+		}	
+		public function setProgressBarBgColor(color : String):void{
+			this.pBar.setStyle("themeColor",color);			
+		}			
+		public function setButtonText(text : String):void{
+			this.upButton.label = text;
+		}
+		public function setMaxFileSize(size : Number) : void{
+			this.maxFileSize = size;
+		}		
+		/**
+		 *		 
+		 **/
+		public function setUploadFileUrl(url : String):void{
+			uploadURL.url = url;
+		}
+		/**
+		 *
+		 **/		
+		public function setUploadFileType(ext : String):void{
+			uploadFileTypes.splice(0,uploadFileTypes.length);
+			
+			var exts : Array = ext.split("|");
+			for(var i :Number=0; i<exts.length; i+=2){
+				var desc : String = exts[i];
+				var exten : String = "";
+				if((i + 1) < exts.length)exten = exts[i+1];
+				if(exten != ""){
+					var filter : FileFilter = new FileFilter(desc,exten);
+					uploadFileTypes.push(filter);
+				}
+			}
+		}
+		/**
+		 *
+		 **/
+		public function selectLocalFile() : void{
+			this.pBar.setProgress(50,100);
+			file.browse(uploadFileTypes);
+		}
+        private function onSelect(e : Event) : void{
+        	if(this.maxFileSize != -1 && file.size > this.maxFileSize){
+				if(ExternalInterface.available){
+					ExternalInterface.call(ExternalInterface.objectID + "_onError", "error");
+				}else{
+					resetUpload();
+				}        		
+        	}else{
+        		startUploadFile(); 
+        	}
+        }
+		private function startUploadFile():void{
+			if(uploadURL.url != null && uploadURL.url != ""){
+				upButton.visible = false;
+				pBar.visible = true;
+				file.upload(uploadURL);  
+			}
+		}                   
+        /**
+         *
+         **/
+        private function onProgress(e:ProgressEvent) : void{
+        	this.pBar.setProgress(Math.round(100 * (e.bytesLoaded / e.bytesTotal)),100); 
+        	this.pBar.label = "progress is " + this.pBar.value + "%"; 
+        	if(ExternalInterface.available){
+        		ExternalInterface.call(ExternalInterface.objectID + "_onUploading", e.bytesTotal,e.bytesLoaded);
+        	}
+        }
+        /**
+        *
+        **/
+        private function onSendComplete(e:Event) : void{
+			if(ExternalInterface.available){
+				ExternalInterface.call(ExternalInterface.objectID + "_onSendComplete", {name:file.name,size:file.size});
+			}else{
+				resetUpload();
+			}
+        }
+        /**
+        *
+        **/
+        private function onUploadComplete(e:Event) : void{
+			if(ExternalInterface.available){
+				ExternalInterface.call(ExternalInterface.objectID + "_onUploadComplete", Object(e).data);
+			}else{
+				resetUpload();
+			}        	
+        }
+        private function onIOError(e:IOErrorEvent) : void{
+			if(ExternalInterface.available){
+				ExternalInterface.call(ExternalInterface.objectID + "_onError", e.text);
+			}else{
+				resetUpload();
+			}  
+        }        
+	]]>
+</mx:Script>
+	<mx:Button id="upButton" label="please upload" fontSize="12" click="selectLocalFile()" />
+	<mx:ProgressBar id="pBar" height="100%" width="100%" labelPlacement="center" label="onUploading..." minimum="0" maximum="100" mode="manual" />	
+</mx:Application>

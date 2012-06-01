@@ -1,0 +1,49 @@
+<%@ page language="java" import="java.util.* ,controller.MovieController, model.Movie" pageEncoding="ISO-8859-1"%>
+<%@ include file="/WEB-INF/cd.jsp"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+/* request.getAttribute("movie"); */
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'editForm.jsp' starting page</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+
+  </head>
+  
+  <body>
+	<form:form commandName="movie" action="http://localhost:8080/tribus_spring/movie/success.action" method="post"> 
+	<fieldset> 
+		<legend > movieEditForm </legend> 
+		<p> 
+		<label >id: </label> <c:out value= "#{movie.movieId}" />
+			                <input type="text" id="id" name="id" value="" >          </p> 
+		<p> 
+		<label >movieNameOriginal: </label> 
+			                <input type="text" id="movieNameOriginal" name="movieNameOriginal" value="" >          </p>
+		<p>  
+		<p> 
+		<label >movieNameEn: </label> 
+			                <input type="text" id="movieNameEn" name="movieNameEn" value="" >          </p>
+		<p>  
+			<input type="submit" value="add"/> 
+		</p> 
+		
+	</fieldset> 
+	 
+	</form:form> 
+  </body>
+</html>

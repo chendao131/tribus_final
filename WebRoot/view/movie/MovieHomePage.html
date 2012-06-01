@@ -1,0 +1,262 @@
+<!--
+<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'MusicHostPage.jsp' starting page</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+
+  </head>
+  
+  <body>
+    <table width="973" align="center" id="movie_home_page">
+      <tr>
+      <td width="682"><table id="left">
+      	<tr id="hot_movie"><td><div style="position:relative; z-index:50; top:42px; left:15px"><img src="images/flag.png" /></div><table>
+          <tr id="hot_movie_mainContent">
+            <td><table width="145">
+              <tr><td width="137" height="137" align="right"><img src="images/image.png" width="111" height="110" /></td></tr>
+              <tr>
+                <td align="right"><img src="images/movie-pic.png" width="110.045px" height="225px" /></td></tr>
+            </table></td>
+            <td><table height="376">
+           	  <tr>
+                <td height="139"><img src="images/friends-recommend-pic.png" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+              </tr>
+              <tr>
+              	<td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+              </tr>
+              <tr>
+              	<td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+                <td><img src="images/friends-recommend-pic.png" alt="" width="111" height="111"/></td>
+              </tr>
+            </table></td>
+          </tr>
+        </table></td></tr>
+        <tr><td><table width="58" align="right">
+          <tr>
+            <td width="22">
+              <img src="images/more-3.png" />
+            </td>
+            <td width="33">
+              <img src="images/more-2.png" />
+            </td>
+          </tr>
+        </table></td></tr>
+        
+        <tr id="recommend"><td><table>
+          <tr><td height="238"><div style="position:relative; z-index:50; top:27px; left:13px"><img src="images/flag.png" /></div><table id="friends_recommend">
+          <tr>
+            <td width="128" height="163"><div align="right"><img src="images/movie-pic (2).png" width="100" height="148" /></div></td>
+            <td width="441"><table width="186" height="161">
+              <tr><td width="178" height="24">Turn Me On</td></tr>
+              <tr><td>Rating:</td></tr>
+              <tr><td>Mmi Heard it</td></tr>
+              <tr><td>2 Minutes ago</td></tr>
+              <tr>
+                <td>
+                  <div><img src="images/expand-button.png" width="19" height="19" /> <img src="images/Search-button.png" width="19" height="19" /></div>
+                </td>  
+              </tr>
+            </table></td>
+          </tr>        	
+        </table></td></tr>
+        </table></td></tr>
+        <tr id="comment"><td><div style="position:relative; top:23px; left:18px;"><img src="images/flag.png" /></div><table width="620" id="comment">
+		  <tr><td width="612"><div align="right">
+		    <table class="comment_box"  width="581" height="131" bgcolor="#CCCCCC">
+		      <tr>
+		        <td width="79" align="center"><div><img src="images/User-Picture-only.png" width="66" height="98" /></div></td>
+		        <td width="117" align="center"><div><img src="images/follower-pic.png" width="65" height="64" /></div></td>
+		        <td width="369"><table>
+		          <tr><td>Title</td></tr>
+		          <tr><td>comment</td></tr>
+		          <tr><td>others</td></tr>
+		          </table>
+		          <div align="right"></div></td>
+		        </tr>
+		      </table>
+		    </div></td></tr>
+          <tr><td><div align="right">
+            <table class="comment_box" width="581" height="131" bgcolor="#FFFFFF">
+              <tr>
+                <td width="82" align="center"><div><img src="images/User-Picture-only.png" alt="" width="66" height="98" /></div></td>
+                <td width="115" align="center"><div><img src="images/follower-pic.png" alt="" width="65" height="64" /></div></td>
+                <td width="368"><table>
+                  <tr><td width="139">Title</td></tr>
+                  <tr><td>comment</td></tr>
+                  <tr><td>others</td></tr>
+                  </table></td>
+                </tr>
+            </table>
+          </div></td></tr>
+          <tr><td><div align="right">
+            <table class="comment_box" width="483" height="131" bgcolor="#CCCCCC">
+              <tr>
+                <td width="84" align="center"><div><img src="images/User-Picture-only.png" alt="" width="66" height="98" /></div></td>
+                <td width="114" align="center"><div><img src="images/follower-pic.png" alt="" width="65" height="64" /></div></td>
+                <td width="367"><table>
+                  <tr><td>Title</td></tr>
+                  <tr><td>comment</td></tr>
+                  <tr><td>others</td></tr>
+                  </table></td>
+                </tr>
+            </table>
+          </div></td></tr>
+          <tr><td><div align="right">
+            <table class="comment_box" width="483" height="131" bgcolor="#FFFFFF">
+              <tr>
+                <td width="86" align="center"><div><img src="images/User-Picture-only.png" alt="" width="66" height="98" /></div></td>
+                <td width="112" align="center"><div><img src="images/follower-pic.png" alt="" width="65" height="64" /></div></td>
+                <td width="367"><table>
+                  <tr><td>Title</td></tr>
+                  <tr><td>comment</td></tr>
+                  <tr><td>others</td></tr>
+                  </table></td>
+                </tr>
+            </table>
+          </div></td></tr>
+          <tr><td><div align="right">
+            <table class="comment_box" width="483" height="131" bgcolor="#CCCCCC">
+              <tr>
+                <td width="86" align="center"><div><img src="images/User-Picture-only.png" alt="" width="66" height="98" /></div></td>
+                <td width="114" align="center"><div><img src="images/follower-pic.png" width="71" height="62" /></div></td>
+                <td width="365"><table>
+                  <tr><td>Title</td></tr>
+                  <tr><td>comment</td></tr>
+                  <tr><td>others</td></tr>
+                  </table></td>
+                </tr>
+            </table>
+          </div></td></tr>
+          <tr><td><div align="right">
+            <table class="comment_box" width="483" height="131" bgcolor="#FFFFFF">
+              <tr>
+                <td width="86" align="center"><div><img src="images/User-Picture-only.png" alt="" width="66" height="98" /></div></td>
+                <td width="116" align="center"><div><img src="images/follower-pic.png" alt="" width="71" height="62" /></div></td>
+                <td width="363"><table>
+                  <tr><td>Title</td></tr>
+                  <tr><td>comment</td></tr>
+                  <tr><td>others</td></tr>
+                  </table></td>
+                </tr>
+            </table>
+          </div></td></tr>
+        </table>
+            <div align="right"></div></td></tr>
+      </table></td>
+      
+      <td width="279" style="vertical-align:top;"><table width="228" height="1481" border="0" style="margin-top:0;">
+        <tr>
+            <td width="227" height="924"><table width="216" height="840" border="0">
+              <tr>
+                <td width="206" height="23"><img src="images/follow-Title-bar-1.png" width="210" height="25"></td>
+              </tr>
+              <tr>
+                <td height="103"><div align="center"><img class="guess_you_like_pic" src="images/Guess-u-like-pic-note-that-the-title-will-overlap-with-the-pic.png" width="137" height="139"></div></td>
+              </tr>
+              <tr>
+                <td><div align="center">Introduction1</div></td>
+              </tr>
+              <tr>
+                <td height="98"><div align="center"><img class="guess_you_like_pic" src="images/Guess-u-like-pic-note-that-the-title-will-overlap-with-the-pic.png"></div></td>
+              </tr>
+              <tr>
+                <td><div align="center">Introduction1</div></td>
+              </tr>
+              <tr>
+                <td><div align="center"><img class="guess_you_like_pic"  src="images/Guess-u-like-pic-note-that-the-title-will-overlap-with-the-pic.png" alt=""></div></td>
+              </tr>
+              <tr>
+                <td><div align="center">Introduction1</div></td>
+              </tr>
+              <tr>
+                <td><div align="center"><img class="guess_you_like_pic"  src="images/Guess-u-like-pic-note-that-the-title-will-overlap-with-the-pic.png" alt="" width="137" height="139"></div></td>
+              </tr>
+              <tr>
+                <td><div align="center">Introduction1</div></td>
+              </tr>
+              <tr>
+                <td><div align="center"><img class="guess_you_like_pic"  src="images/Guess-u-like-pic-note-that-the-title-will-overlap-with-the-pic.png" alt="" width="137" height="139"></div></td>
+              </tr>
+              <tr>
+                <td><div align="center">Introduction1</div></td>
+              </tr>
+              <tr>
+                <td height="104"><div align="center"><img class="guess_you_like_pic" src="images/Guess-u-like-pic-note-that-the-title-will-overlap-with-the-pic.png" alt="" width="137" height="139"></div></td>
+              </tr>
+              <tr>
+                <td height="36"><div align="center">Introduction1</div></td>
+              </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td height="141" style="vertical-align:top;"><table width="200" border="0">
+              <tr>
+                <td><img src="images/follow-Title-bar-1.png" alt="" width="210" height="25"></td>
+              </tr>
+              <tr>
+                <td><div align="center">tag1 / tag2</div></td>
+              </tr>
+              <tr>
+                <td><div align="center">tag3 / tag4</div></td>
+              </tr>
+              <tr>
+                <td height="23"><div align="center">tag5 / tag6</div></td>
+              </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td height="75"><table width="200" border="0">
+              <tr>
+                <td><img src="images/follow-Title-bar-1.png" alt="" width="210" height="25"></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td><div align="center">List1</div></td>
+              </tr>
+              <tr>
+                <td><div align="center">List1</div></td>
+              </tr>
+              <tr>
+                <td><div align="center">List1</div></td>
+              </tr>
+              <tr>
+                <td><div align="center">List1</div></td>
+              </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td height="329">&nbsp;</td>
+          </tr>
+        </table>
+      </td> <!-- right -->
+      </tr>
+    </table>  <!-- movie home page -->
+  </body>
+</html>

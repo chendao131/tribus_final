@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/tribus?characterEncoding=gbk</property>
+        <property name="connection.username">localhost</property>
+        <property name="connection.password"></property>
+        <!--
+        <property name="connection.url">jdbc:mysql://50.31.147.38/tribus_tribus</property>
+        <property name="connection.username">tribus_admin</property>
+        <property name="connection.password">fuzan19841022</property>
+
+        -->
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">32</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+                
+		<property name="hibernate.transaction.auto_close_session">false</property>
+		<property name="hibernate.transaction.flush_before_completion">true</property>        
+		<property name="hibernate.connection.release_mode">after_statement</property>
+		
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <!-- property name="hbm2ddl.auto">update</property-->
+           
+        <mapping class="model.Movie"/>
+        <mapping class="model.User"/>
+        <mapping class="model.MovieComment"/>
+        <mapping class="model.MovieTag"/>
+        <mapping class="model.Starring"/>
+        <mapping class="model.Company"/>
+        <mapping class="model.Zodiac"/>
+        <mapping class="model.StarType"/>
+        <mapping class="model.MovieMark"/>
+        <mapping class="model.MovieAlbum"/>
+        <mapping class="model.MovieImage"/>
+        <mapping class="model.MovieQuickComment"/>
+        
+        <mapping class="model.Book"/>
+        <mapping class="model.BookComment"/>
+        <mapping class="model.BookTag"/>
+        <mapping class="model.BookDiary"/>
+        <mapping class="model.BookMark"/>
+        <mapping class="model.BookQuickComment"/>
+        
+        <mapping class="model.Music"/>
+        <mapping class="model.MusicType"/>
+        <mapping class="model.Band"/>
+        <mapping class="model.MusicVersion"/>
+        <mapping class="model.MusicAudio"/>
+        <mapping class="model.Singer"/>
+        <mapping class="model.MusicComment"/>
+        <mapping class="model.MusicMark"/>
+        <mapping class="model.MusicTrack"/>
+        <mapping class="model.MusicQuickComment"/>
+        
+        <mapping class="model.Activity"/>
+              
+
+    </session-factory>
+
+</hibernate-configuration>

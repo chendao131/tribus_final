@@ -1,0 +1,93 @@
+table a { 
+        height:100%;
+		width:100%;
+		display:block;
+}
+
+table{
+	position:relative;
+	float: left;
+	width: 520px;
+	height: 24px;
+}
+
+a.city{
+         background:url(../nav.png) no-repeat 0px 0px;
+		 height:24px;
+		 width:77px;
+}
+ 
+a.city:hover, a.city-active{
+                            background:url(../nav.png) no-repeat 0px -24px;
+						    height:24px;
+		                    width:77px;
+}
+ 
+a.movie{
+          		background:url(../nav.png) no-repeat -77px 0px;
+		  		height:24px;
+		 		width:110px;
+}
+ 
+a.movie:hover, a.movie-active{
+                                  			background:url(../nav.png) no-repeat -77px -24px;
+								  			height:24px;
+		                          			width:110px;
+}
+ 
+a.book{
+           background:url(../nav.png) no-repeat -187px 0px;
+		   height:24px;
+		   width:96px;
+}
+ 
+a.book:hover, a.book-active{
+                                    background:url(../nav.png) no-repeat -187px -24px;
+								    height:24px;
+		                            width:96px;
+}
+ 
+a.music{
+           background:url(../nav.png) no-repeat -283px 0px;
+		   height:24px;
+		   width:97px;
+}
+ 
+a.music:hover, a.muisc-active{
+                                    background:url(../nav.png) no-repeat -283px -24px;
+								    height:24px;
+		                            width:97px;
+}
+ 
+a.mytribus{
+           background:url(../nav.png) no-repeat -380px 0px;
+		   height:24px;
+		   width:136px;
+}
+ 
+a.mytibus:hover, a.tribus-active{
+                                     background:url(../nav.png) no-repeat -380px -24px;
+								     height:24px;
+		                             width:136px;
+}
+
+.nav_social {
+	margin:4px;	
+	position:relative;
+	left:20px;
+}
+
+#nav_nameAndCity{
+	position:relative;
+	right:30px;
+}
+
+#nav_nameAndCity a {
+	font-size:15px;	
+}
+
+#nav_sub {
+	position:relative;
+	top: 15px;
+	left: 20px;	
+}

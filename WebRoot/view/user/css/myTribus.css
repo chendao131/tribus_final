@@ -1,0 +1,152 @@
+#mytribus{
+	margin-top:100px;
+	float:left;	
+}
+#mytribus_left{
+	float:left;
+	height:1000px;
+}
+#mytribus_right{
+	float:left;	
+	position:relative;
+	left:40px;
+}
+#mytribus_center{
+	float:left;	
+	width:580px;
+	height:1000px;
+}
+.follow {
+	float:left;	
+	margin-right:2px;
+}
+.follow_num {
+	float:left;
+	margin-left:2px;
+}
+.follow_num a{
+	position:relative;
+	bottom:7px;
+	right:45px;
+}
+.person ul {
+	list-style-type:none;
+	position:relative;
+	top:5px;
+	right:40px;
+}
+.person ul li {
+	float:left;
+	margin:3px;
+}
+#mytribus_left_ifollow {
+	position:relative;
+	top:100px;
+}
+.more {
+	float:right;
+	position:relative;
+	top:10px;
+	right:43px;
+}
+#mytribus_left_follower{
+	position:relative;
+	top:170px;
+}
+.flag {
+	width:200px;
+	height:56px;
+}
+.my_resource{
+	margin-bottom:24px;
+}
+.my_resource_content {
+	position:relative;
+	left:16px;
+	bottom:22px;
+	z-index:-1;
+}
+.wanted_tag {
+	float:left;
+	margin-left:15px;
+	margin-top:50px;
+}
+.wanted_pic ul li {
+	float:left;
+	margin-top:5px;
+	margin-left:12px;
+}
+.finished {
+	position:relative;
+	top:18px;
+}
+.finished_tag {
+	float:left;
+	margin-left:15px;
+	margin-top:50px;
+}
+.finished_pic ul li {
+	float:left;
+	margin-top:5px;
+	margin-left:12px;
+}
+.tribus_list_sum {
+	margin-top:18px;
+	margin-left:50px;
+}
+div.RoundedCorner{background: #CCC}
+b.rtop, b.rbottom{display:block;background: #FFF}
+b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #CCC}
+b.r1{margin: 0 5px}
+b.r2{margin: 0 3px}
+b.r3{margin: 0 2px}
+b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+
+.resource_pic {
+	float:left;
+	margin-left:20px;
+	margin-top:4px;
+}
+.not_resource_pic {
+	position:relative;
+	left:35px;
+	top: 5px;
+}
+.my_profile {
+	float:left;
+}
+.resource_comment {
+	position:relative;
+	left:30px;
+}
+.my_comment_1 {
+	margin-bottom:8px;
+}
+.my_comment_2 {
+	margin-bottom:8px;
+}
+#my_activity_main {
+	position:relative;
+	bottom: 800px;
+	left:52px;
+}
+.my_activity_pic {
+	margin-top:10px;
+	margin-left:6px;
+}
+.my_activity_content span {
+	margin-left:30px;
+}
+.my_activity_1 {
+	margin-bottom: 10px;
+}
+.my_activity_2 {
+}
+.my_activity_more {
+	margin-left:8px;
+	margin-left:30px;
+	margin-bottom: 30px;
+}
+#my_activity_finished {
+	
+}

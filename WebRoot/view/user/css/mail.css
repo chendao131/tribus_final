@@ -1,0 +1,73 @@
+#mail {
+	position:relative;
+	top:15px;
+	height:1000px;
+}
+#mail_search {
+
+}
+#mail_box {
+	float:left;
+}
+.mail_box_flag{
+	position:relative;
+	top:22px;
+	left:-16px;
+}
+.mail_box_title_box {
+	width:600px;
+}
+
+#mail_box_sub_title .sub_title img{
+	width:100px;
+	height:3px;
+	position:relative;
+	top:-10px;
+	lfet:-10px;	
+}
+
+#mail_box_sub_title .sub_title{
+	float:left;	
+	margin-left:70px;
+	margin-top:20px;
+}
+
+#mail_box_sub_title .sub_title h3{
+	margin-left:12px;
+}
+#mail_box_content ul {
+	list-style-type:none;
+}
+#mail_box_content ul li{
+	float:left;
+	font-size:20px;
+	margin-left:20px;
+	margin-top:10px;
+	margin-right:55px;
+}
+#mail_box_mails ul{
+	list-style-type:none;
+}
+#mail_box_mails ul li{
+	float:left;
+	font-size:14px;
+	margin-left:34px;
+	margin-top:10px;
+	margin-right:75px;
+}
+.mail_lines ul li img {
+	width:12px;
+	height:12px;
+	margin-top:2px;
+}
+#mail_operation {
+	float:right;
+	float:left;
+}
+#mail_operation {
+	margin-top: 60px;
+	margin-left:150px;
+}
+.mail_operation_button {
+	margin-bottom: 20px;
+}

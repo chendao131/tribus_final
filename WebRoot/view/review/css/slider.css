@@ -1,0 +1,152 @@
+
+/*--------------slider2---------------*/
+
+#book_gallery_area .slider {
+	width:650px;
+	height:380px;
+	position:relative;
+}
+
+#book_gallery_area .sliderContent {
+	width:650px;
+	height:380px;
+	clear:both;
+	position:relative;
+	overflow:hidden;
+}
+
+#book_gallery_area .sliderArrows a {
+	display:block;
+	text-indent:-9999px;
+	outline:none;
+	z-index:50;
+	width:18px;
+	height:18px;
+	position:absolute;
+	top:380px;
+}
+
+#book_gallery_area .prev {
+	background:url(../img/btn_prev.jpg) no-repeat;
+	left:528px;
+}
+
+#book_gallery_area .prev:hover {
+}
+
+#book_gallery_area .next {
+	background:url(../img/btn_next.jpg) no-repeat;
+	left:583px;
+}
+
+#book_gallery_area .next:hover {
+}
+
+#book_gallery_area .sliderContent .item {
+	position:absolute;
+	width:650px;
+	height:365px;
+	background:#fff;
+}
+#book_gallery_area .sliderBullets {
+	position:absolute;
+	top:242px;
+	z-index:50;
+	width:300px;
+	height:13px;
+	left:26px;
+}
+
+#book_gallery_area .sliderBullets a {
+	display:block;
+	float:left;
+	text-indent:-9999px;
+	outline:none;
+	margin-right:13px;
+	width:11px;
+	height:13px;
+	background:url(../img/slider_normal.png) no-repeat;
+}
+
+#book_gallery_area .sliderBullets .active {
+	background:url(../img/slider_active.png) no-repeat;
+}
+
+#book_gallery_area .sliderContent a {
+	outline:none;
+}
+/*--------------slider2---------------*/
+#banner .slider {
+	width:729px;
+	height:479px;
+	position:relative;
+}
+
+#banner .sliderContent {
+	width:729px;
+	height:479px;
+	clear:both;
+	position:relative;
+	overflow:hidden;	
+}
+
+#banner .sliderArrows a {
+	display:block;
+	text-indent:-9999px;
+	outline:none;
+	z-index:50;
+	width:18px;
+	height:18px;
+	position:absolute;
+	top:479px;
+}
+
+#banner .prev {
+	background:url(../img/btn_prev.jpg) no-repeat;
+	left:515px;
+}
+
+#banner .prev:hover {
+}
+
+#banner .next {
+	background:url(../img/btn_next.jpg) no-repeat;
+	left:569px;
+}
+
+#banner .next:hover {
+}
+
+#banner .sliderContent .item {
+	position:absolute;
+	width:729px;
+	height:85px;
+	background:#fff;
+}
+#banner .sliderBullets {
+	position:absolute;
+	top:242px;
+	z-index:50;
+	width:300px;
+	height:13px;
+	left:26px;
+}
+
+#banner .sliderBullets a {
+	display:block;
+	float:left;
+	text-indent:-9999px;
+	outline:none;
+	margin-right:13px;
+	width:11px;
+	height:13px;
+	background:url(../img/slider_normal.png) no-repeat;
+}
+
+#banner .sliderBullets .active {
+	background:url(../img/slider_active.png) no-repeat;
+}
+
+#banner .sliderContent a {
+	outline:none;
+}

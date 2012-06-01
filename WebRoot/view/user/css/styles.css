@@ -1,0 +1,23 @@
+body{
+	width: 1024px;
+	margin: 0 auto;
+}
+.main_nav{
+	position:relative;
+	float:left;
+	background:URL(../navigation_bar.png) no-repeat top;
+	height: 58px;
+	width: 1024px;
+}
+.nav{
+	position:relative;
+	float:left;
+	margin:15px 0px 0px 80px;
+}
+.search{
+	position:relative;
+	float:left;
+	margin:0px 0px 0px 50px;
+	height: 21px;
+	
+}

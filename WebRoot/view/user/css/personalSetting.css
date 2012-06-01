@@ -1,0 +1,55 @@
+#personal_setting_box {
+	width:600px;
+}
+#personal_setting_box .username {
+	margin-top:40px;
+	float:left;
+}
+#personal_setting_box .username ul{
+	list-style-type:none;
+}
+#personal_setting_box .user_pic{
+	float:left;
+	margin-left:15px;
+	margin-top:15px;
+}
+#personal_setting_box .user_pic ul{
+	list-style-type:none;
+}
+#personal_setting_box .upload_area {
+	float:left;
+	margin-left:15px;
+	margin-top:35px;
+}
+#personal_setting_box .upload_area ul{
+	list-style-type:none;
+}
+#personal_setting_box .basic_setting{
+	float:left;
+	margin-left:15px;
+	margin-top:35px;
+}
+#personal_setting_box .basic_setting ul{
+	list-style-type:none;
+}
+.input_line ul {
+	list-style-type:none;
+}
+.input_line_title{
+	float:left;
+}
+.input_line_box{
+	float:left;
+}
+#personal_setting_input {
+	position:relative;
+	top:15px;
+}
+#personal_setting_flag {
+	position:relative;
+	top:22px;
+	left:-14px;
+}
+.save_button {
+	margin-left:150px;
+}

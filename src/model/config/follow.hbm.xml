@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2006-6-5 17:47:36 by Hibernate Tools 3.1.0 beta3 -->
+<hibernate-mapping>
+    <class  name="model.Follow" table="follow" dynamic-insert="true">
+        <id name="followId" type="int">
+            <column name="followId" precision="10" scale="0" />
+            <generator class="increment"/>
+        </id>
+        <property name="followerId" type="int">
+            <column name="followerId" length="100" not-null="true" />
+        </property>
+        <property name="followeeId" type="string" not-null="true">
+            <column name="followeeId" length="100" not-null="true" />
+        </property>
+        <property name="followStatus" type="byte">
+            <column name="followStatus" length="2" not-null="true" />
+        </property>                            
+    </class>
+</hibernate-mapping>

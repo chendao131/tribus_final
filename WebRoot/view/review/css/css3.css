@@ -1,0 +1,49 @@
+.comment_box,
+.tribus_common_box,
+.mid_white_box,
+.review_box,
+.message_activity {
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+    behavior:url(PIE.htc);
+}
+#about_box {	
+	-webkit-border-radius: 21px;
+	-moz-border-radius: 21px;
+	border-radius: 21px;
+	position:relative;
+    behavior:url(PIE.htc);
+}
+.wish_listbox {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	position:relative;
+    behavior:url(PIE.htc);
+}
+#facebook_box {
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+	position:relative;
+    behavior:url(PIE.htc);
+}
+.round_btm {
+	border-radius:0px 0px 15px 0; 
+	-moz-border-radius: 0px 0px 15px 0; 
+	-khtml-border-radius: 0px 0px 15px 0; 
+	-webkit-border-radius: 0px 0px 15px 0;
+	border-bottom-left-radius:15px;
+	-khtml-border-bottom-left-radius:15px;
+	border-bottom-right-radius:0;
+	-moz-border-bottom-left-radius:15px;
+	-webkit-border-bottom-right-radius:0;
+ 	behavior:url(PIE.htc);
+}
+.tag_feature {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+    behavior:url(PIE.htc);
+}
