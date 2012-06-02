@@ -14,6 +14,7 @@ import model.MovieComment;
 import model.Music;
 import model.Singer;
 import model.User;
+import model.UserProfile;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ import dao.MusicMarkDao;
 import dao.SingerDao;
 import dao.SinglePageDao;
 import dao.UserDao;
+import dao.UserProfileDao;
 
 @Controller
 @RequestMapping("book")
@@ -84,6 +86,11 @@ public class BookController {
 	public ModelAndView displayBookHomePage(HttpServletRequest request, HttpServletResponse response) {
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		
+		//get user
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("book/book_Final");
 		HomePageDao homePageDao= new HomePageDao();
 		BookDao bd = new BookDao();
@@ -106,6 +113,8 @@ public class BookController {
 		homePageFriendRecommends.add(homePageFriendRecommend2);
 		
 		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		//mv.addObject("userCity", up.getProfCity());
 		mv.addObject("homePageReviews", homePageReviews);
 		mv.addObject("homePageFriendRecommends", homePageFriendRecommends);
 		mv.addObject("booksByTag1", booksByTag1);
@@ -126,6 +135,11 @@ public class BookController {
 			@PathVariable("bookId")int bookId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		
+		//get user
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("book/singleBookPage");
 		SinglePageDao singlePageDao = new SinglePageDao();
 		BookDao md = new BookDao();
@@ -135,6 +149,8 @@ public class BookController {
 		System.out.println(singlePageReviews.size());
 		
 		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		//mv.addObject("userCity", up.getProfCity());
 		mv.addObject("singlePageReviews", singlePageReviews);
 		mv.addObject("singlePageMain", singlePageMain);
 		return mv;

@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%><%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page language="java" import="config.*"%>
 <%
-	request.setAttribute("domain",GlobleConfig.localhost);
-	//request.setAttribute("my_local",GlobleConfig.show_local);
 	request.setAttribute("my_local",GlobleConfig.my_local);
 	request.setAttribute("my_domain",GlobleConfig.my_domain);
  %>
@@ -29,10 +27,10 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="#">CITY</a></li>
-                    	<li><a href="${my_domain}/movie/movieHomePage/${userId }.action" title="MOVIE">MOVIE</a></li>
-                        <li><a href="${my_domain}/book/bookHomePage/${userId }.action" title="BOOK">BOOK</a></li>
-                        <li class="current_page_item"><a href="#" title="MUSIC">MUSIC</a></li>
+                    	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
+                    	<li><a href="${my_domain}/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
+                        <li><a href="${my_domain}/book/bookHomePage.action" title="BOOK">BOOK</a></li>
+                        <li class="current_page_item"><a href="${my_domain}/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
                         <li><a href="${my_domain}/my.action" title="MY TRIBUS">MY TRIBUS</a></li>
                     </ul>
                     <div class="header_search">
@@ -69,8 +67,8 @@
                             <a href="#"><img src="${my_local}/music/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
-                        	<h3>Jeremy Guan</h3>
-                            <span>New York City</span>
+                        	<h3><c:out value="${userName}" /></h3>
+                            <span><c:out value="${userCity }" /></span>
                         </div>
                     </div><!--//end #social_box-->
                 </div><!--//end #social_media-->

@@ -1,9 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%><%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page language="java" import="config.*"%>
 <%
-	request.setAttribute("domain",GlobleConfig.localhost);
-	request.setAttribute("no_view_url",GlobleConfig.show_local);
 	request.setAttribute("my_local",GlobleConfig.my_local);
+	request.setAttribute("my_domain",GlobleConfig.my_domain);
  %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -30,9 +29,9 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="#">CITY</a></li>
-                    	<li class="current_page_item"><a href="#" title="MOVIE">MOVIE</a></li>
-                        <li><a href="${my_domain}/book/bookHomePage.action" title="BOOK">BOOK</a></li>
+                    	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
+                    	<li><a href="${my_domain}/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
+                        <li class="current_page_item"><a href="${my_domain}/book/bookHomePage.action" title="BOOK">BOOK</a></li>
                         <li><a href="${my_domain}/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
                         <li><a href="${my_domain}/my.action" title="MY TRIBUS">MY TRIBUS</a></li>
                     </ul>
@@ -70,8 +69,8 @@
                             <a href="#"><img src="${my_local}/book/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
-                        	<h3>Jeremy Guan</h3>
-                            <span>New York City</span>
+                        	<h3><c:out value="${userName}" /></h3>
+                            <span><c:out value="${userCity }" /></span>
                         </div>
                     </div><!--//end #social_box-->
                 </div><!--//end #social_media-->
@@ -190,7 +189,7 @@
                         	<c:if test="${r.index==0}">
                             <div class="review_box"><!--start review_box-->
                                 <h2>Review</h2>
-                                <h4 class="create_kings"><a href="#">Create a Review</a></h4>
+                                <h4 class="create_kings"><a href="${my_domain }/review/bookReviewAction/${singlePageMain.itemId }.action">Create a Review</a></h4>
                                 <div class="review_title_area"><!--start review_title_area-->
                                     <div class="review_small_img">
                                         <a href="${my_domain }/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="30" /></a>
@@ -252,7 +251,7 @@
                     </div><!--//end #brief_main-->
                 </div><!--//end #review_lftcol-->
                 <div id="review_side_bar"><!--start review_side_bar-->
-                	<div class="review_btn"><a href="#">Create a Review</a></div>
+                	<div class="review_btn"><a href="${my_domain }/review/bookReviewAction/${singlePageMain.itemId }.action">Create a Review</a></div>
                 </div><!--//end review_side_bar-->
                 <div class="clear"></div>
             </div><!--//end #common_maincontent-->

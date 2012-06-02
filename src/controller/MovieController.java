@@ -15,6 +15,7 @@ import model.MovieQuickComment;
 import model.MovieTag;
 import model.Starring;
 import model.User;
+import model.UserProfile;
 import dao.ActivityDao;
 import dao.FollowDao;
 import dao.HomePageDao;
@@ -27,6 +28,7 @@ import dao.MovieTagDao;
 import dao.SinglePageDao;
 import dao.StarringDao;
 import dao.UserDao;
+import dao.UserProfileDao;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +69,11 @@ public class MovieController {
 	public ModelAndView displayMovieHomePage(HttpServletRequest request, HttpServletResponse response){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
-		System.out.println(userId);
+
+		//get user
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("movie/Movie_Final");
 		HomePageDao homePageDao = new HomePageDao();
 		MovieDao md = new MovieDao();
@@ -103,6 +109,8 @@ public class MovieController {
 		homePageFriendRecommends.add(homePageFriendRecommend2);
 		
 		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		//mv.addObject("userCity", up.getProfCity());
 		mv.addObject("recentHotMovies_1", recentHotMovies_1);
 		mv.addObject("recentHotMovies_2", recentHotMovies_2);
 		mv.addObject("recentHotMovies_3", recentHotMovies_3);
@@ -124,6 +132,12 @@ public class MovieController {
 			@PathVariable("movieId")int movieId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		
+		//get user
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
+		
 		ModelAndView mv = new ModelAndView("movie/singleMoviePage");
 		SinglePageDao singlePageDao = new SinglePageDao();
 		MovieDao md = new MovieDao();
@@ -131,7 +145,10 @@ public class MovieController {
 		SinglePageMain singlePageMain = singlePageDao.getMovieSinglePage(movieId);
 		List<SinglePageReview> singlePageReviews = singlePageDao.getMovieSinglePageReviewById(movieId);
 		System.out.println(singlePageReviews.size());
+		
 		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		//mv.addObject("userCity", up.getProfCity());
 		mv.addObject("singlePageReviews", singlePageReviews);
 		mv.addObject("singlePageMain", singlePageMain);
 		return mv;

@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%><%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page language="java" import="config.*"%>
 <%
-	request.setAttribute("domain",GlobleConfig.localhost);
-	//request.setAttribute("my_local",GlobleConfig.show_local);
 	request.setAttribute("my_local",GlobleConfig.my_local);
 	request.setAttribute("my_domain",GlobleConfig.my_domain);
  %>
@@ -29,7 +27,7 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="#">CITY</a></li>
+                    	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
                     	<li><a href="${my_domain }/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
                         <li class="current_page_item"><a href="#" title="BOOK">BOOK</a></li>
                         <li><a href="${my_domain }/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
@@ -69,8 +67,8 @@
                             <a href="#"><img src="${my_local}/book/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
-                        	<h3>Jeremy Guan</h3>
-                            <span>New York City</span>
+                        	<h3><c:out value="${userName}" /></h3>
+                            <span><c:out value="${userCity }" /></span>
                         </div>
                     </div><!--//end #social_box-->
                 </div><!--//end #social_media-->
@@ -152,7 +150,7 @@
                                     <a href="#"><img src="${my_local}/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                     <a href="#"><img src="${my_local}/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                 </div>
-                                <div class="rating_star_rt"><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><img src="${my_local}/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
+                                <div class="rating_star_rt"><a href="${my_domain }/review/bookReview/${thisReview.commentId }.action"><img src="${my_local}/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
                             </div>
                         </div><!--//end .rating_feature-->
                     </div><!--//end .review_box-->
@@ -184,14 +182,14 @@
                                     <a href="#"><img src="${my_local}/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                     <a href="#"><img src="${my_local}/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                 </div>
-                                <div class="rating_star_rt"><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><img src="${my_local}/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
+                                <div class="rating_star_rt"><a href="${my_domain }/review/bookReview/${thisReview.commentId }.action"><img src="${my_local}/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
                             </div>
                         </div><!--//end .rating_feature-->
                     </div><!--//end .review_box-->
                     </c:if>
                     </c:forEach>
                     <div class="more_review">
-                        <a href="#">More reviews <img src="${my_local}/book/img/tripple_arrow3.jpg" alt="" /></a>
+                        <a href="${my_domain }/review/book.action">More reviews <img src="${my_local}/book/img/tripple_arrow3.jpg" alt="" /></a>
                     </div>
                 </div><!--//end #content_book_final-->
                 </div><!--//end #content-->

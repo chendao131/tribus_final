@@ -15,6 +15,7 @@ import model.MusicComment;
 import model.Singer;
 import model.Starring;
 import model.User;
+import model.UserProfile;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,7 @@ import dao.MusicMarkDao;
 import dao.SingerDao;
 import dao.SinglePageDao;
 import dao.StarringDao;
+import dao.UserProfileDao;
 
 @Controller
 @RequestMapping("music")
@@ -78,6 +80,12 @@ public class MusicController {
 	public ModelAndView displayMusicHomePage(HttpServletRequest request, HttpServletResponse response){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		
+		//get user
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
+		System.out.println("test here");
 		ModelAndView mv = new ModelAndView("music/Music_Final");
 		HomePageDao homePageDao = new HomePageDao();
 		MusicDao md = new MusicDao();
@@ -108,6 +116,8 @@ public class MusicController {
 		homePageFriendRecommends.add(homePageFriendRecommend2);
 		
 		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		//mv.addObject("userCity", up.getProfCity());
 		System.out.println(recentHotMusics_1.size());
 		System.out.println(recentHotMusics_2.size());
 		mv.addObject("recentHotMusics_1", recentHotMusics_1);
@@ -122,6 +132,11 @@ public class MusicController {
 			@PathVariable("musicId")int musicId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		
+		//get user
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("music/singleMusicPage");
 		SinglePageDao singlePageDao = new SinglePageDao();
 		MusicDao md = new MusicDao();
@@ -130,6 +145,8 @@ public class MusicController {
 		List<SinglePageReview> singlePageReviews = singlePageDao.getMusicSinglePageReviewById(musicId);
 		System.out.println(singlePageReviews.size());
 		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		//mv.addObject("userCity", up.getProfCity());
 		mv.addObject("singlePageReviews", singlePageReviews);
 		mv.addObject("singlePageMain", singlePageMain);
 		return mv;

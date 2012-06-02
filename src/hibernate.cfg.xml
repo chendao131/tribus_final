@@ -51,6 +51,7 @@
         <mapping class="model.MovieAlbum"/>
         <mapping class="model.MovieImage"/>
         <mapping class="model.MovieQuickComment"/>
+        <mapping class="model.MovieCommentDraft"/>
         
         <mapping class="model.Book"/>
         <mapping class="model.BookComment"/>
@@ -58,6 +59,7 @@
         <mapping class="model.BookDiary"/>
         <mapping class="model.BookMark"/>
         <mapping class="model.BookQuickComment"/>
+        <mapping class="model.BookCommentDraft"/>
         
         <mapping class="model.Music"/>
         <mapping class="model.MusicType"/>
@@ -69,6 +71,7 @@
         <mapping class="model.MusicMark"/>
         <mapping class="model.MusicTrack"/>
         <mapping class="model.MusicQuickComment"/>
+        <mapping class="model.MusicCommentDraft"/>
         
         <mapping class="model.Activity"/>
               

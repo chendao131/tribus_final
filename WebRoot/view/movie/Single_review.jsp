@@ -11,9 +11,9 @@
 	<title>Tribus_Single_review</title>
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/review/font/font.css" />
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/review/style.css" />
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/review/css/css3.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/movie/font/font.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/movie/style.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/movie/css/css3.css" />
     <!--[if lt IE 10]>
    		<script src="js/PIE.js" type="text/javascript"></script>
     <![endif]-->
@@ -24,7 +24,7 @@
 <body>
 	<div id="wrapper"><!--start wrapper-->
     	<div id="header"><!--start header-->
-        	<div class="logo"><a name="top" href="index.html"><img src="${my_local}/review/img/logo.png" alt="" width="59" height="65" /></a></div>
+        	<div class="logo"><a name="top" href="index.html"><img src="${my_local}/movie/img/logo.png" alt="" width="59" height="65" /></a></div>
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
@@ -41,8 +41,8 @@
                         </form>
                     </div>
                     <div class="header_icon_area">
-                    	<span class="space_btm"><a href="#"><img src="${my_local}/review/img/icon_header1.png" alt="" width="10" height="11" /></a></span>
-                        <span><a href="#"><img src="${my_local}/review/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
+                    	<span class="space_btm"><a href="#"><img src="${my_local}/movie/img/icon_header1.png" alt="" width="10" height="11" /></a></span>
+                        <span><a href="#"><img src="${my_local}/movie/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
                     </div>
                 </div></div></div>
             </div><!--//end #header_rgt-->
@@ -57,15 +57,15 @@
                 </div><!--//end #search_bg-->
                 <div id="social_media"><!--start social_media-->
                 	<div id="social_lftcol">
-                    	<a href="#"><img src="${my_local}/review/img/icon_facebook.jpg" alt="" width="24" height="24" /></a>
-                        <a href="#"><img src="${my_local}/review/img/icon_tweet.jpg" alt="" width="24" height="24" /></a>
+                    	<a href="#"><img src="${my_local}/movie/img/icon_facebook.jpg" alt="" width="24" height="24" /></a>
+                        <a href="#"><img src="${my_local}/movie/img/icon_tweet.jpg" alt="" width="24" height="24" /></a>
                     </div>
                     <div id="social_box"><!--start social_box-->
                     	<div id="message">
-                        	<a href="#"><img src="${my_local}/review/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
-                            <a href="#"><img src="${my_local}/review/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
-                            <a href="#"><img src="${my_local}/review/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
-                            <a href="#"><img src="${my_local}/review/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
+                        	<a href="#"><img src="${my_local}/movie/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
+                            <a href="#"><img src="${my_local}/movie/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
+                            <a href="#"><img src="${my_local}/movie/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
+                            <a href="#"><img src="${my_local}/movie/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
                         	<h3><c:out value="${userName}" /></h3>
@@ -82,13 +82,13 @@
                             <div class="review_ratting"><!--start review_ratting-->
                             	<div class="games_bg"><h3><c:out value="${singleReviewMain.itemName}" /> </h3></div>
                                 <span>(<a href="#"><c:out value="${singleReviewMain.commentNumber}" /></a>)</span>
-                                <h4><a href="#">Create a Review</a></h4>
+                                <h4><a href="${my_domain }/review/movieReviewAction/${singleReviewMain.itemId }.action">Create a Review</a></h4>
                                 <div class="rating_icon">
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" width="12" height="12" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" width="12" height="12" /></a>
                                 </div>
                             </div><!--//end .review_ratting-->
                             <div class="rating_descript"><!--start rating_descript-->
@@ -101,24 +101,24 @@
                         
                         <div class="review_post"><!--start review_post-->
                             <div class="review_ratting space_rating"><!--start review_ratting-->
-                            	<img src="${my_local}/review/img/pic_review.jpg" alt="" class="pic_review" width="44" height="43" />
+                            	<img src="${my_local}/movie/img/pic_review.jpg" alt="" class="pic_review" width="44" height="43" />
                             	<h2><c:out value="${singleReviewMain.commentTitle}" /></h2>
                                 <div class="rating_icon">
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" width="12" height="12"  /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" width="12" height="12"  /></a>
                                 </div>
                             </div><!--//end .review_ratting-->
                         </div><!--//end .review_post-->
                         <div class="games_info"><!--start games_info-->
-                        	<div class="games_btm_icon"><img src="${my_local}/review/img/icon_album.jpg" alt="" width="20" height="19"/></div>
+                        	<div class="games_btm_icon"><img src="${my_local}/movie/img/icon_album.jpg" alt="" width="20" height="19"/></div>
                         	<div class="games_social">
                             	<span>By <c:out value="${singleReviewMain.userName}" /></span>
                                 <div class="games_media">
-                                	<a href="#"><img src="${my_local}/review/img/icon_facebook2.jpg" alt="" width="15" height="15" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_tweet2.jpg" alt="" width="16" height="15" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_facebook2.jpg" alt="" width="15" height="15" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_tweet2.jpg" alt="" width="16" height="15" /></a>
                                     <a href="#">+ Wish List</a>
                                     <a href="#">+Tribus List</a>
                                 </div>
@@ -144,14 +144,14 @@
                             	<div class="comment_first_content"><!--start comment_first_content-->
                                 	<div class="pic_author">
                                     	<div class="arrow_author1"></div>
-                                        <img src="${my_local}/review/img/pic_author1.png" alt="" width="73" height="73" />
+                                        <img src="${my_local}/movie/img/pic_author1.png" alt="" width="73" height="73" />
                                     </div>
                                     <div class="author_total_rgt">
                                     	<div class="author_speech">
                                             <textarea rows="10" cols="10" onclick="if(this.value=='Name Says : ...')(this.value='')"  onblur="if(this.value=='')(this.value='Name Says : ...')">Name Says : ...</textarea>
                                         </div>
                                         <div class="author_icon">
-                                        	<span><img src="${my_local}/review/img/icon_album.jpg" alt="" width="20" height="19" /></span>
+                                        	<span><img src="${my_local}/movie/img/icon_album.jpg" alt="" width="20" height="19" /></span>
                                             <div class="btn_done"><a href="#">Done</a></div>
                                         </div>
                                     </div>
@@ -162,7 +162,7 @@
                             <div class="comment_box bg_differ"><!--start comment_box-->
                             	<div class="comment_scnd_content"><!--start comment_scnd_content-->
                                 	<div class="pic_author">
-                                        <img src="${my_local}/review/img/pic_author2.png" alt="" width="72" height="72" />
+                                        <img src="${my_local}/movie/img/pic_author2.png" alt="" width="72" height="72" />
                                     </div>
                                     <div class="author_total_rgt">
                                     	<div class="author_speech">
@@ -188,52 +188,52 @@
                         </div>
                     </div><!--//end #review_lftcol-->
                     <div id="review_side_bar"><!--start review_side_bar-->
-                    	<div class="review_btn"><a href="#">Create a Review</a></div>
+                    	<div class="review_btn"><a href="${my_domain }/review/movieReviewAction/${singleReviewMain.itemId }.action">Create a Review</a></div>
                     	<div class="review_feature">
                         	<img src="${singleReviewMain.itemPic}" alt="" width="142" height="217"/>
-                            <h3><c:out value="${singleReviewMain.itemName}" /> Page <a href="#"><img src="${my_local}/review/img/tripple_arrow3.jpg" alt="" /></a></h3>
+                            <h3><c:out value="${singleReviewMain.itemName}" /> Page <a href="#"><img src="${my_local}/movie/img/tripple_arrow3.jpg" alt="" /></a></h3>
                         </div>
                         <div class="rating_widget">
                         	<h2>Seach by Rating <span>(<a href="#"><c:out value="${singleReviewMain.commentNumber}" /></a>)</span></h2>
                             <ul>
                             	<li>
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
                                     <span><c:out value="${rateNumber[4]}" /></span>
                                 </li>
                                 <li>
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
                                     <span><c:out value="${rateNumber[3]}" /></span>
                                 </li>
                                 <li>
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
                                     <span><c:out value="${rateNumber[2]}" /></span>
                                 </li>
                                 <li>
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
                                     <span><c:out value="${rateNumber[1]}" /></span>
                                 </li>
                                 <li>
-                                	<a href="#"><img src="${my_local}/review/img/icon_rating1.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
-                                    <a href="#"><img src="${my_local}/review/img/icon_rating2.jpg" alt="" /></a>
+                                	<a href="#"><img src="${my_local}/movie/img/icon_rating1.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
+                                    <a href="#"><img src="${my_local}/movie/img/icon_rating2.jpg" alt="" /></a>
                                     <span><c:out value="${rateNumber[0]}" /></span>
                                 </li>
                             </ul>
@@ -246,9 +246,9 @@
             <div id="back_to_top"><a href="#top"></a></div>
         </div><!--//end #main_area-->
     </div><!--//end #wrapper-->
-    <script src="${my_local}/review/js/smoothscroll.js" type="text/javascript"></script>
-    <script src="${my_local}/review/js/jquery-1.js" type="text/javascript"></script>
-    <script src="${my_local}/review/js/easy-editable-text.js" type="text/javascript"></script>
+    <script src="${my_local}/movie/js/smoothscroll.js" type="text/javascript"></script>
+    <script src="${my_local}/movie/js/jquery-1.js" type="text/javascript"></script>
+    <script src="${my_local}/movie/js/easy-editable-text.js" type="text/javascript"></script>
 
 </body>
 </html>                                                                                                   
