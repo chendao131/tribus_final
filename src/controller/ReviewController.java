@@ -424,7 +424,7 @@ public class ReviewController {
 		System.out.println(mc.getUser().getUserId());
 		int userId = mc.getUser().getUserId();
 		int musicId = mc.getMusic().getMusicId();
-		ModelAndView mv = new ModelAndView("review/Single_review");
+		ModelAndView mv = new ModelAndView("music/Single_review");
 		MusicMarkDao mmd = new MusicMarkDao();
 		MusicDao md = new MusicDao();
 		Music m = md.getMusicById(musicId);
@@ -615,54 +615,7 @@ public class ReviewController {
 		mc.setCommentDate(now);
 		mcd.save(mc);
 		
-		//return "movie/{"+movieId+"}";
 		return "redirect:/movie/"+movieId+".action";
-/*		Integer totalCommentNumber=0;
-		//List<MovieComment> mcs = mcd.getAllMovieComment();
-		Integer[] r = new Integer[5];
-		for(int i=0; i<5; i++){
-			r[i] = 0;
-		}
-		List<MovieComment> mcs = mcd.getMovieCommentById(movieId);
-		Iterator<MovieComment> iterator = mcs.iterator();
-		List<ReviewPage> reviewPages = new ArrayList<ReviewPage>();
-		mc = null;
-		while(iterator.hasNext()){
-			mc = iterator.next();
-			ReviewPage reviewPage = new ReviewPage();
-			reviewPage.setCommentContent(mc.getCommentContent());
-			reviewPage.setCommentDate(DateToString.convertDateToString(mc.getCommentDate()));
-			reviewPage.setCommentId(mc.getCommentId());
-			reviewPage.setCommentTitle(mc.getCommentTitle());
-			reviewPage.setItemId(mc.getMovie().getMovieId());
-			reviewPage.setItemName(mc.getMovie().getMovieNameOriginal());
-			reviewPage.setItemPic(mc.getMovie().getMoviePic());
-			int userRate = mmd.getMovieGradeByMovieIdAndUserId(mc.getMovie().getMovieId(), mc.getUser().getUserId());
-			switch(userRate){
-			case 1: r[0]++;
-			case 2: r[1]++;
-			case 3: r[2]++;
-			case 4: r[3]++;
-			case 5: r[4]++;
-			}
-			reviewPage.setUserRate(userRate);
-			reviewPages.add(reviewPage);
-		}
-		
-		for(int i=0; i<5 ; i++){
-			totalCommentNumber+=r[i];
-		}
-		
-		mv.addObject("userName", u.getUserAlias());
-		//mv.addObject("userCity", up.getProfCity());
-		mv.addObject("rateNumber", r);
-		mv.addObject("itemId", m.getMovieId());
-		mv.addObject("itemName", m.getMovieNameOriginal());
-		mv.addObject("itemPic", m.getMoviePic());
-		mv.addObject("reviewNumber", reviewPages.size());
-		mv.addObject("reviewPages", reviewPages);		
-
-		return mv;*/
 	}
 	
 	@RequestMapping("draftMovieReview/{movieId}")
@@ -686,57 +639,7 @@ public class ReviewController {
 		Date now = new Date();
 		commentDraft.setDraftDate(now);
 		mcdd.save(commentDraft);
-		
-		//return "movie/"+movieId;
 		return "redirect:/movie/"+movieId+".action";
-/*
-		Integer totalCommentNumber=0;
-		//List<MovieComment> mcs = mcd.getAllMovieComment();
-		Integer[] r = new Integer[5];
-		for(int i=0; i<5; i++){
-			r[i] = 0;
-		}
-		List<MovieComment> mcs = mcd.getMovieCommentById(movieId);
-		Iterator<MovieComment> iterator = mcs.iterator();
-		List<ReviewPage> reviewPages = new ArrayList<ReviewPage>();
-		mc = null;
-		while(iterator.hasNext()){
-			mc = iterator.next();
-			ReviewPage reviewPage = new ReviewPage();
-			reviewPage.setCommentContent(mc.getCommentContent());
-			reviewPage.setCommentDate(DateToString.convertDateToString(mc.getCommentDate()));
-			reviewPage.setCommentId(mc.getCommentId());
-			reviewPage.setCommentTitle(mc.getCommentTitle());
-			reviewPage.setItemId(mc.getMovie().getMovieId());
-			reviewPage.setItemName(mc.getMovie().getMovieNameOriginal());
-			reviewPage.setItemPic(mc.getMovie().getMoviePic());
-			int userRate = mmd.getMovieGradeByMovieIdAndUserId(mc.getMovie().getMovieId(), mc.getUser().getUserId());
-			switch(userRate){
-			case 1: r[0]++;
-			case 2: r[1]++;
-			case 3: r[2]++;
-			case 4: r[3]++;
-			case 5: r[4]++;
-			}
-			reviewPage.setUserRate(userRate);
-			reviewPages.add(reviewPage);
-		}
-		
-		for(int i=0; i<5 ; i++){
-			totalCommentNumber+=r[i];
-		}
-		
-		mv.addObject("userName", u.getUserAlias());
-		//mv.addObject("userCity", up.getProfCity());
-		mv.addObject("rateNumber", r);
-		mv.addObject("itemId", m.getMovieId());
-		mv.addObject("itemName", m.getMovieNameOriginal());
-		mv.addObject("itemPic", m.getMoviePic());
-		mv.addObject("reviewNumber", reviewPages.size());
-		mv.addObject("reviewPages", reviewPages);
-		
-		//redirect
-		return mv;*/
 	}
 	
 	@RequestMapping("musicReviewAction/{musicId}")
@@ -747,10 +650,9 @@ public class ReviewController {
 	}
 		
 	@RequestMapping("submitMusicReview/{musicId}")
-	public ModelAndView submitMusicComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("musicId")int musicId){
+	public String submitMusicComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("musicId")int musicId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
-		ModelAndView mv = new ModelAndView("review/Review_page_by_id");
 		
 		System.out.println("successful");
 		//save this comment
@@ -768,48 +670,11 @@ public class ReviewController {
 		mc.setCommentDate(now);
 		mcd.save(mc);
 		
-		m = md.getMusicById(musicId);
-		List<MusicComment> mcs = mcd.getAllMusicComment();
-		System.out.println(mcs.size());
-		Iterator<MusicComment> iterator = mcs.iterator();
-		List<ReviewPage> reviewPages = new ArrayList<ReviewPage>();
-		//List<MovieComment> mcs = mcd.getAllMovieComment();
-		Integer[] r = new Integer[5];
-		for(int i=0; i<5; i++){
-			r[i] = 0;
-		}
-		mc = null;
-		while(iterator.hasNext()){
-			mc = iterator.next();
-			ReviewPage reviewPage = new ReviewPage();
-			reviewPage.setCommentContent(mc.getCommentContent());
-			reviewPage.setCommentDate(DateToString.convertDateToString(mc.getCommentDate()));
-			reviewPage.setCommentId(mc.getCommentId());
-			reviewPage.setCommentTitle(mc.getCommentTitle());
-			reviewPage.setItemId(mc.getMusic().getMusicId());
-			reviewPage.setItemName(mc.getMusic().getMusicName());
-			reviewPage.setItemPic(mc.getMusic().getMusicPic());
-			int userRate = mmd.getGradeByMusicIdAndUseId(mc.getMusic().getMusicId(), mc.getUser().getUserId());
-			switch(userRate){
-			case 1: r[0]++;
-			case 2: r[1]++;
-			case 3: r[2]++;
-			case 4: r[3]++;
-			case 5: r[4]++;
-			}
-			reviewPage.setUserRate(userRate);
-			reviewPages.add(reviewPage);
-		}
-		mv.addObject("rateNumber", r);
-		mv.addObject("itemName", m.getMusicNum());
-		mv.addObject("itemPic", m.getMusicPic());
-		mv.addObject("reviewNumber", reviewPages.size());
-		mv.addObject("reviewPages", reviewPages);
-		return mv;
+		return "redirect:/music/"+musicId+".action";
 	}
 	
 	@RequestMapping("draftMusicReview/{musicId}")
-	public ModelAndView draftMusicComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("musicId")int musicId){
+	public String draftMusicComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("musicId")int musicId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		ModelAndView mv = new ModelAndView("review/Review_page_by_id");
@@ -830,51 +695,7 @@ public class ReviewController {
 		commentDraft.setDraftDate(now);
 		mcdd.save(commentDraft);
 		
-		
-
-		Integer totalCommentNumber=0;
-		//List<MovieComment> mcs = mcd.getAllMovieComment();
-		Integer[] r = new Integer[5];
-		for(int i=0; i<5; i++){
-			r[i] = 0;
-		}
-		List<MusicComment> mcs = mcd.getMusicCommentByMusicId(musicId);
-		Iterator<MusicComment> iterator = mcs.iterator();
-		List<ReviewPage> reviewPages = new ArrayList<ReviewPage>();
-		mc = null;
-		while(iterator.hasNext()){
-			mc = iterator.next();
-			ReviewPage reviewPage = new ReviewPage();
-			reviewPage.setCommentContent(mc.getCommentContent());
-			reviewPage.setCommentDate(DateToString.convertDateToString(mc.getCommentDate()));
-			reviewPage.setCommentId(mc.getCommentId());
-			reviewPage.setCommentTitle(mc.getCommentTitle());
-			reviewPage.setItemId(mc.getMusic().getMusicId());
-			reviewPage.setItemName(mc.getMusic().getMusicName());
-			reviewPage.setItemPic(mc.getMusic().getMusicPic());
-			int userRate = mmd.getGradeByMusicIdAndUseId(mc.getMusic().getMusicId(), mc.getUser().getUserId());
-			switch(userRate){
-			case 1: r[0]++;
-			case 2: r[1]++;
-			case 3: r[2]++;
-			case 4: r[3]++;
-			case 5: r[4]++;
-			}
-			reviewPage.setUserRate(userRate);
-			reviewPages.add(reviewPage);
-		}
-		
-		for(int i=0; i<5 ; i++){
-			totalCommentNumber+=r[i];
-		}
-		mv.addObject("rateNumber", r);
-		mv.addObject("itemName", m.getMusicName());
-		mv.addObject("itemPic", m.getMusicPic());
-		mv.addObject("reviewNumber", reviewPages.size());
-		mv.addObject("reviewPages", reviewPages);
-		
-		//redirect
-		return mv;
+		return "redirect:/music/"+musicId+".action";
 	}
 	
 	
@@ -898,7 +719,7 @@ public class ReviewController {
 	}
 		
 	@RequestMapping("submitBookReview/{bookId}")
-	public ModelAndView submitBookComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("bookId")int bookId){
+	public String submitBookComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("bookId")int bookId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		
@@ -906,7 +727,6 @@ public class ReviewController {
 		UserProfileDao upd = new UserProfileDao();
 		UserProfile up = upd.getUserProfileById(userId);
 		
-		ModelAndView mv = new ModelAndView("book/Review_page_by_id");
 		
 		System.out.println("successful");
 		//save this comment
@@ -924,49 +744,11 @@ public class ReviewController {
 		bc.setCommentDate(now);
 		bcd.save(bc);
 		
-		List<BookComment> bcs = bcd.getAllBookComment();
-		Iterator<BookComment> iterator = bcs.iterator();
-		List<ReviewPage> reviewPages = new ArrayList<ReviewPage>();
-		//List<MovieComment> mcs = mcd.getAllMovieComment();
-		Integer[] r = new Integer[5];
-		for(int i=0; i<5; i++){
-			r[i] = 0;
-		}
-		bc = null;
-		while(iterator.hasNext()){
-			bc = iterator.next();
-			ReviewPage reviewPage = new ReviewPage();
-			reviewPage.setCommentContent(bc.getCommentContent());
-			reviewPage.setCommentDate(DateToString.convertDateToString(bc.getCommentDate()));
-			reviewPage.setCommentId(bc.getCommentId());
-			reviewPage.setCommentTitle(bc.getCommentTitle());
-			reviewPage.setItemId(bc.getBook().getBookId());
-			reviewPage.setItemName(bc.getBook().getBookName());
-			reviewPage.setItemPic(bc.getBook().getBookPic());
-			int userRate = bmd.getBookGradeByUserIdandBookId(bc.getUser().getUserId(), bc.getBook().getBookId());
-			switch(userRate){
-			case 1: r[0]++;
-			case 2: r[1]++;
-			case 3: r[2]++;
-			case 4: r[3]++;
-			case 5: r[4]++;
-			}
-			reviewPage.setUserRate(userRate);
-			reviewPages.add(reviewPage);
-		}
-		mv.addObject("rateNumber", r);
-		mv.addObject("userName", u.getUserAlias());
-		//mv.addObject("userCity", up.getProfCity());
-		mv.addObject("itemId", b.getBookId());
-		mv.addObject("itemName", b.getBookName());
-		mv.addObject("itemPic", b.getBookPic());
-		mv.addObject("reviewNumber", reviewPages.size());
-		mv.addObject("reviewPages", reviewPages);
-		return mv;
+		return "redirect:/book/"+bookId+".action";
 	}
 	
 	@RequestMapping("draftBookReview/{bookId}")
-	public ModelAndView draftBookComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("bookId")int bookId){
+	public String draftBookComment(HttpServletRequest request, HttpServletResponse response,  @PathVariable("bookId")int bookId){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		
@@ -974,12 +756,8 @@ public class ReviewController {
 		UserProfileDao upd = new UserProfileDao();
 		UserProfile up = upd.getUserProfileById(userId);
 		
-		ModelAndView mv = new ModelAndView("review/Review_page_by_id");
 		
 		//save this comment
-		BookComment bc = new BookComment();
-		BookCommentDao bcd = new BookCommentDao();
-		BookMarkDao bmd = new BookMarkDao();
 		BookCommentDraftDao mcdd = new BookCommentDraftDao();
 		BookCommentDraft commentDraft = new BookCommentDraft();
 		BookDao bd = new BookDao();
@@ -992,52 +770,6 @@ public class ReviewController {
 		commentDraft.setDraftDate(now);
 		mcdd.save(commentDraft);
 		
-		
-
-		Integer totalCommentNumber=0;
-		//List<MovieComment> mcs = mcd.getAllMovieComment();
-		Integer[] r = new Integer[5];
-		for(int i=0; i<5; i++){
-			r[i] = 0;
-		}
-		List<BookComment> bcs = bcd.getBookCommentByBookId(bookId);
-		Iterator<BookComment> iterator = bcs.iterator();
-		List<ReviewPage> reviewPages = new ArrayList<ReviewPage>();
-		bc = null;
-		while(iterator.hasNext()){
-			bc = iterator.next();
-			ReviewPage reviewPage = new ReviewPage();
-			reviewPage.setCommentContent(bc.getCommentContent());
-			reviewPage.setCommentDate(DateToString.convertDateToString(bc.getCommentDate()));
-			reviewPage.setCommentId(bc.getCommentId());
-			reviewPage.setCommentTitle(bc.getCommentTitle());
-			reviewPage.setItemId(bc.getBook().getBookId());
-			reviewPage.setItemName(bc.getBook().getBookName());
-			reviewPage.setItemPic(bc.getBook().getBookPic());
-			int userRate = bmd.getBookGradeByUserIdandBookId(bc.getUser().getUserId(), bc.getBook().getBookId());
-			switch(userRate){
-			case 1: r[0]++;
-			case 2: r[1]++;
-			case 3: r[2]++;
-			case 4: r[3]++;
-			case 5: r[4]++;
-			}
-			reviewPage.setUserRate(userRate);
-			reviewPages.add(reviewPage);
-		}
-		
-		for(int i=0; i<5 ; i++){
-			totalCommentNumber+=r[i];
-		}
-		mv.addObject("rateNumber", r);
-		mv.addObject("userName", u.getUserAlias());
-		//mv.addObject("userCity", up.getProfCity());
-		mv.addObject("itemName", b.getBookName());
-		mv.addObject("itemPic", b.getBookPic());
-		mv.addObject("reviewNumber", reviewPages.size());
-		mv.addObject("reviewPages", reviewPages);
-		
-		//redirect
-		return mv;
+		return "redirect:/book/"+bookId+".action";
 	}
 }

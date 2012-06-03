@@ -31,7 +31,7 @@
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
                     	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
-                    	<li><a href="${my_domain}/book/movieHomePage.action" title="MOVIE">MOVIE</a></li>
+                    	<li><a href="${my_domain}/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
                         <li><a href="${my_domain}/book/bookHomePage.action" title="BOOK">BOOK</a></li>
                         <li><a href="${my_domain}/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
                         <li><a href="#" title="MY TRIBUS">MY TRIBUS</a></li>
@@ -112,7 +112,6 @@
                         });
                     });
                     function comment_action(path) {
-                    	alert(path);
                     	$('#comment_action_form').attr("action", path);
                     	//alert($('#comment_action_form').a);
                     	$('#comment_action_form').submit();

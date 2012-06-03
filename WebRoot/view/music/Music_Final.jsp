@@ -150,15 +150,15 @@
                                     <div class="book_rating_info">
                                     	<div class="book_icon">
                                         	<span>Rating:</span>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/music/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/music/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/music/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/music/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/music/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
                                         </div>
                                         <h5><a href="${my_domain }/friendHome/${thisRecommend.friendId }.action"><c:out value="${thisRecommend.friendName}" /></a> Saw it </h5>
                                         <small>2 Minutes ago</small>
-                                        <div class="zoom"><a href="#"><img src="${my_local }/movie/img/icon_zoom.jpg" alt="" width="19" height="19" /></a></div>
+                                        <div class="zoom"><a href="#"><img src="${my_local }/music/img/icon_zoom.jpg" alt="" width="19" height="19" /></a></div>
                                         <p><c:out value="${thisRecommend.itemName}" /></p>
                                     </div>
                                </div>
@@ -190,13 +190,13 @@
                             </div>
                             <div class="rating_star">
                                 <div class="rating_star_lft">
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star1.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star1.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star1.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star2.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star2.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star1.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star1.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star1.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star2.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                 </div>
-                                <div class="rating_star_rt"><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><img src="${my_local}/movie/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
+                                <div class="rating_star_rt"><a href="${my_domain }/review/musicReview/${thisReview.commentId }.action"><img src="${my_local}/music/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
                             </div>
                         </div><!--//end .rating_feature-->
                     </div><!--//end .review_box-->
@@ -207,7 +207,7 @@
                         <div class="review_title_area"><!--start review_title_area-->
                             <div class="review_small_img">
                                 <a href="${my_domain }/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
-                                <a href="#"><img src="${my_local}/movie/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
+                                <a href="#"><img src="${my_local}/music/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                             </div>
                             <div class="review_title_rgt">
                                 <h3><a href="${my_domain }/review/musicReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
@@ -222,13 +222,13 @@
                             </div>
                             <div class="rating_star">
                                 <div class="rating_star_lft">
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star1.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star1.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star1.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star2.png" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/movie/img/icon_star2.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star1.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star1.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star1.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star2.png" alt="" width="12" height="12" /></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                 </div>
-                                <div class="rating_star_rt"><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><img src="${my_local}/movie/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
+                                <div class="rating_star_rt"><a href="${my_domain }/review/musicReview/${thisReview.commentId }.action"><img src="${my_local}/music/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
                             </div>
                         </div><!--//end .rating_feature-->
                     </div><!--//end .review_box-->
@@ -264,7 +264,7 @@
                         </div>
                     </div><!--//end .widget-->
                     <div class="widget"><!--start widget-->
-                    	<h2>Top Movie List</h2>
+                    	<h2>Top Music List</h2>
                         <div class="widget_info">
                         	<ul>
                             	<li><a href="#">INCREDIBLES</a></li>

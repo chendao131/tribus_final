@@ -29,7 +29,7 @@
                     <ul>
                     	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
                     	<li><a href="${my_domain }/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
-                        <li class="current_page_item"><a href="#" title="BOOK">BOOK</a></li>
+                        <li class="current_page_item"><a href="${my_domain }/book/bookHomePage.action" title="BOOK">BOOK</a></li>
                         <li><a href="${my_domain }/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
                         <li><a href="${my_domain }/my.action" title="MY TRIBUS">MY TRIBUS</a></li>
                     </ul>
@@ -105,15 +105,15 @@
                                     <div class="book_rating_info">
                                     	<div class="book_icon">
                                         	<span>Rating:</span>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
-                                            <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/book/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/book/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/book/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/book/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+                                            <a href="#"><img src="${my_local }/book/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
                                         </div>
                                         <h5><a href="${my_domain }/friendHome/${thisRecommend.friendId }.action"><c:out value="${thisRecommend.friendName}" /></a> Saw it </h5>
                                         <small>2 Minutes ago</small>
-                                        <div class="zoom"><a href="#"><img src="${my_local }/movie/img/icon_zoom.jpg" alt="" width="19" height="19" /></a></div>
+                                        <div class="zoom"><a href="#"><img src="${my_local }/book/img/icon_zoom.jpg" alt="" width="19" height="19" /></a></div>
                                         <p><c:out value="${thisRecommend.itemName}" /></p>
                                     </div>
                                </div>

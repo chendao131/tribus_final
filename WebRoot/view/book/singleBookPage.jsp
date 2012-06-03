@@ -196,7 +196,7 @@
                                         <a href="#"><img src="${my_local }/book/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                                     </div>
                                     <div class="review_title_rgt">
-                                        <h3><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
+                                        <h3><a href="${my_domain }/review/bookReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
                                         <span><c:out value="${thisReview.userName}" /></span>
                                     </div>
                                 </div><!--//end .review_title_area-->
@@ -212,7 +212,7 @@
                                             <a href="#"><img src="${my_local }/book/img/icon_star1.png" alt="" width="12" height="12" /></a>
                                             <a href="#"><img src="${my_local }/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                         </div>
-                                        <div class="rating_star_rt"><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><img src="${my_local }/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
+                                        <div class="rating_star_rt"><a href="${my_domain }/review/bookReview/${thisReview.commentId }.action"><img src="${my_local }/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
                                     </div>
                                 </div><!--//end .rating_feature-->
                             </div><!--//end .review_box-->
@@ -225,7 +225,7 @@
                                         <a href="#"><img src="${my_local }/book/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                                     </div>
                                     <div class="review_title_rgt">
-                                        <h3><a href="{my_local }/review/movieReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
+                                        <h3><a href="{my_local }/review/bookReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
                                         <span><c:out value="${thisReview.userName}" /></span>
                                     </div>
                                 </div><!--//end .review_title_area-->
@@ -241,7 +241,7 @@
                                             <a href="#"><img src="${my_local }/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                             <a href="#"><img src="${my_local }/book/img/icon_star2.png" alt="" width="12" height="12" /></a>
                                         </div>
-                                        <div class="rating_star_rt"><a href="${my_domain }/review/movieReview/${thisReview.commentId }.action"><img src="${my_local }/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
+                                        <div class="rating_star_rt"><a href="${my_domain }/review/bookReview/${thisReview.commentId }.action"><img src="${my_local }/book/img/tripple_arrow4.png" alt="" width="27" height="9" /></a></div>
                                     </div>
                                 </div><!--//end .rating_feature-->
                             </div><!--//end .review_box-->

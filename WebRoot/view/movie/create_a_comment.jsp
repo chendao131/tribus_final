@@ -114,7 +114,6 @@
                         });
                     });
                     function comment_action(path) {
-                    	alert(path);
                     	$('#comment_action_form').attr("action", path);
                     	//alert($('#comment_action_form').a);
                     	$('#comment_action_form').submit();
