@@ -45,7 +45,7 @@
                     </div>
                     <div class="header_icon_area">
                     	<span class="space_btm"><a href="#"><img src="${my_local}/movie/img/icon_header1.png" alt="" width="10" height="11" /></a></span>
-                        <span><a href="#"><img src="${my_local}/movie/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
+                        <span><a href="${my_domain }/user/editForm.action"><img src="${my_local}/movie/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
                     </div>
                 </div></div></div>
             </div><!--//end #header_rgt-->
@@ -65,7 +65,7 @@
                     </div>
                     <div id="social_box"><!--start social_box-->
                     	<div id="message">
-                        	<a href="#"><img src="${my_local}/movie/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
+                        	<a href="${my_domain }/userMail/box/0/0.action"><img src="${my_local}/movie/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
                             <a href="#"><img src="${my_local}/movie/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
                             <a href="#"><img src="${my_local}/movie/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
                             <a href="#"><img src="${my_local}/movie/img/icon_message4.jpg" alt="" width="22" height="22" /></a>

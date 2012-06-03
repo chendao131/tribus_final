@@ -225,7 +225,7 @@
                                         <a href="#"><img src="${my_local }/book/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                                     </div>
                                     <div class="review_title_rgt">
-                                        <h3><a href="{my_local }/review/bookReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
+                                        <h3><a href="${my_domain }/review/bookReview/${thisReview.commentId }.action"><c:out value="${thisReview.commentTitle}" /></a></h3>
                                         <span><c:out value="${thisReview.userName}" /></span>
                                     </div>
                                 </div><!--//end .review_title_area-->
