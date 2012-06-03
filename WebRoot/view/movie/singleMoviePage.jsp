@@ -180,7 +180,7 @@
                                 <h4 class="create_kings"><a href="${my_domain }/review/movieReviewAction/${singlePageMain.itemId }.action">Create a Review</a></h4>
                                 <div class="review_title_area"><!--start review_title_area-->
                                     <div class="review_small_img">
-                                        <a href="${my_domain }/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="30" /></a>
+                                        <a href="${my_domain }/user/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="30" /></a>
                                         <a href="#"><img src="${my_local}/movie/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                                     </div>
                                     <div class="review_title_rgt">
@@ -209,7 +209,7 @@
                             <div class="review_box"><!--start review_box-->
                                 <div class="review_title_area"><!--start review_title_area-->
                                     <div class="review_small_img">
-                                        <a href="${my_domain}/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
+                                        <a href="${my_domain}/user/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
                                         <a href="#"><img src="${my_local}/movie/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                                     </div>
                                     <div class="review_title_rgt">

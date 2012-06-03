@@ -124,7 +124,7 @@
                                             <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
                                             <a href="#"><img src="${my_local }/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
                                         </div>
-                                        <h5><a href="${my_domain }/friendHome/${thisRecommend.friendId }.action"><c:out value="${thisRecommend.friendName}" /></a> Saw it </h5>
+                                        <h5><a href="${my_domain }/user/friendHome/${thisRecommend.friendId }.action"><c:out value="${thisRecommend.friendName}" /></a> Saw it </h5>
                                         <small>2 Minutes ago</small>
                                         <div class="zoom"><a href="#"><img src="${my_local }/movie/img/icon_zoom.jpg" alt="" width="19" height="19" /></a></div>
                                         <p><c:out value="${thisRecommend.itemName}" /></p>
@@ -142,7 +142,7 @@
                         <h2>Review</h2>
                         <div class="review_title_area"><!--start review_title_area-->
                             <div class="review_small_img">
-                                <a href="${my_domain }/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
+                                <a href="${my_domain }/user/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
                                 <a href="#"><img src="${my_local}/movie/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                             </div>
                             <div class="review_title_rgt">
@@ -174,7 +174,7 @@
                     <div class="review_box"><!--start review_box-->
                         <div class="review_title_area"><!--start review_title_area-->
                             <div class="review_small_img">
-                                <a href="${my_domain }/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
+                                <a href="${my_domain }/user/friendHome/${thisReview.userId }.action"><img src="${thisReview.userPic}" alt="" width="31" height="31" /></a>
                                 <a href="#"><img src="${my_local}/movie/img/black_arrow.jpg" alt="" width="9" height="16" /></a>
                             </div>
                             <div class="review_title_rgt">
