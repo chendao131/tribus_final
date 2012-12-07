@@ -16,7 +16,7 @@ public class Message {
 	/**
 	 * inbox , outbox  
 	 */
-	private String type;
+	private String messageType;
 	
 	private int  messageFromUserId;
 	
@@ -24,7 +24,7 @@ public class Message {
 	
 	private String messageContent;
 	
-	private boolean read;
+	private boolean messageRead;
 	
 	private Date messageDate;
 	
@@ -39,22 +39,22 @@ public class Message {
 
 	public void setMessageTitle(String messageTitle) {
 		this.messageTitle = messageTitle;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}	
 
-	public boolean isRead() {
-		return read;
+	public String getMessageType() {
+		return messageType;
 	}
 
-	public void setRead(boolean read) {
-		this.read = read;
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
+	}
+
+	public boolean isMessageRead() {
+		return messageRead;
+	}
+
+	public void setMessageRead(boolean messageRead) {
+		this.messageRead = messageRead;
 	}
 
 	public int getMessageFromUserId() {

@@ -362,7 +362,7 @@
                     </div><!--//end #friends_rgtcol-->
                 </div><!--//end #friends_content-->
             </div><!--//end #main_content-->
-            <div id="footer"><p>Copyright @ Tribus.us 2012.      <span>All rights reserved</span> </p></div>
+            <div id="footer"><p> &copy;2012 goTribus |<span>All rights reserved</span> </p></div>
                                                  
                           <div id="back_to_top"><a href="#top"></a></div>
             <script src="js/smoothscroll.js" type="text/javascript"></script>

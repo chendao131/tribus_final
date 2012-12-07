@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,6 +20,29 @@ import vo.SingleReviewRelatedArticle;
 import model.Movie;
 @Repository
 public class MovieCommentDao {
+	@SuppressWarnings("unchecked")
+	public List<MovieComment> getCommentByMovieIdAndRating(int movieId, int rating){
+		List<MovieComment> mcs = new ArrayList<MovieComment>();
+		List<MovieComment> result = new ArrayList<MovieComment>();
+		try {
+			Session session = TribusHibernateSessionFactory.currentSession();
+			String hql = "from MovieComment mc where mc.movie.movieId=:movieId";
+			 mcs = session.createQuery(hql).setInteger("movieId", movieId).list();
+			 
+			 MovieMarkDao mmd = new MovieMarkDao();
+			 Iterator<MovieComment> iterator = mcs.iterator();
+			 while(iterator.hasNext()){
+				 MovieComment mc = iterator.next();
+				 if(mmd.getMovieGradeByMovieIdAndUserId(mc.getMovie().getMovieId(), mc.getUser().getUserId())==rating){
+					 result.add(mc);
+				 }
+			 }
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return result;		
+	}
 	
 	public int save(MovieComment mc){
 		Session session = TribusHibernateSessionFactory.currentSession();
@@ -97,7 +121,7 @@ public class MovieCommentDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<MovieComment> getMovieCommentByUserId(Integer userId){
+	public List<MovieComment> getMovieCommentByUserId(Integer userId,int num){
 		MovieComment mc = null;
 		List<MovieComment> mcs = null;
 		try {
@@ -108,6 +132,9 @@ public class MovieCommentDao {
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
+		}
+		if(mcs!=null && mcs.size() > num){
+			return mcs.subList(0, num);
 		}
 		return mcs;		
 	}
@@ -180,23 +207,7 @@ public class MovieCommentDao {
 	
 	public static void main(String args[]){
 	MovieCommentDao mcd = new MovieCommentDao();
-	//MovieComment s = mcd.getMovieCommentByContent("c2");
-	//System.out.println(s.getCommentId());
-	//mcd.getMovieCommentByUserId(1);
-/*	MovieComment mc = mcd.getMovieCommentByCommentId(1);
-	System.out.println(mc.getCommentTitle());*/
-	
-/*	List<MovieComment> movieComments = mcd.getMovieCommentById(8380);
-	Iterator<MovieComment> iterator = movieComments.iterator();
-	MovieComment mc = new MovieComment();
-	mc = null;
-	while(iterator.hasNext()){
-		mc = iterator.next();
-		SingleReviewRelatedArticle article = new SingleReviewRelatedArticle();
-		//article.setItemName(m.getMovieNameOriginal());
-		article.setCommentTitle(mc.getCommentTitle());
-		//article.setCommentDate(DateToString.convertDateToString(m.getMovieDate()));
-	}*/
+		System.out.println(mcd.getCommentByMovieIdAndRating(8380, 5).size());
 	}
 	
 }

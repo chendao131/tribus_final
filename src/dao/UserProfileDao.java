@@ -131,9 +131,9 @@ public class UserProfileDao {
 		upf1.setUser(u1);
 		
 		
-		upf1 = u.getUserProfileByUserId(3);
+		upf1 = u.getUserProfileByUserId(1);
 		upf1.setProfDob(new Date());
-		u.update(upf1);
+		//u.update(upf1);
 		System.out.println(123);
 		//u.add(upf1);
 		//upf1.setUser(user)

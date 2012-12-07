@@ -2,6 +2,7 @@ package dao;
 
 import hibernate.TribusHibernateSessionFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.MusicQuickComment;
@@ -32,8 +33,11 @@ public class MusicQuickCommentDao {
 		List<MusicQuickComment> mqcs = null;
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
-			String hql = "from MusicQuickComment as mqc where mqc.comment.commentId=:commentId";
+			String hql = "from MusicQuickComment as mqc where mqc.comment.commentId=:commentId order by mqc.quickCommentId desc";
 			 mqcs = session.createQuery(hql).setInteger("commentId",commentId).list();
+			 if(mqcs == null){
+				 mqcs = new ArrayList<MusicQuickComment>();
+			 }
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());

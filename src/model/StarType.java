@@ -28,4 +28,5 @@ public class StarType {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
+
 }

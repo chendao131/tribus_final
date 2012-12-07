@@ -25,7 +25,7 @@ public class StarringDao {
 		/*String hql = "select m from Movie m "+
 						"join m.tags t "+
 						"where t.tagName in (:tags)";*/
-		String hql = "from Starring";
+/*		String hql = "from Starring";
 		Session session = TribusHibernateSessionFactory.currentSession();
 		List<Starring> allStars = new ArrayList<Starring>();
 		List<Starring> result = new ArrayList<Starring>();
@@ -42,16 +42,30 @@ public class StarringDao {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		return result;
+		return result;*/
+		
+		String hql ="select s from Starring s where lower(s.starName) like :name";
+		List<Starring> stars = null;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		try{
+			 stars = session.createQuery(hql).setString("name", "%"+name.toLowerCase()+"%").list();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return stars;
+		
+		
 	}
 	
 	public int save(Starring s){
 		Session session = TribusHibernateSessionFactory.currentSession();
 		Transaction tx = session.beginTransaction();
 		try {
+			System.out.println("1");
 			session.save(s);
 			session.flush();
 			tx.commit();
+			System.out.println("2");
 			return 1;
 
 		} catch (Exception e) {
@@ -73,6 +87,23 @@ public class StarringDao {
 		}
 		return s;
 	}
+/*	@SuppressWarnings("unchecked")
+	public Starring getStarringByName(String name){
+		List<Starring> ss = new ArrayList<Starring>();
+		Starring s = new Starring();
+		try {
+			Session session = TribusHibernateSessionFactory.currentSession();
+			String hql = "from Starring as s where s.starName=:name";
+			ss = session.createQuery(hql).setString("name", name).list();	
+			if(ss==null)
+				return null;
+			s = ss.get(0);
+			return s;
+		} catch (Exception e) {	
+			e.printStackTrace();
+		}
+		return s;
+	}*/
 	
 	public Starring getStarringById(int id){
 		
@@ -130,9 +161,12 @@ public class StarringDao {
 		return -1;
 	}
 	
-/*	public static void main(String args[]){
+	public static void main(String args[]){
 		StarringDao sd = new StarringDao();
-		List<Starring> stars = sd.searchStarByName("Chris Pratt");
-		System.out.println(stars.size());
-	}*/
+		StarTypeDao std = new StarTypeDao();
+		Starring newStar = new Starring();
+		newStar.setStarName("d");
+		newStar.setStarType(std.getStarTypeById(1));
+		sd.save(newStar);
+	}
 }

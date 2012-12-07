@@ -58,7 +58,7 @@ public class Singer implements Serializable{
 	public void setSingerGender(Integer singerGender) {
 		this.singerGender = singerGender;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "bandId")
 	public Band getBand() {
 		return band;
@@ -84,7 +84,7 @@ public class Singer implements Serializable{
 	public void setSingerNation(String singerNation) {
 		this.singerNation = singerNation;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "typeId")
 	public MusicType getMusicType() {
 		return musicType;
@@ -110,7 +110,7 @@ public class Singer implements Serializable{
 	public void setSingerLanguage(String singerLanguage) {
 		this.singerLanguage = singerLanguage;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "companyId")
 	public Company getCompany() {
 		return company;
@@ -142,7 +142,7 @@ public class Singer implements Serializable{
 	public void setSingerPic(String singerPic) {
 		this.singerPic = singerPic;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;

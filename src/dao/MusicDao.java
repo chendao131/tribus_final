@@ -9,6 +9,7 @@ import java.util.List;
 import model.Book;
 import model.Movie;
 import model.Music;
+import model.Starring;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -21,29 +22,15 @@ import vo.MusicMarkVo;
 public class MusicDao {
 	@SuppressWarnings("unchecked")
 	public List<Music> searchMusicByName(String name){
-		//String sql = "from Movie where tags.tagName = :movieTag";
-		//String[] tags = {"Drama"};
-		/*String hql = "select m from Movie m "+
-						"join m.tags t "+
-						"where t.tagName in (:tags)";*/
-		String hql = "from Music";
+		String hql ="select m from Music m where lower(m.musicName) like :name order by m.musicPublishDate desc";
+		List<Music> musics = null;
 		Session session = TribusHibernateSessionFactory.currentSession();
-		List<Music> allMusics = new ArrayList<Music>();
-		List<Music> result = new ArrayList<Music>();
 		try{
-			allMusics = session.createQuery(hql).list();
-			 Iterator<Music> iterator = allMusics.iterator();
-			 while(iterator.hasNext()){
-				 Music m = iterator.next();
-				 if(m.getMusicName().indexOf(name)!=-1){
-					 result.add(m);
-				 }
-			 }
-			 System.out.println("success");
+			musics = session.createQuery(hql).setString("name", "%"+name.toLowerCase()+"%").list();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		return result;
+		return musics;
 	}
 	
 	public int save(Music m) {
@@ -64,8 +51,9 @@ public class MusicDao {
 	}
 	
 	public List<MusicMarkVo> getMusicAndGradeByUserId(int id){
-		String sql = "select m.movieId,m.movieNameOriginal,mm.movieGrade from book b, book_mark bb, user_account u, user_profile up" +
-		" where b.bookId = bb.bookId and u.userId = bb.userId and up.userId = u.userId" +
+		String sql = "select m.musicId,m.musicName,mm.musicGrade from " +
+				" music m, music_mark mm, user_account u, user_profile up" +
+		" where m.musicId = mm.musicId and u.userId = mm.userId and up.userId = u.userId" +
 		" and u.userId = ? ";
 
 		List<MusicMarkVo> l_music_vo = new ArrayList<MusicMarkVo>();
@@ -98,8 +86,8 @@ public class MusicDao {
 	
 	public List<Music> getMusicsWantedByUserId(int id){
 		String sql = "select m.* from music m, music_mark mm, user_account u" +
-		" where m.musicId = mm.musicId and u.userId = mm.musicId" +
-		" and mm.musicLike = 1 and u.userId = ?";
+		" where m.musicId = mm.musicId and u.userId = mm.userId" +
+		" and mm.musicListen = 1 and u.userId = ?";
 		Session session = TribusHibernateSessionFactory.currentSession();
 		return session.createSQLQuery(sql).addEntity(Music.class).setInteger(0, id).list();		
 	}
@@ -107,8 +95,8 @@ public class MusicDao {
 	
 	public List<Music> getMusicsListenedByUserId(int id){
 		String sql = "select m.* from music m, music_mark mm, user_account u" +
-		" where m.musicId = mm.musicId and u.userId = mm.musicId" +
-		" and mm.musicListen = 1 and u.userId = ?";
+		" where m.musicId = mm.musicId and u.userId = mm.userId" +
+		" and mm.musicListen = 2 and u.userId = ?";
 		Session session = TribusHibernateSessionFactory.currentSession();
 		return session.createSQLQuery(sql).addEntity(Music.class).setInteger(0, id).list();		
 	}
@@ -217,6 +205,26 @@ public class MusicDao {
 			System.out.println(e.getMessage());
 		}
 		return bs;		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Music> searchMusicByTag(String musicTag){
+		//String sql = "from Movie where tags.tagName = :movieTag";
+		//String[] tags = {"Drama"};
+		/*String hql = "select m from Movie m "+
+						"join m.tags t "+
+						"where t.tagName in (:tags)";*/
+		String hql = "select m from Music m "+
+				"join m.tags t "+
+				"where t.tagName like :musicTag";
+		List<Music> musics = null;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		try{
+			 musics = session.createQuery(hql).setString("musicTag", "%"+musicTag+"%").list();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return musics;
 	}
 	
 	public static void main(String args[]){

@@ -36,7 +36,7 @@ public class BookComment implements Serializable{
 	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -62,7 +62,7 @@ public class BookComment implements Serializable{
 	public void setCommentDate(Date commentDate) {
 		this.commentDate = commentDate;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "bookId")
 	public Book getBook() {
 		return book;

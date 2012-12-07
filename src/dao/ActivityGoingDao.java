@@ -46,6 +46,19 @@ public class ActivityGoingDao {
 				.list();
 
 	}
+	public List<ActivityGoing> getActivityGoingByDate(
+			Integer userId) {// 依条件查询，根据某个参与者id查出其参与的所有活动id
+		// 组合语句
+		String hql = "from ActivityGoing where  1=1";
+		
+		if (userId != 0) {
+			hql = hql + " and userId = '" + userId + "'";
+		}
+
+		return TribusHibernateSessionFactory.currentSession().createQuery(hql)
+				.list();
+
+	}
 
 	public Boolean delActivityGoing(ActivityGoing activityGoing) {// 删除参与者
 

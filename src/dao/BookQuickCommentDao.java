@@ -33,7 +33,7 @@ public class BookQuickCommentDao {
 		List<BookQuickComment> bqcs = null;
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
-			String hql = "from BookQuickComment as bqc where bqc.comment.commentId=:commentId";
+			String hql = "from BookQuickComment as bqc where bqc.comment.commentId=:commentId order by bqc.quickCommentId desc";
 			bqcs = session.createQuery(hql).setInteger("commentId",commentId).list();
 		} catch (Exception e) {
 			// TODO: handle exception

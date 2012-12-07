@@ -34,7 +34,7 @@ public class MusicQuickComment implements Serializable{
 	public void setQuickCommentId(int quickCommentId) {
 		this.quickCommentId = quickCommentId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -60,7 +60,7 @@ public class MusicQuickComment implements Serializable{
 	public void setCommentDate(Date commentDate) {
 		this.commentDate = commentDate;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "commentId")
 	public MusicComment getComment() {
 		return comment;

@@ -23,7 +23,7 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
+                    	<li><a href="${my_domain}/activity/index.action">EVENT</a></li>
                     	<li class="current_page_item"><a href="${my_domain}/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
                         <li><a href="${my_domain}/book/bookHomePage.action" title="BOOK">BOOK</a></li>
                         <li><a href="${my_domain}/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
@@ -196,7 +196,7 @@
                     <div class="clear"></div>
                 </div><!--//end #review_main-->
             </div><!--//end #common_maincontent-->
-            <div id="footer"><p>Copyright @ Tribus.us 2012.      <span>All rights reserved</span> </p></div>
+            <div id="footer"><p> &copy;2012 goTribus |<span>All rights reserved</span> </p></div>
             <div id="back_to_top"><a href="#top"></a></div>
             <script src="${my_local}/review/js/smoothscroll.js" type="text/javascript"></script>
         </div><!--//end #main_area-->

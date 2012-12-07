@@ -1,5 +1,8 @@
 package dao;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +17,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import vo.BookMarkVo;
 import vo.MovieMarkVo;
@@ -37,9 +42,9 @@ public class MovieDao {
 	}
 	
 	public List<MovieMarkVo> getMovieAndGradeByUserId(int id){
-		String sql = "select m.movieId,m.movieNameOriginal,mm.movieGrade from book b, book_mark bb, user_account u, user_profile up" +
-		" where b.bookId = bb.bookId and u.userId = bb.userId and up.userId = u.userId" +
-		" and u.userId = ? ";
+		String sql = "select m.movieId,m.movieNameOriginal,mm.movieGrade from movie m, movie_mark mm, " +
+				" user_account u, user_profile up" +
+		" where m.movieId = mm.movieId and u.userId = mm.userId and up.userId = u.userId" +		" and u.userId = ? ";
 
 		List<MovieMarkVo> l_movie_vo = new ArrayList<MovieMarkVo>();
 		
@@ -86,7 +91,7 @@ public class MovieDao {
 	public List<Movie> getMoviesWatchedByUserId(int id){
 		String sql = "select m.* from movie m, movie_mark mm, user_account u " +
 		" where m.movieId = mm.movieId and u.userId = mm.userId " +
-		" and mm.movieWatch = 1 and u.userId = ?";
+		" and mm.movieWatch = 2 and u.userId = ?";
 		Session session = TribusHibernateSessionFactory.currentSession();
 		return session.createSQLQuery(sql).addEntity(Movie.class).setInteger(0, id).list();
 	}
@@ -232,7 +237,7 @@ public class MovieDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Movie> getMovieByTag(String movieTag){
+	public List<Movie> searchMovieByTag(String movieTag){
 		//String sql = "from Movie where tags.tagName = :movieTag";
 		//String[] tags = {"Drama"};
 		/*String hql = "select m from Movie m "+
@@ -240,12 +245,11 @@ public class MovieDao {
 						"where t.tagName in (:tags)";*/
 		String hql = "select m from Movie m "+
 				"join m.tags t "+
-				"where t.tagName = :movieTag";
+				"where t.tagName like :movieTag";
 		List<Movie> movies = null;
 		Session session = TribusHibernateSessionFactory.currentSession();
 		try{
-			 movies = session.createQuery(hql).setString("movieTag",movieTag).list();
-			 System.out.println("success");
+			 movies = session.createQuery(hql).setString("movieTag", "%"+movieTag+"%").list();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -253,36 +257,23 @@ public class MovieDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Movie> searchMovieByName(String name){
-		//String sql = "from Movie where tags.tagName = :movieTag";
-		//String[] tags = {"Drama"};
-		/*String hql = "select m from Movie m "+
-						"join m.tags t "+
-						"where t.tagName in (:tags)";*/
-		String hql = "from Movie";
+	public List<Movie> searchMovieByName(String name){		
+		String hql ="select m from Movie m where lower(m.movieNameOriginal) like :name order by m.movieDate desc";
+		List<Movie> movies = null;
 		Session session = TribusHibernateSessionFactory.currentSession();
-		List<Movie> allMovies = new ArrayList<Movie>();
-		List<Movie> result = new ArrayList<Movie>();
 		try{
-			allMovies = session.createQuery(hql).list();
-			 Iterator<Movie> iterator = allMovies.iterator();
-			 while(iterator.hasNext()){
-				 Movie m = iterator.next();
-				 if(m.getMovieNameOriginal().indexOf(name)!=-1){
-					 result.add(m);
-				 }
-			 }
-			 System.out.println("success");
+			 movies = session.createQuery(hql).setString("name", "%"+name.toLowerCase()+"%").list();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		return result;
+		return movies;
 	}
 	
 	public static void main(String args[]){
 		MovieDao md = new MovieDao();
-		List<Movie> movies = md.searchMovieByName("Money");
-		System.out.println(movies.size());
+
+/*		List<Movie> movies = md.searchMovieByTag("film");
+		System.out.println(movies.size());*/
 /*		List<Movie> recentHotMovies = md.getRecentHotMovie();
 		Iterator<Movie> iterator = recentHotMovies.iterator();
 		while(iterator.hasNext()){

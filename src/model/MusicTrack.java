@@ -30,7 +30,7 @@ public class MusicTrack implements Serializable{
 	public void setTrackId(Integer trackId) {
 		this.trackId = trackId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "musicId")
 	public Music getMusic() {
 		return music;

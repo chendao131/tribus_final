@@ -27,9 +27,17 @@ public class User implements Serializable{
 	private int userState;
 	private int userVerifycode;
 	private Date createDate;
+	private String userIntro;
+	
 	
 	
 		
+	public String getUserIntro() {
+		return userIntro;
+	}
+	public void setUserIntro(String userIntro) {
+		this.userIntro = userIntro;
+	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getUserId() {

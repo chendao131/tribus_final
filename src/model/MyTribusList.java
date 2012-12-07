@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,17 +19,29 @@ public class MyTribusList {
 	private Date createDate;
 	private String type;		
 	private String title; // this tribus name
-	private String resourceName;		// this resource name
-	private UserProfile userProfile;		
+	private String resourceName;		// this resource name			
+	private User user;
+	private TribusClassify classified;
 	
-	@OneToOne
+	
+	
+	@ManyToOne
 	@JoinColumn(name="userId")
-	public UserProfile getUserProfile() {
-		return userProfile;
+	public User getUser() {
+		return user;
 	}
-	public void setUserProfile(UserProfile userProfile) {
-		this.userProfile = userProfile;
+	public void setUser(User user) {
+		this.user = user;
 	}
+	@ManyToOne
+	@JoinColumn(name = "classId")
+	public TribusClassify getClassified() {
+		return classified;
+	}
+	public void setClassified(TribusClassify classified) {
+		this.classified = classified;
+	}
+					
 	public String getResourceName() {
 		return resourceName;
 	}

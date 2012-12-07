@@ -119,7 +119,7 @@ public class Starring implements Serializable{
 	public void setStarFamily(String starFamily) {
 		this.starFamily = starFamily;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "zodiacId")
 	public Zodiac getZodiac() {
 		return zodiac;
@@ -133,7 +133,7 @@ public class Starring implements Serializable{
 	public void setStarBrief(String starBrief) {
 		this.starBrief = starBrief;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "companyId")
 	public Company getCompany() {
 		return company;
@@ -147,7 +147,7 @@ public class Starring implements Serializable{
 	public void setStarPic(String starPic) {
 		this.starPic = starPic;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;

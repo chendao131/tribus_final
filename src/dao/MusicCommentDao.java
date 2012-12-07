@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import hibernate.TribusHibernateSessionFactory;
@@ -15,6 +16,30 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 public class MusicCommentDao {
+	@SuppressWarnings("unchecked")
+	public List<MusicComment> getCommentByMusicIdAndRating(int musicId, int rating){
+		List<MusicComment> mcs = new ArrayList<MusicComment>();
+		List<MusicComment> result = new ArrayList<MusicComment>();
+		try {
+			Session session = TribusHibernateSessionFactory.currentSession();
+			String hql = "from MusicComment mc where mc.music.musicId=:musicId";
+			 mcs = session.createQuery(hql).setInteger("musicId", musicId).list();
+			 
+			 MusicMarkDao mmd = new MusicMarkDao();
+			 Iterator<MusicComment> iterator = mcs.iterator();
+			 while(iterator.hasNext()){
+				 MusicComment mc = iterator.next();
+				 if(mmd.getGradeByMusicIdAndUseId(mc.getMusic().getMusicId(), mc.getUser().getUserId())==rating){
+					 result.add(mc);
+				 }
+			 }
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return result;		
+	}
+	
 	public int save(MusicComment mc){
 		Session session = TribusHibernateSessionFactory.currentSession();
 		Transaction tx = session.beginTransaction();
@@ -33,7 +58,7 @@ public class MusicCommentDao {
 	
 	@SuppressWarnings("unchecked")
 	public MusicComment getMusicCommentByCommentId(int commentId){
-		MusicComment mc = new MusicComment();
+		MusicComment mc = null;
 		Session session = TribusHibernateSessionFactory.currentSession();
 		List<MusicComment> mcs = new ArrayList<MusicComment>();
 		try{
@@ -48,7 +73,7 @@ public class MusicCommentDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<MusicComment> getMusicCommentByUserId(int UserId){
+	public List<MusicComment> getMusicCommentByUserId(int UserId,int num){
 		Session session = TribusHibernateSessionFactory.currentSession();
 		List<MusicComment> mcs = new ArrayList<MusicComment>();
 		try{
@@ -57,6 +82,9 @@ public class MusicCommentDao {
 								setInteger("UserId", UserId).list();
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+		}
+		if(mcs!=null && mcs.size() > num){
+			return mcs.subList(0, num);
 		}
 		return mcs;		
 	}

@@ -95,7 +95,7 @@ a:hover {
 #menu_rgt ul li a {
 	font-size:18px;
 	color:#fff;
-	font-family:'GillSansStdRegular';
+	font-family:Helvetica,sans-serif;
 	text-transform:uppercase;
 }
 #menu_rgt ul li.current_page_item > a,
@@ -689,7 +689,7 @@ a:hover {
 	color:#fff;
 	font-weight:normal;
 	padding-left:23px;
-	font-family:'GillSansStdRegular';
+	font-family:Helvetica,sans-serif;
 	margin-bottom:12px;
 }
 .bar_widget {
@@ -1364,7 +1364,7 @@ a:hover {
 }
 .edit_tools {
 	width:335px;
-	height:45px;
+	min-height:45px;
 	position:relative;
 }
 .edit_tools label {
@@ -1897,8 +1897,10 @@ a:hover {
 }
 .book_feature {
 	width:123px;
+	height:180px;
 	float:left;
 	padding:0 38px 18px 0;
+	margin-bottom:100px;
 }
 .book_feature img {
 	display:block;
@@ -3355,7 +3357,7 @@ a:hover {
 	color:#fff;
 	line-height:26px;
 	font-weight:normal;
-	font-family:'GillSansStdRegular';
+	font-family:Helvetica,sans-serif;
 	padding-left:17px;
 	position:absolute;
 	left:-15px;
@@ -3399,7 +3401,7 @@ a:hover {
 	color:#fff;
 	font-weight:normal;
 	line-height:26px;
-	font-family:'GillSansStdRegular';
+	font-family:Helvetica,sans-serif;
 	padding-left:26px;
 	z-index:100;
 }
@@ -3492,7 +3494,7 @@ a:hover {
 	color:#fff;
 	font-weight:normal;
 	line-height:26px;
-	font-family:'GillSansStdRegular';
+	font-family:Helvetica,sans-serif;
 	padding-left:65px;
 	z-index:100;
 }
@@ -3632,7 +3634,7 @@ a:hover {
 	color:#fff;
 	line-height:26px;
 	font-weight:normal;
-	font-family:'GillSansStdRegular';
+	font-family:Helvetica,sans-serif;
 	padding-left:35px;
 	position:absolute;
 	left:-15px;
@@ -3849,6 +3851,13 @@ a:hover {
 	padding-bottom:86px;
 	position:relative;
 }
+.movie_img ul {
+	overflow:hidden;
+}
+.movie_img ul li {
+	overflow:hidden;
+}
+
 .movie_img h2 {
 	position:absolute;
 	left:-15px;
@@ -3890,7 +3899,7 @@ a:hover {
 	padding-top:6px;
 }
 .kings_gallery {
-	width:600px;
+	width:643px;
 }
 .kings_gallery img {
 	display:block;
@@ -5450,8 +5459,8 @@ a:hover {
 	height:18px;
 	display:block;
 	position:absolute;
-	left:519px;
-	top:-26px;
+	left:0;
+	top:100px;
 }
 .kings_gallery .bx-next {
 	text-indent: -99999px !important;
@@ -5460,8 +5469,8 @@ a:hover {
 	height:18px;
 	display:block;
 	position:absolute;
-	top:-26px;
-	left:573px;
+	top:100px;
+	left:584px;
 }
 #book_gallery_area .bx-prev  {
 	text-indent: -99999px !important;
@@ -5502,4 +5511,97 @@ a:hover {
 	display:block;
 	position:absolute;
 	right:0px;
+}
+/*-----------------------------------*/
+/*pop up box                         */
+/*-----------------------------------*/
+#light_box_wrapper {
+	width:273px;
+	margin:0 auto;
+	background:#fff;
+	padding:38px 0 16px 27px;
+	position:absolute;
+	left:360px;
+	z-index:15000;
+	display:none;
+}
+#light_box_bg {
+	width:219px;
+	background:#d1d3d4;
+	padding:45px 0 9px 23px;
+	position:relative;
+}
+#light_box_bg h2 {
+	background:url(img/bgr_title2.png) no-repeat;
+	height:43px;
+	font-size:18px;
+	color:#fff;
+	font-family:'GillSansStdRegular';
+	line-height:26px;
+	font-weight:normal;
+	padding-left:46px;
+	position:absolute;
+	left:-16px;
+	top:-27px;
+	width:144px;
+}
+#light_box_bg form {
+	width:219px;
+}
+#light_box_bg form select {
+	width:189px;
+	height:27px;
+	background:#fff;
+	border:1px solid #e6e6e6;
+	font-size:12px;
+	color:#1D1D1B;
+	margin-bottom:17px;
+	padding-left:5px;
+	line-height:27px;
+	font-family:Helvetica, sans-serif;
+}
+#light_box_bg form textarea {
+	background:#fff;
+	width:171px;
+	height:71px;
+	border:none;
+	overflow:auto;
+	font-size:12px;
+	color:#1D1D1B;
+	font-family:Helvetica, sans-serif;
+	padding:14px 9px;
+	margin-bottom:45px;
+}
+.pop_btn {
+	padding-left:67px;
+}
+.pop_btn a {
+	display:block;
+	background:url(img/btn_pop.png) no-repeat;
+	width:62px;
+	height:26px;
+	text-align:center;
+	line-height:26px;
+	font-size:18px;
+	color:#fff;
+}
+.pop_up_cross {
+	position:absolute;
+	right:8px;
+	top:11px;
+}
+.pop_up_cross a {
+	background:url(img/pop_up_cross.png) no-repeat;
+	width:18px;
+	height:18px;
+	display:block;
+}
+#popup_layer{
+	width:100%;
+	position:absolute;
+	left:0;
+	top:0;
+	background:#797979;
+	display:none;
+	z-index:10000;
 }

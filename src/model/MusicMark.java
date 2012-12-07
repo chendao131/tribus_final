@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,6 +26,7 @@ public class MusicMark implements Serializable{
 	private Integer musicLike;
 	private Integer musicGrade;
 	private User user;
+	private Timestamp markDate;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer getMusicMarkId() {
@@ -33,7 +35,7 @@ public class MusicMark implements Serializable{
 	public void setMusicMarkId(Integer musicMarkId) {
 		this.musicMarkId = musicMarkId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "musicId")
 	public Music getMusic() {
 		return music;
@@ -59,12 +61,18 @@ public class MusicMark implements Serializable{
 	public void setMusicGrade(Integer musicGrade) {
 		this.musicGrade = musicGrade;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public Timestamp getMarkDate() {
+		return markDate;
+	}
+	public void setMarkDate(Timestamp markDate) {
+		this.markDate = markDate;
 	}
 }

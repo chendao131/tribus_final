@@ -20,6 +20,30 @@ import org.hibernate.criterion.Restrictions;
 import vo.UserComment;
 
 public class BookCommentDao {
+	@SuppressWarnings("unchecked")
+	public List<BookComment> getCommentByBookIdAndRating(int bookId, int rating){
+		List<BookComment> mcs = new ArrayList<BookComment>();
+		List<BookComment> result = new ArrayList<BookComment>();
+		try {
+			Session session = TribusHibernateSessionFactory.currentSession();
+			String hql = "from BookComment bc where bc.book.bookId=:bookId";
+			 mcs = session.createQuery(hql).setInteger("bookId", bookId).list();
+			 
+			 BookMarkDao bmd = new BookMarkDao();
+			 Iterator<BookComment> iterator = mcs.iterator();
+			 while(iterator.hasNext()){
+				 BookComment bc = iterator.next();
+				 if(bmd.getBookGradeByUserIdandBookId(bc.getUser().getUserId(),bc.getBook().getBookId()) ==rating){
+					 result.add(bc);
+				 }
+			 }
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return result;		
+	}
+	
 	public int save(BookComment bc){
 		Session session = TribusHibernateSessionFactory.currentSession();
 		Transaction tx = session.beginTransaction();
@@ -87,75 +111,22 @@ public class BookCommentDao {
 	 * @param id
 	 * @return
 	 */
-/*	public List<UserComment> getBookCommentsByUserId(int id){
-		String sql = "select b.bookPic,b.bookName,bm.commentContent,bm.commentDate " +
-				"from book b, " +
-				"book_comment bm, " +
-				"user_account u where " +
-				" u.userId = bm.userId and b.bookId = bm.bookId" +
-				" bm.userId = ?";				
-		List<UserComment> bs = new ArrayList<UserComment>();		
-		Session session = TribusHibernateSessionFactory.currentSession();		
-		try {
-			List l = session.createSQLQuery(sql).setInteger(0, id).list();
-			if( l!=null ){
-				Iterator itr = l.iterator();
-				while(itr.hasNext()){
-					Object[] o = (Object[])itr.next();
-					
-					UserComment uc = new UserComment();
-					uc.setBookUrl(o[0].toString());
-					uc.setBookName(o[1].toString());
-					uc.setUserComments(o[2].toString());
-										
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd"); 
-					Date d = sdf.parse(o[3].toString());
-					 
-					uc.setDate(d);
-					bs.add(uc);
-													
-				}
-			}			
-		} catch ( Exception e ) {			
+	@SuppressWarnings("unchecked")
+	public List<BookComment> getBookCommentByUserId(int UserId ,int num){
+		Session session = TribusHibernateSessionFactory.currentSession();
+		List<BookComment> bcs = new ArrayList<BookComment>();
+		try{
+			String hql = "from BookComment as bc where bc.user.userId=:UserId";
+			bcs = session.createQuery(hql).
+								setInteger("UserId", UserId).list();
+		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-		return bs;		
+		if(bcs!=null && bcs.size() > num){
+			return bcs.subList(0, num);
+		}
+		return bcs;		
 	}
-	
-	
-	public List<UserComment> getBookCommentsByUserId(){
-		String sql = "select b.bookPic,b.bookName,bm.commentContent,bm.commentDate " +
-				"from book b, " +
-				"book_comment bm, " +
-				"user_account u where " +
-				" u.userId = bm.userId and b.bookId = bm.bookId" +
-				" ";				
-		List<UserComment> bs = new ArrayList<UserComment>();		
-		Session session = TribusHibernateSessionFactory.currentSession();		
-		try {
-			List l = session.createSQLQuery(sql).list();
-			if( l!=null ){
-				Iterator itr = l.iterator();
-				while(itr.hasNext()){
-					Object[] o = (Object[])itr.next();
-					
-					UserComment uc = new UserComment();
-					uc.setBookUrl(o[0].toString());
-					uc.setBookName(o[1].toString());
-					uc.setUserComments(o[2].toString());
-										
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd"); 
-					Date d = sdf.parse(o[3].toString());
-					 
-					uc.setDate(d);
-					bs.add(uc);																		
-				}
-			}			
-		} catch ( Exception e ) {			
-			System.out.println(e.getMessage());
-		}
-		return bs;		
-	}*/
 	
 	@SuppressWarnings("unchecked")
 	public List<BookComment> getAllBookComment(){

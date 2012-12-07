@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -28,14 +32,18 @@ public class Music implements Serializable{
 	private MusicType musicType;
 	private MusicVersion musicVersion;
 	private MusicAudio musicAudio;
-	private String musicPublishDate;
+	private Date musicPublishDate;
 	private String musicPublisher;
 	private Integer musicNum;
 	private Integer musicCode;
 	private String musicBrief;
 	private String musicPic;
+	private String musicPicBig;
+	private String musicPicMiddle;
+	private String musicPicSmall;
 	private User user;
 	private String recordDate;
+	private Set<MusicTag> tags = new HashSet<MusicTag>();
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer getMusicId() {
@@ -56,7 +64,7 @@ public class Music implements Serializable{
 	public void setMusicAlias(String musicAlias) {
 		this.musicAlias = musicAlias;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "singerId")
 	public Singer getSinger() {
 		return singer;
@@ -70,7 +78,7 @@ public class Music implements Serializable{
 	public void setMusicClassified(Integer musicClassified) {
 		this.musicClassified = musicClassified;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "typeId")
 	public MusicType getMusicType() {
 		return musicType;
@@ -78,7 +86,7 @@ public class Music implements Serializable{
 	public void setMusicType(MusicType musicType) {
 		this.musicType = musicType;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "versionId")
 	public MusicVersion getMusicVersion() {
 		return musicVersion;
@@ -86,7 +94,7 @@ public class Music implements Serializable{
 	public void setMusicVersion(MusicVersion musicVersion) {
 		this.musicVersion = musicVersion;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "audioId")
 	public MusicAudio getMusicAudio() {
 		return musicAudio;
@@ -94,10 +102,11 @@ public class Music implements Serializable{
 	public void setMusicAudio(MusicAudio musicAudio) {
 		this.musicAudio = musicAudio;
 	}
-	public String getMusicPublishDate() {
+
+	public Date getMusicPublishDate() {
 		return musicPublishDate;
 	}
-	public void setMusicPublishDate(String musicPublishDate) {
+	public void setMusicPublishDate(Date musicPublishDate) {
 		this.musicPublishDate = musicPublishDate;
 	}
 	public String getMusicPublisher() {
@@ -130,7 +139,25 @@ public class Music implements Serializable{
 	public void setMusicPic(String musicPic) {
 		this.musicPic = musicPic;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	public String getMusicPicBig() {
+		return musicPicBig;
+	}
+	public void setMusicPicBig(String musicPicBig) {
+		this.musicPicBig = musicPicBig;
+	}
+	public String getMusicPicMiddle() {
+		return musicPicMiddle;
+	}
+	public void setMusicPicMiddle(String musicPicMiddle) {
+		this.musicPicMiddle = musicPicMiddle;
+	}
+	public String getMusicPicSmall() {
+		return musicPicSmall;
+	}
+	public void setMusicPicSmall(String musicPicSmall) {
+		this.musicPicSmall = musicPicSmall;
+	}
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -143,5 +170,16 @@ public class Music implements Serializable{
 	}
 	public void setRecordDate(String recordDate) {
 		this.recordDate = recordDate;
+	}
+	@ManyToMany
+	@JoinTable(name="music_music_tag", 
+		joinColumns={@JoinColumn(name="musicId")},
+		inverseJoinColumns={@JoinColumn(name="tagId")}
+	)
+	public Set<MusicTag> getTags() {
+		return tags;
+	}
+	public void setTags(Set<MusicTag> tags) {
+		this.tags = tags;
 	}
 }

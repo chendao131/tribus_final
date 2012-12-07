@@ -49,8 +49,7 @@ public class ActivityFollowDao {
 			hql = hql + " and userId = '" + userId + "'";
 		}
 
-		return TribusHibernateSessionFactory.currentSession().createQuery(hql)
-				.list();
+		return TribusHibernateSessionFactory.currentSession().createQuery(hql).list();
 
 	}
 	public Boolean delActivityFollow(ActivityFollow activityFollow) {// É¾³ý¹Ø×¢Õß

@@ -57,9 +57,7 @@ public class ObjectCopy {
 	public static void main(String[] args){
 		User u =  new User();
 		u.setUserAlias("zhangsan");
-		u.setUserIntro("nihao");
 		u.setUserId(22);
-		
 		
 		UserProfile upf = new UserProfile();
 		upf.setProfId(123124);

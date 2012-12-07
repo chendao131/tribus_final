@@ -4,10 +4,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>upload failed!</title>
+
+<script type="text/javascript">
+		function callback()   
+		{   		    
+		    parent.document.getElementById("msg").innerHTML = "file size is too large or not Jpeg!";			
+		}   
+	</script>
+
 </head>
 <body>
 uploadfail !!
-<a href="uploadForm.action">please reupload</a> 
+	<script type="text/javascript">
+		callback();   
+	</script>
 </body>
 </html>

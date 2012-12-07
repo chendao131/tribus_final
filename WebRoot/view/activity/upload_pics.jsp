@@ -1,14 +1,21 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="/WEB-INF/tld/c-rt.tld" prefix="c"%><%
+<%@ page language="java" import="java.util.*,config.GlobleConfig,model.User" pageEncoding="utf-8"%>
+<%@ taglib uri="/WEB-INF/tld/c-rt.tld" prefix="c"%>
+<%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 			String size=(String) request.getAttribute("size");
-%><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+			request.setAttribute("path1",GlobleConfig.pathPath);
+			request.setAttribute("path2",GlobleConfig.pathPath1);
+			User user=(User)session.getAttribute("user");
+			
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<base href="<%=basePath%>">
+		
 
 		<title>My JSP 'upload_pics.jsp' starting page</title>
 
@@ -21,10 +28,11 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 		<link rel="stylesheet" type="text/css" media="screen,projection"
-			href="../tribus/view/activity/font/font.css" />
+			href="${path1}activity/font/font.css" />
 		<link rel="stylesheet" type="text/css" media="screen,projection"
-			href="../tribus/view/activity/css/style.css" />
-<script type="text/javascript" src="../tribus/view/js/jquery-1.6.2.min.js"></script>			
+			href="${path1}activity/css/style.css" />
+			    <link href="${path1}activity/css/browser.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${path1}js/jquery-1.6.2.min.js"></script>			
 		<script language="javascript">
 	function get11() {
 		$("#div11").show();
@@ -90,12 +98,12 @@
 
 	<body>
 		<div id="wrapper">
-			idde<!--start wrapper-->
+			<!--start wrapper-->
 			<div id="header">
 				<!--start header-->
 				<div class="logo">
-					<a href="index.html"><img
-							src="../tribus/view/activity/img/logo.png" alt="" width="59"
+					<a href="${path2}activity/index.action"><img
+							src="${path1}activity/img/logo.png" alt="" width="59"
 							height="65" />
 					</a>
 				</div>
@@ -106,19 +114,19 @@
 							<div id="menu_rgt">
 								<ul>
 									<li class="current_page_item">
-										<a href="#">CITY</a>
+										<a href="${path2}activity/index.action">CITY</a>
 									</li>
 									<li>
-										<a href="#" title="MOVIE">MOVIE</a>
+										<a href="${path2}movie/movieHomePage.action" title="MOVIE">MOVIE</a>
 									</li>
 									<li>
-										<a href="#" title="BOOK">BOOK</a>
+										<a href="${path2}book/bookHomePage.action" title="BOOK">BOOK</a>
 									</li>
 									<li>
-										<a href="#" title="MUSIC">MUSIC</a>
+										<a href="${path2}music/musicHomePage.action" title="MUSIC">MUSIC</a>
 									</li>
 									<li>
-										<a href="#" title="MY TRIBUS">MY TRIBUS</a>
+										<a href="${path2}user/my.action" title="MY TRIBUS">MY TRIBUS</a>
 									</li>
 								</ul>
 								<div class="header_search">
@@ -133,12 +141,12 @@
 								</div>
 								<div class="header_icon_area">
 									<span class="space_btm"><a href="#"><img
-												src="../tribus/view/activity/img/icon_header1.png" alt=""
+												src="${path1}activity/img/icon_header1.png" alt=""
 												width="10" height="11" />
 									</a>
 									</span>
 									<span><a href="#"><img
-												src="../tribus/view/activity/img/icon_header2.png" alt=""
+												src="${path1}activity/img/icon_header2.png" alt=""
 												width="12" height="13" />
 									</a>
 									</span>
@@ -156,7 +164,7 @@
 					<!--start saerch_area-->
 					<div id="search_bg" class="space_lft">
 						<!--start search_bg-->
-						<form action="activity/search.action">
+						<form action="${path2}activity/search.action">
                     	<p class="search_text"><input id="searchCondition" name="searchCondition" type="text" value="Seach activity, activity time, activity location" onclick="if(this.value=='Seach activity, activity time, activity location')(this.value='')"  onblur="if(this.value=='')(this.value='Seach activity, activity time, activity location')" /></p>
                         <p class="search_submit"><input type="submit" value=" " /></p>
                     </form>
@@ -166,39 +174,25 @@
 						<!--start social_media-->
 						<div id="social_lftcol">
 							<a href="#"><img
-									src="../tribus/view/activity/img/icon_facebook.jpg" alt=""
+									src="${path1}activity/img/icon_facebook.jpg" alt=""
 									width="24" height="24" />
 							</a>
 							<a href="#"><img
-									src="../tribus/view/activity/img/icon_tweet.jpg" alt=""
+									src="${path1}activity/img/icon_tweet.jpg" alt=""
 									width="24" height="24" />
 							</a>
 						</div>
 						<div id="social_box">
 							<!--start social_box-->
 							<div id="message">
-								<a href="#"><img
-										src="../tribus/view/activity/img/icon_message1.jpg" alt=""
-										width="22" height="22" /><span>5</span>
-								</a>
-								<a href="#"><img
-										src="../tribus/view/activity/img/icon_message2.jpg" alt=""
-										width="22" height="22" />
-								</a>
-								<a href="#"><img
-										src="../tribus/view/activity/img/icon_message3.jpg" alt=""
-										width="22" height="22" />
-								</a>
-								<a href="#"><img
-										src="../tribus/view/activity/img/icon_message4.jpg" alt=""
-										width="22" height="22" />
-								</a>
+								<a href="${path2}userMail/box/0/0.action"><img src="${path1}activity/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
+                            <a href="${path2}user/about.action"><img src="${path1}activity/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${path2}user/police.action"><img src="${path1}activity/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${path2}user/logout.action"><img src="${path1}activity/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
 							</div>
 							<div class="address">
-								<h3>
-									Jeremy Guan
-								</h3>
-								<span>New York City</span>
+								<h3><%if(user!=null){ %><a href="${path2}user/my.action"><%=user.getUserAlias()%></a><%}else{ %><a href="${path2}user/login.action">login</a><%} %></h3>
+								<span>${userProf.profCity}</span>
 							</div>
 						</div>
 						<!--//end #social_box-->
@@ -219,24 +213,23 @@
 							
 							<div class="frame" id="container_1">
 								<div class="icon_edit">
-									<img src="../tribus/view/activity/img/icon_edit.jpg" alt=""
+									<img src="${path1}activity/img/icon_edit.jpg" alt=""
 										width="19" height="19" />
 								</div>
 							</div>
 							<form method="post" name="form12" id="form_upload1"
-				action="http://localhost:8080/tribus/uploadForm/uploadAction.action"
+				action="${path2}uploadForm/uploadAction.action"
 				enctype="multipart/form-data" target="hidden_frame_1">
 
 				
 				<!-- input type="submit" value="submit" -->
-				<span id="msg"></span>
-				<div id="div_pic"></div>
+				<span id="msg"></span>				
 				<iframe name='hidden_frame_1' id="hidden_frame_1" style='display: none'></iframe>
 			
-							<p class="edit_txt">
+							
 							
 									
-			<input type="file" name="myfile"   onchange="$('#form_upload1').submit();"   />
+			<input type="file" name="myfile" value="browser pic" class="browser" onchange="$('#form_upload1').submit();"   />
 		<input type="hidden" value="1" name="div_container_number" />
 		</form>
 							
@@ -249,7 +242,7 @@
 									<input type="hidden" name="hidden_para1" id="hidden_para1" value="" />
 									<input type="text" name="albumName1" id="albumName1"/>
 
-									<%if(!size.equals("0")){ %><a href="javascript:get12()">已有相册1</a><%}else {%>相册名<%} %>
+									<%if(!size.equals("0")){ %><a href="javascript:get12()">Album Existed</a><%}else {%>Name<%} %>
 									
 							</div>
 							<%if(!size.equals("0")){ %>
@@ -261,7 +254,7 @@
 										</option>
 									</c:forEach>
 								</select>
-								<a href="javascript:get11()">新建</a>
+								<a href="javascript:get11()">New Album</a>
 								
 							</div><%} %>
 							<p class="edit_message">
@@ -276,21 +269,20 @@
 						
 						 <div class="edit_album_widget"><!--start edit_album_widget-->
                     	<div class="frame" id="container_2">
-                        	<div class="icon_edit"><img src="../tribus/view/activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
+                        	<div class="icon_edit"><img src="${path1}activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
                         </div>
                         
                         <form method="post" name="form12" id="form_upload2"
-				action="http://localhost:8080/tribus/uploadForm/uploadAction.action"
+				action="${path2}uploadForm/uploadAction.action"
 				enctype="multipart/form-data" target="hidden_frame_2">
 
 				
 				<!-- input type="submit" value="submit" -->
 				<span id="msg"></span>
-				<div id="div_pic"></div>
 				<iframe name='hidden_frame_2' id="hidden_frame_2" style='display: none'></iframe>
 			
-                        <p class="edit_txt">
-                        <input type="file" name="myfile"   onchange="$('#form_upload2').submit();"   /></p>
+                       
+                        <input type="file" name="myfile"  value="browser pic"  class="browser" onchange="$('#form_upload2').submit();"   /></p>
                         <input type="hidden" value="2" name="div_container_number" />
                         		</form>
                         		<div id="div21" <%if(!size.equals("0")){ %> style="display: none"<%} %>>
@@ -299,7 +291,7 @@
 									<input type="hidden" name="hidden_para2" id="hidden_para2" value="" />
 									<input type="text" name="albumName2" id="albumName2"/>
 
-									<%if(!size.equals("0")){ %><a href="javascript:get22()">已有相册2</a><%}else{ %>相册名<%} %>
+									<%if(!size.equals("0")){ %><a href="javascript:get22()">Album Existed</a><%}else{ %>Name<%} %>
 									
 							</div><%if(!size.equals("0")){ %>
 							<div id="div22" class="edit_drop">
@@ -310,7 +302,7 @@
 										</option>
 									</c:forEach>
 								</select>
-								<a href="javascript:get21()">新建</a>
+								<a href="javascript:get21()">New Album</a>
 								
 							</div><%} %>
                         <p class="edit_message">
@@ -320,24 +312,23 @@
 						
 						<div class="edit_album_widget padding_rgt_null"><!--start edit_album_widget-->
                     	<div class="frame" id="container_3">
-                        	<div class="icon_edit"><img src="../tribus/view/activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
+                        	<div class="icon_edit"><img src="${path1}activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
                         </div>
                         
                         
                         <form method="post" name="form12" id="form_upload3"
-				action="http://localhost:8080/tribus/uploadForm/uploadAction.action"
+				action="${path2}uploadForm/uploadAction.action"
 				enctype="multipart/form-data" target="hidden_frame_3">
 
 				
 				<!-- input type="submit" value="submit" -->
 				<span id="msg"></span>
-				<div id="div_pic"></div>
 				<iframe name='hidden_frame_3' id="hidden_frame_3" style='display: none'></iframe>
 			
                         
                         
                         
-                        <p class="edit_txt"><input type="file" name="myfile"   onchange="$('#form_upload3').submit();"   /></p>
+                      <input type="file" name="myfile"   value="browser pic"  class="browser" onchange="$('#form_upload3').submit();"   /></p>
                         <input type="hidden" value="3" name="div_container_number" />
                         </form>
                        							<div id="div31" <%if(!size.equals("0")){ %>style="display: none"<%} %>>
@@ -346,7 +337,7 @@
 									<input type="hidden" name="hidden_para3" id="hidden_para3" value="" />
 									<input type="text" name="albumName3" id="albumName3"/>
 
-<%if(!size.equals("0")){ %>									<a href="javascript:get32()">已有相册3</a><%}else{ %>相册名<%} %>
+<%if(!size.equals("0")){ %>									<a href="javascript:get32()">Album Existed</a><%}else{ %>Name<%} %>
 									
 							</div><%if(!size.equals("0")){ %>
 							<div id="div32" class="edit_drop">
@@ -357,7 +348,7 @@
 										</option>
 									</c:forEach>
 								</select>
-								<a href="javascript:get31()">新建</a>
+								<a href="javascript:get31()">New Album</a>
 								
 							</div><%} %>
                         <p class="edit_message">
@@ -369,22 +360,21 @@
 						
 						 <div class="edit_album_widget"><!--start edit_album_widget-->
                     	<div class="frame" id="container_4">
-                        	<div class="icon_edit"><img src="../tribus/view/activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
+                        	<div class="icon_edit"><img src="${path1}activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
                         </div>
                         
                         
                         
                         <form method="post" name="form12" id="form_upload4"
-				action="http://localhost:8080/tribus/uploadForm/uploadAction.action"
+				action="${path2}uploadForm/uploadAction.action"
 				enctype="multipart/form-data" target="hidden_frame_4">
 
 				
 				<!-- input type="submit" value="submit" -->
 				<span id="msg"></span>
-				<div id="div_pic"></div>
 				<iframe name='hidden_frame_4' id="hidden_frame_4" style='display: none'></iframe>
 			
-                        <p class="edit_txt"><input type="file" name="myfile"   onchange="$('#form_upload4').submit();"   /></p>
+                       <input type="file" name="myfile"  value="browser pic"  class="browser" onchange="$('#form_upload4').submit();"   /></p>
                          <input type="hidden" value="4" name="div_container_number" />
                         </form>
                        							<div id="div41" <%if(!size.equals("0")){ %>style="display: none"<%} %>>
@@ -393,7 +383,7 @@
 									<input type="hidden" name="hidden_para4" id="hidden_para4" value="" />
 									<input type="text" name="albumName4" id="albumName4"/>
 <%if(!size.equals("0")){ %>
-									<a href="javascript:get42()">已有相册4</a><%}else{ %>相册名<%} %>
+									<a href="javascript:get42()">Album Existed</a><%}else{ %>Name<%} %>
 									
 							</div><%if(!size.equals("0")){ %>
 							<div id="div42" class="edit_drop">
@@ -404,7 +394,7 @@
 										</option>
 									</c:forEach>
 								</select>
-								<a href="javascript:get41()">新建</a>
+								<a href="javascript:get41()">New Album</a>
 								
 							</div><%} %>
                         <p class="edit_message">
@@ -413,21 +403,20 @@
                     </div><!--//end .edit_album_widget-->
                     <div class="edit_album_widget"><!--start edit_album_widget-->
                     	<div class="frame" id="container_5">
-                        	<div class="icon_edit"><img src="../tribus/view/activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
+                        	<div class="icon_edit"><img src="${path1}activ${path1}it.jpg" alt="" width="19" height="19" /></div>
                         </div>
                         
                         
                         <form method="post" name="form12" id="form_upload5"
-				action="http://localhost:8080/tribus/uploadForm/uploadAction.action"
+				action="${path2}uploadForm/uploadAction.action"
 				enctype="multipart/form-data" target="hidden_frame_5">
 
 				
 				<!-- input type="submit" value="submit" -->
 				<span id="msg"></span>
-				<div id="div_pic"></div>
 				<iframe name='hidden_frame_5' id="hidden_frame_5" style='display: none'></iframe>
 			
-                        <p class="edit_txt"><input type="file" name="myfile"   onchange="$('#form_upload5').submit();"   /></p>
+                      <input type="file" name="myfile" value="browser pic"  class="browser"  onchange="$('#form_upload5').submit();"   /></p>
                          <input type="hidden" value="5" name="div_container_number" />
                         </form>
                         							<div id="div51" <%if(!size.equals("0")){ %> style="display: none"<%} %>>
@@ -436,7 +425,7 @@
 									<input type="hidden" name="hidden_para5" id="hidden_para5" value="" />
 									<input type="text" name="albumName5" id="albumName5"/>
 <%if(!size.equals("0")){ %>
-									<a href="javascript:get52()">已有相册5</a><%}else{ %>相册名<%} %>
+									<a href="javascript:get52()">Album Existed</a><%}else{ %>Name<%} %>
 									
 							</div><%if(!size.equals("0")){ %>
 							<div id="div52" class="edit_drop">
@@ -447,7 +436,7 @@
 										</option>
 									</c:forEach>
 								</select>
-								<a href="javascript:get51()">新建</a>
+								<a href="javascript:get51()">New Album</a>
 								
 							</div><%} %>
                         <p class="edit_message">
@@ -456,22 +445,21 @@
                     </div><!--//end .edit_album_widget-->
                     <div class="edit_album_widget padding_rgt_null"><!--start edit_album_widget-->
                     	<div class="frame" id="container_6">
-                        	<div class="icon_edit"><img src="../tribus/view/activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
+                        	<div class="icon_edit"><img src="${path1}activity/img/icon_edit.jpg" alt="" width="19" height="19" /></div>
                         </div>
                         
                         
                         
                         <form method="post" name="form12" id="form_upload6"
-				action="http://localhost:8080/tribus/uploadForm/uploadAction.action"
+				action="${path2}uploadForm/uploadAction.action"
 				enctype="multipart/form-data" target="hidden_frame_6">
 
 				
 				<!-- input type="submit" value="submit" -->
 				<span id="msg"></span>
-				<div id="div_pic"></div>
 				<iframe name='hidden_frame_6' id="hidden_frame_6" style='display:none'></iframe>
 			
-                        <p class="edit_txt"><input type="file" name="myfile"   onchange="$('#form_upload6').submit();"   /></p>
+                      <input type="file" name="myfile"  value="browser pic"  class="browser" onchange="$('#form_upload6').submit();"   /></p>
                         <input type="hidden" value="6" name="div_container_number" />
                         </form>
                        							<div id="div61" <%if(!size.equals("0")){ %>style="display: none"<%} %>>
@@ -480,7 +468,7 @@
 									<input type="hidden" name="hidden_para6" id="hidden_para6" value="" />
 									<input type="text" name="albumName6" id="albumName6"/>
 <%if(!size.equals("0")){ %>
-									<a href="javascript:get62()">已有相册6</a><%}else{ %>相册名<%} %>
+									<a href="javascript:get62()">Album Existed</a><%}else{ %>Name<%} %>
 									
 							</div><%if(!size.equals("0")){ %>
 							<div id="div62" class="edit_drop">
@@ -491,7 +479,7 @@
 										</option>
 									</c:forEach>
 								</select>
-								<a href="javascript:get61()">新建</a>
+								<a href="javascript:get61()">New Album</a>
 								
 							</div><%} %>
                         <p class="edit_message">
@@ -500,12 +488,19 @@
                     </div><!--//end .edit_album_widget-->
                     <div class="clear"></div>
 						
-						
+						<c:choose><c:when test="${flag==1}">
 						
 						<div class="save_edit">
-							<input type="button" id="save_button" name="Save" value="Save" disabled=true onclick="javascript:getValues();" >upload
+							<input type="button" id="save_button" name="Save" value="Save" disabled=true onclick="javascript:getValues();">
 						</div>
-					
+					</c:when>
+					</c:choose>
+					<div id="footer">
+					<p>
+						Copyright @ Tribus.us 2012.
+						<span>All rights reserved</span>
+					</p>
+				</div>
 					</div>
 					<!--//end #edit_album_content-->
 					
@@ -556,7 +551,7 @@
 									}
 									</script>
 									
-									<form method="post" action="activity/addPic.action?activityId=${activityId}" id="hidden_form">
+									<form method="post" action="${path2}activity/addPic.action?activityId=${activityId}" id="hidden_form">
 									
 										
 										<input type="hidden" name="desc1" id="desc1" value="" />
@@ -593,12 +588,7 @@
 
 									
 				<!--//end #common_maincontent-->
-				<div id="footer">
-					<p>
-						Copyright @ Tribus.us 2012.
-						<span>All rights reserved</span>
-					</p>
-				</div>
+				
 			</div>
 			<!--//end #main_area-->
 		</div>

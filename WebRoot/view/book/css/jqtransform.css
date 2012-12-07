@@ -12,14 +12,14 @@
 /* -------------
  * Checkboxes
  * ------------- */
-#chart_box_bg span.jqTransformCheckboxWrapper{
+span.jqTransformCheckboxWrapper{
 	display:block;
 }
-#chart_box_bg a.jqTransformCheckbox {
-	background: transparent url(../images/check2.png) no-repeat center top;
+ a.jqTransformCheckbox {
+	background: transparent url(../img/btn_chk.png) no-repeat center top;
 	vertical-align: middle;
-	height: 22px;
-	width: 18px;
+	height: 15px;
+	width: 11px;
 	display:block;/*display: -moz-inline-block;*/
 }
 
@@ -27,5 +27,5 @@
  * Checked - Used for both Radio and Checkbox
  * ------------- */
 a.jqTransformChecked { background-position: center bottom;}
-#chart_box_bg a.jqTransformChecked { background-position: center bottom;}
+a.jqTransformChecked { background-position: center bottom;}
 

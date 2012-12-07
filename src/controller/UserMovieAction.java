@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/userMovieAction")
 public class UserMovieAction {
 	
-
 	/**
 	 * Simply selects the welcome view to render by returning void and relying
 	 * on the default request-to-view-translator.

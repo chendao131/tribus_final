@@ -29,12 +29,27 @@ public class MovieTagDao {
 		return -1;	
 	}
 	
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public MovieTag getMovieTagByName(String name){
 		MovieTag mt = null;
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
 			String hql = "from MovieTag as mt where mt.tagName=:name";
+			List<MovieTag> mts = session.createQuery(hql).setString("name", name)
+					.list();
+			mt = mts.get(0);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return mt;
+	}*/
+	@SuppressWarnings("unchecked")
+	public MovieTag getMovieTagByName(String name){
+		MovieTag mt = null;
+		try {
+			Session session = TribusHibernateSessionFactory.currentSession();
+			String hql = "from MovieTag as mt where lower(mt.tagName)=:name";
 			List<MovieTag> mts = session.createQuery(hql).setString("name", name)
 					.list();
 			mt = mts.get(0);

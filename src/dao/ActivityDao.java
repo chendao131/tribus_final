@@ -6,13 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import model.Activity;
-import model.User;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class ActivityDao {
-	public boolean addActivity(Activity activity) {// Ôö¼Ó»î¶¯
+	public boolean addActivity(Activity activity) {// ï¿½ï¿½Ó»î¶¯
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
 			Transaction tx = session.beginTransaction();
@@ -26,7 +24,7 @@ public class ActivityDao {
 
 	}
 
-	public boolean updateActivity(Activity activity) {// ¸üÐÂ»î¶¯
+	public boolean updateActivity(Activity activity) {// ï¿½ï¿½ï¿½Â»î¶¯
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
 			Transaction tx = session.beginTransaction();
@@ -39,7 +37,7 @@ public class ActivityDao {
 		}
 	}
 
-	public boolean delActivityById(int activityId) {// Í¨¹ý»î¶¯IDÉ¾³ý»î¶¯
+	public boolean delActivityById(int activityId) {// Í¨ï¿½ï¿½î¶¯IDÉ¾ï¿½ï¿½î¶¯
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
 			Transaction tx = session.beginTransaction();
@@ -53,21 +51,28 @@ public class ActivityDao {
 		}
 	}
 
-	public Activity getActivityById(int activityId) {// Í¨¹ý»î¶¯IDÕÒ³ö»î¶¯
-		return (Activity) TribusHibernateSessionFactory.currentSession().get(Activity.class, activityId);
+	public Activity getActivityById(int activityId) {
+		return (Activity) TribusHibernateSessionFactory.currentSession().get(
+				Activity.class, activityId);
+	}
+	
+	public String getActivityNameById(int activityId) {
+		return  TribusHibernateSessionFactory.currentSession().createSQLQuery("select activityName from activity where activityId = :id").
+		setInteger("id", activityId).uniqueResult().toString();				
 	}
 
-	public List<Activity> getAllActivity() {// ÕÒ³öËùÓÐ»î¶¯
+	public List<Activity> getAllActivity() {
 		String hql = "from Activity";
-		return TribusHibernateSessionFactory.currentSession().createQuery(hql).list();
+		return TribusHibernateSessionFactory.currentSession().createQuery(hql)
+				.list();
 	}
 
 
 	public List<Activity> getActivityByCondition(String activityName,
 			String activityCity, Date activityStartTime,
 			Date activityFinishedTime) {
-		// ×éºÏÓï¾ä
-		String hql = "from Activity where  1=1 ";
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		String hql = "from Activity where  1=1";
 		if (activityName != null) {
 			hql = hql + " and activityName like '%" + activityName + "%'";
 		}
@@ -96,20 +101,24 @@ public class ActivityDao {
 		String sql = "select activityCity from activity a group by a.activityCity order by count(*) desc limit 4";
 		return TribusHibernateSessionFactory.currentSession().createSQLQuery(sql).list();
 	}
-	public List<Activity> getActivityByAbstractCondition(String condition){//¹ãÒåÄ£ºýËÑË÷£¬´ÓËùÓÐ×Ö¶Î½øÐÐËÑË÷
+	public List<Activity> getActivityByAbstractCondition(String condition){//ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶Î½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 		
 		String sql="select * from activity where activityName like '%"+ condition+"%' or activityCity ='"+condition+"' or userId = '"+condition+"'";
 		return TribusHibernateSessionFactory.currentSession().createSQLQuery(sql)
 		.addEntity(Activity.class).list();
 	}
-	public List<Activity> getActivityByClassifiedId(Integer classifiedId){//Í¨¹ý±êÇ©idÕÒ³ö¶ÔÓ¦»î¶¯ 			
+	public List<Activity> getActivityByClassifiedId(Integer classifiedId){//Í¨ï¿½ï¿½ï¿½Ç©idï¿½Ò³ï¿½ï¿½Ó¦ï¿½î¶¯ 
+		
+		
 		String sql="select * from activity where classifiedId ='"+ classifiedId+"'";
 		return TribusHibernateSessionFactory.currentSession().createSQLQuery(sql)
 		.addEntity(Activity.class).list();
 	}
-//	public static void main(String a[]) {
-//		ActivityDao a1=new ActivityDao();
-//		System.out.println(a1.getActivityByCondition(null, "´óÈÕ±¾", null, null).get(0).getActivityName());
-//	}
+public String getMaxId(){
+	String sql="select max(activityId) from activity";
+	return TribusHibernateSessionFactory.currentSession().createSQLQuery(sql).uniqueResult().toString();
+
+	
+}
 }

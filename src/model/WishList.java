@@ -18,16 +18,16 @@ public class WishList {
 	private Date createDate;
 	private String type;
 	private String wishListName;
-	private UserProfile userProfile;
+	private User user;
 		
 	
 	@OneToOne
 	@JoinColumn(name="userId")
-	public UserProfile getUserProfile() {
-		return userProfile;
+	public User getUser() {
+		return user;
 	}
-	public void setUserProfile(UserProfile userProfile) {
-		this.userProfile = userProfile;
+	public void setUser(User user) {
+		this.user = user;
 	}
 			
 	public String getWishListName() {

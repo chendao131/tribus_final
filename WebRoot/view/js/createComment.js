@@ -12,4 +12,4 @@ $(function comment_submit(){
 		}  
 		});  	// .ajax  	
 	});   //.button
-}
+})

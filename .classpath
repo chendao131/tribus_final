@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="tribus_data"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="com.genuitec.eclipse.j2eedt.core.J2EE14_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring3.0"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring3.0"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/dbDrivers"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/others"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/hib4"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/spring3/org.springframework.web.servlet-3.0.7.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Leon/Workspaces/MyEclipse 10/csv/lib/opencsv-2.3.jar"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/xwork-1.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/commons-lang3-3.1/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/commons-lang3-3.1/commons-lang3-3.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/commons-lang3-3.1/commons-lang3-3.1-sources.jar"/>
+	<classpathentry kind="lib" path="D:/WORK/thetribus/ProjectDirectory/lib/lib/commons-lang3-3.1/commons-lang3-3.1-tests.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Leon/Downloads/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Leon/Downloads/cglib-nodep-2.2.3.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

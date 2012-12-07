@@ -1,11 +1,18 @@
-<%@ page language="java" import="java.util.*,model.User" pageEncoding="utf8"%><%@ taglib uri="/WEB-INF/tld/c-rt.tld" prefix="c"%><%
+<%@ page language="java" import="java.util.*,model.User,config.GlobleConfig" pageEncoding="utf8"%>
+<%@ taglib uri="/WEB-INF/tld/c-rt.tld" prefix="c"%>
+<%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 User user=(User)request.getAttribute("user");
-%><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+request.setAttribute("path1",GlobleConfig.pathPath);
+request.setAttribute("path2",GlobleConfig.pathPath1);
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <base href="<%=basePath%>">
+    
     
     <title>My JSP 'myAlbum.jsp' starting page</title>
     
@@ -17,45 +24,45 @@ User user=(User)request.getAttribute("user");
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="../tribus/view/activity/font/font.css" />
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="../tribus/view/activity/css/style.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${path1}activity/font/font.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${path1}activity/css/style.css" />
    
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="../tribus/view/activity/css/css3.css" />
-    <script type="text/javascript" src="../tribus/view/js/jquery-1.6.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${path1}activity/css/css3.css" />
+    <script type="text/javascript" src="${path1}js/jquery-1.6.2.min.js"></script>
   </head>
   
   <body>
  <div id="wrapper"><!--start wrapper-->
     	<div id="header"><!--start header-->
-        	<div class="logo"><a href="index.html"><img src="../tribus/view/activity/img/logo.png" alt="" /></a></div>
+        	<div class="logo"><a href="index.html"><img src="${path1}activity/img/logo.png" alt="" /></a></div>
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
                     	<li class="current_page_item">
-										<a href="activity/index.action">CITY</a>
+										<a href="${path2}activity/index.action">CITY</a>
 									</li>
 									<li>
-										<a href="movie/movieHomePage.action" title="MOVIE">MOVIE</a>
+										<a href="${path2}movie/movieHomePage.action" title="MOVIE">MOVIE</a>
 									</li>
 									<li>
-										<a href="book/bookHomePage.action" title="BOOK">BOOK</a>
+										<a href="${path2}book/bookHomePage.action" title="BOOK">BOOK</a>
 									</li>
 									<li>
-										<a href="music/musicHomePage.action" title="MUSIC">MUSIC</a>
+										<a href="${path2}music/musicHomePage.action" title="MUSIC">MUSIC</a>
 									</li>
 									<li>
-										<a href="user/my.action" title="My TRIBUS">MY TRIBUS</a>
+										<a href="${path2}user/my.action" title="${path2}user/my.action">MY TRIBUS</a>
 									</li>
                     </ul>
                     <div class="header_search">
-                    	<form action="#">
-                        	<p class="txt_header"><input type="text" /></p>
+                    	<form action="${path2}user/searchAll.action">
+                        	<p class="txt_header"><input id="search" name="search" type="text" /></p>
                             <p class="submit_header"><input type="submit" value=" " /></p>
                         </form>
                     </div>
                     <div class="header_icon_area">
-                    	<span class="space_btm"><a href="#"><img src="../tribus/view/activity/img/icon_header1.png" alt="" /></a></span>
-                        <span><a href="#"><img src="../tribus/view/activity/img/icon_header2.png" alt="" /></a></span>
+                    	<span class="space_btm"><a href="#"><img src="${path1}activity/img/icon_header1.png" alt="" /></a></span>
+                        <span><a href="#"><img src="${path1}activity/img/icon_header2.png" alt="" /></a></span>
                     </div>
                 </div></div></div>
             </div><!--//end #header_rgt-->
@@ -63,26 +70,26 @@ User user=(User)request.getAttribute("user");
         <div id="main_area"><!--start main_area-->
         	<div id="saerch_area"><!--start saerch_area-->
             	<div id="search_bg" class="space_lft"><!--start search_bg-->
-                	<form action="activity/search.action">
+                	<form action="${path2}activity/search.action">
                     	<p class="search_text"><input id="searchCondition" name="searchCondition" type="text" value="Seach activity, activity time, activity location" onclick="if(this.value=='Seach activity, activity time, activity location')(this.value='')"  onblur="if(this.value=='')(this.value='Seach activity, activity time, activity location')" /></p>
                         <p class="search_submit"><input type="submit" value=" " /></p>
                     </form>
                 </div><!--//end #search_bg-->
                 <div id="social_media"><!--start social_media-->
                 	<div id="social_lftcol">
-                    	<a href="#"><img src="../tribus/view/activity/img/icon_facebook.jpg" alt="" /></a>
-                        <a href="#"><img src="../tribus/view/activity/img/icon_tweet.jpg" alt="" /></a>
+                    	<a href="#"><img src="${path1}activity/img/icon_facebook.jpg" alt="" /></a>
+                        <a href="#"><img src="${path1}activity/img/icon_tweet.jpg" alt="" /></a>
                     </div>
                     <div id="social_box"><!--start social_box-->
                     	<div id="message">
-                        	<a href="#"><img src="../tribus/view/activity/img/icon_message1.jpg" alt="" /><span>5</span></a>
-                            <a href="#"><img src="../tribus/view/activity/img/icon_message2.jpg" alt="" /></a>
-                            <a href="#"><img src="../tribus/view/activity/img/icon_message3.jpg" alt="" /></a>
-                            <a href="#"><img src="../tribus/view/activity/img/icon_message4.jpg" alt="" /></a>
+                        	<a href="#"><img src="${path1}activity/img/icon_message1.jpg" alt="" /><span>5</span></a>
+                            <a href="#"><img src="${path1}activity/img/icon_message2.jpg" alt="" /></a>
+                            <a href="#"><img src="${path1}activity/img/icon_message3.jpg" alt="" /></a>
+                            <a href="#"><img src="${path1}activity/img/icon_message4.jpg" alt="" /></a>
                         </div>
                         <div class="address">
-                        	<h3><%if(user!=null){ %><a href="user/my/<%=user.getUserId()%>">welcome back,<%=user.getUserAlias()%></a><%}else{ %><a href="user/login.action">login</a><%} %></h3>
-                            <span>New York City</span>
+                        	<h3><%if(user!=null){ %><a href="user/my.action"><%=user.getUserAlias()%></a><%}else{ %><a href="user/login.action">login</a><%} %></h3>
+                            <span>${userProf.profCity}</span>
                         </div>
                     </div><!--//end #social_box-->
                 </div><!--//end #social_media-->
@@ -101,12 +108,12 @@ User user=(User)request.getAttribute("user");
 					
                     	<h2>${item.albumName }</h2>
                     	<div class="frame">
-                        	<a href="activity/showPicList.action?albumId=${item.albumId}"><img src="${item.albumCover}" alt="" width=192 height=192/></a>
-                        	<div class="icon_edit"><img src="../tribus/view/activity/img/icon_edit.jpg" alt="" width=19 height=19/></div>
+                        	<a href="${path2}activity/showPicList.action?albumId=${item.albumId}"><img src="${item.albumCover}" alt="" width=192 height=192/></a>
+                        	<div class="icon_edit"><img src="${path1}activity/img/icon_edit.jpg" alt="" width=19 height=19/></div>
 							
                         </div>
 						 <p class="edit_message">
-                        	<textarea id="picDescription${i.index }" name="picDescription${i.index }" rows="10" cols="10" onclick="if(this.value=='Introduction')(this.value='')" onblur="if(this.value=='')(this.value='Introduction')"><c:choose><c:when test="${item.albumDescription!=null}">${item.albumDescription}</c:when><c:otherwise>Introduction</c:otherwise></c:choose></textarea>
+                        	<textarea  <c:choose><c:when test="${flag==0}"> readonly=true </c:when></c:choose> id="picDescription${i.index }" name="picDescription${i.index }" rows="10" cols="10" onclick="if(this.value=='Introduction')(this.value='')" onblur="if(this.value=='')(this.value='Introduction')"><c:choose><c:when test="${item.albumDescription!=null}">${item.albumDescription}</c:when><c:otherwise>Introduction</c:otherwise></c:choose></textarea>
                         </p>
                     </div><!--//end .edit_album_widget-->
                    <c:choose>
@@ -116,24 +123,11 @@ User user=(User)request.getAttribute("user");
                     </c:choose>
                      <input type="hidden" name="albumId${i.index}" id="albumId${i.index}" value="${item.albumId }" />
                      </c:forEach>
-                    <div id="follower_apgi">
-                            <a href="#" class="prev"> </a>
-                              <c:forEach items="${pageNumbers}" var="item">  
-             <a href="activity/album.action?page=${item}&activityId=${activityId}">
-             ${item}
-             </a>&nbsp
-            
-            </c:forEach>
-                            <a href="#" class="next"></a>
-                    	</div>
-                    	                    <div class="save_edit">
-<input type="button" id="save_button" name="Save" value="Save"  onclick="javascript:getValues();" >
 
-</div>
                 </div><!--//end #edit_album_content-->
                 
                 
-                
+       
                 
             </div>
             
@@ -160,7 +154,7 @@ User user=(User)request.getAttribute("user");
 									}
 									</script>
 									
-									<form method="post" action="activity/editAlbum.action" id="hidden_form">
+									<form method="post" action="${path2}activity/editAlbum.action" id="hidden_form">
 									
 										
 										<input type="hidden" name="desc1" id="desc1" value="" />
@@ -187,8 +181,25 @@ User user=(User)request.getAttribute("user");
             
             
             <!--//end #common_maincontent-->
-            <div id="footer"><p>Copyright @ Tribus.us 2012.      <span>All rights reserved</span> </p></div>
+           
         </div><!--//end #main_area-->
+          <div id="follower_apgi">
+                            <a href="#" class="prev"> </a>
+                              <c:forEach items="${pageNumbers}" var="item">  
+             <a href="${path2}activity/album.action?page=${item}&activityId=${activityId}">
+             ${item}
+             </a>&nbsp
+            
+            </c:forEach>
+                            <a href="#" class="next"></a>
+                    	</div>
+              <c:choose><c:when test="${flag==1}">
+              <div class="save_edit">
+<input type="button" id="save_button" name="Save" value="Save"  onclick="javascript:getValues();" >
+
+</div>
+</c:when></c:choose>
+ <div id="footer"><p> &copy;2012 goTribus |<span>All rights reserved</span> </p></div>
     </div><!--//end #wrapper-->
   </body>
 </html>

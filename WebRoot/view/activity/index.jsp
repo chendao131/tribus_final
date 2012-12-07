@@ -1,5 +1,5 @@
 <%@ page language="java"
-	import="java.util.*,model.User,model.Activity,model.ActivityClassified,vo.ActivityGoingMax,vo.UserComment"
+	import="java.util.*,model.User,model.Activity,model.ActivityClassified,vo.ActivityGoingMax,vo.UserComment,config.GlobleConfig"
 	pageEncoding="utf-8"%>
 <%@ taglib uri="/WEB-INF/tld/c-rt.tld" prefix="c"%>
 <%
@@ -18,12 +18,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	int day1=0;
 	if(latestActivity!=null){
 	day1=latestActivity.getActivityStartTime().getDate();}
+request.setAttribute("path2",GlobleConfig.pathPath1);
+	request.setAttribute("path1",GlobleConfig.pathPath);
+//asdfsdfdsf	
+	List days=(List<Integer>)request.getAttribute("days");
 	%>
+
+
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<base href="<%=basePath%>">
 
 		<title>My JSP 'index.jsp' starting page</title>
 
@@ -36,15 +42,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 		<link rel="stylesheet" type="text/css" media="screen,projection"
-			href="../tribus/view/activity/font/font.css" />
+			href="${path1}activity/font/font.css" />
 		<link rel="stylesheet" type="text/css" media="screen,projection"
-			href="../tribus/view/activity/css/style.css" /> 
+			href="${path1}activity/css/style.css" />
 		<script type="text/javascript">
 function search(){
 var a =document.getElementById("txt1");
-window.location.href="activity/search.action?searchCondition="+a.value;
+window.location.href="${path2}activity/search.action?searchCondition="+a.value;
 }
 </script>
+<style type="text/css">
+.STYLE1 {color: #FF0000}
+</style>
 	</head>
 
 	<body>
@@ -53,8 +62,8 @@ window.location.href="activity/search.action?searchCondition="+a.value;
 			<div id="header">
 				<!--start header-->
 				<div class="logo">
-					<a href="index.html"><img src="../tribus/view/activity/img/logo.png" alt="" />
-					</a>
+					<a name="top" href="${path2}activity/index.action"><img
+							src="${path1}activity/img/logo.png" alt="" /> </a>
 				</div>
 				<div id="header_rgt">
 					<!--start header_rgt-->
@@ -63,40 +72,33 @@ window.location.href="activity/search.action?searchCondition="+a.value;
 							<div id="menu_rgt">
 								<ul>
 									<li class="current_page_item">
-										<a href="activity/index.action">CITY</a>
+										<a href="${path2}activity/index.action">CITY</a>
 									</li>
 									<li>
-										<a href="movie/movieHomePage.action" title="MOVIE">MOVIE</a>
+										<a href="${path2}movie/movieHomePage.action" title="MOVIE">MOVIE</a>
 									</li>
 									<li>
-										<a href="book/bookHomePage.action" title="BOOK">BOOK</a>
+										<a href="${path2}book/bookHomePage.action" title="BOOK">BOOK</a>
 									</li>
 									<li>
-										<a href="music/musicHomePage.action" title="MUSIC">MUSIC</a>
+										<a href="${path2}music/musicHomePage.action" title="MUSIC">MUSIC</a>
 									</li>
 									<li>
-										<a href="#" title="user/my.action">MY TRIBUS</a>
+										<a href="${path2}user/my.action" title="MY TRIBUS">MY
+											TRIBUS</a>
 									</li>
 								</ul>
 								<div class="header_search">
-									<form action="#">
-										<p class="txt_header">
-											<input type="text" />
-										</p>
-										<p class="submit_header">
-											<input type="submit" value=" " />
-										</p>
-									</form>
+									<form action="${path2}user/searchAll.action">
+                        	<p class="txt_header"><input id="search" name="search" type="text" /></p>
+                            <p class="submit_header"><input type="submit" value=" " /></p>
+                        </form>
 								</div>
 								<div class="header_icon_area">
 									<span class="space_btm"><a href="#"><img
-												src="../tribus/view/activity/img/icon_header1.png" alt="" />
-									</a>
-									</span>
-									<span><a href="#"><img src="../tribus/view/activity/img/icon_header2.png"
-												alt="" />
-									</a>
-									</span>
+												src="${path1}activity/img/icon_header1.png" alt="" /> </a> </span>
+									<span><a href="${path2}user/editForm.action"><img
+												src="${path1}activity/img/icon_header2.png" alt="" /> </a> </span>
 								</div>
 							</div>
 						</div>
@@ -111,13 +113,8 @@ window.location.href="activity/search.action?searchCondition="+a.value;
 					<!--start saerch_area-->
 					<div id="search_bg">
 						<!--start search_bg-->
-						<form action="activity/search.action">
-							<p class="search_text">
-								<input id="txt1" name="searchCondition"  type="text"
-									value="Music, Musicial, Album, tribus music list"
-									onclick="if (this.value == 'Music, Musicial, Album, tribus music list') (this.value = '')";
-onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list')" />
-							</p>
+						<form action="${path2}activity/search.action">
+							<p class="search_text"><input id="txt1" name="searchCondition" type="text" value="Seach activity, activity time, activity location" onclick="if(this.value=='Seach activity, activity time, activity location')(this.value='')"  onblur="if(this.value=='')(this.value='Seach activity, activity time, activity location')" /></p>
 							<p class="search_submit">
 								<input type="submit" value=" " />
 							</p>
@@ -127,32 +124,27 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 					<div id="social_media">
 						<!--start social_media-->
 						<div id="social_lftcol">
-							<a href="#"><img src="../tribus/view/activity/img/icon_facebook.jpg" alt="" />
-							</a>
-							<a href="#"><img src="../tribus/view/activity/img/icon_tweet.jpg" alt="" />
-							</a>
+							<a href="#"><img src="${path1}activity/img/icon_facebook.jpg"
+									alt="" /> </a>
+							<a href="#"><img src="${path1}activity/img/icon_tweet.jpg"
+									alt="" /> </a>
 						</div>
 						<div id="social_box">
 							<!--start social_box-->
 							<div id="message">
-								<a href="#"><img src="../tribus/view/activity/img/icon_message1.jpg" alt="" /><span>5</span>
-								</a>
-								<a href="#"><img src="../tribus/view/activity/img/icon_message2.jpg" alt="" />
-								</a>
-								<a href="#"><img src="../tribus/view/activity/img/icon_message3.jpg" alt="" />
-								</a>
-								<a href="#"><img src="../tribus/view/activity/img/icon_message4.jpg" alt="" />
-								</a>
+								<a href="${path2}userMail/box/0/0.action"><img src="${path1}activity/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
+                            <a href="${path2}user/about.action"><img src="${path1}activity/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${path2}user/police.action"><img src="${path1}activity/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${path2}user/logout.action"><img src="${path1}activity/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
 							</div>
 							<div class="address">
-								<h3>
-									<%if(u==null){%><a href="user/login.action">login</a>
-									<%}else{ %>Welcome back,
-									<a href="user/my/<%=u.getUserId()%>"><%=u.getUserAlias()%>
-										<%} %>
-									</a>
+									<h3>
+									<%if(u==null){%><a href="${path2}user/loginForm.action">login</a>
+									<%}else{ %>
+									<a href="${path2}user/my.action"><%=u.getUserAlias()%>
+										<%} %> </a>
 								</h3>
-								<span>New York City</span>
+								<span>${userProf.profCity}</span>
 							</div>
 						</div>
 						<!--//end #social_box-->
@@ -167,9 +159,9 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 						<%if(hottestActivityList.get(0)!=null) {%>
 						<div id="banner">
 							<a
-								href="activity/info.action?activityId=<%=hottestActivityList.get(0).getActivityId()%>"><img
-									src="<%=hottestActivityList.get(0).getActivityPic() %>" width="729" height="479"/>
-							</a>
+								href="${path2}activity/info.action?activityId=<%=hottestActivityList.get(0).getActivityId()%>"><img
+									src="<%=hottestActivityList.get(0).getActivityPic() %>"
+									width="729" height="479" /> </a>
 						</div>
 						<div class="banner_title">
 							<h2><%=hottestActivityList.get(0).getActivityName() %></h2>
@@ -182,15 +174,17 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 								<div class="event_top">
 									<div class="event_btm">
 										<div class="event_lftcol">
-											<img src="../tribus/view/activity/img/icon_star.jpg" alt="" />
+											<img src="${path1}activity/img/icon_star.jpg" alt="" />
 										</div>
 										<div class="event_rgtcol">
 											<h3>
 												Your Next City Events
 											</h3>
 											<p>
-											<%if(latestActivity==null){ %>本月剩余时间无活动<%}else{ %><a href="activity/info.action?activityId=<%=latestActivity.getActivityId() %>"><%=latestActivity.getActivityStartTime() %>&nbsp<%=latestActivity.getActivityName() %> <%} %></a>
-												
+												<%if(latestActivity==null){ %>No to-do events among this month<%}else{ %><a
+													href="${path2}activity/info.action?activityId=<%=latestActivity.getActivityId() %>"><%=latestActivity.getActivityStartTime() %>&nbsp<%=latestActivity.getActivityName() %>
+													<%} %> </a>
+
 											</p>
 										</div>
 									</div>
@@ -200,104 +194,57 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 						<!--//end .event_box-->
 						<div class="calender">
 							<!--start calender-->
-							<div class="indicator"></div>
+						
 							<div class="prev_home">
 								<a href="#"></a>
 							</div>
 							<ul>
+								<%for(int i=1;i<29;i++){ %>
+								<%if(days!=null&&days.contains(i)){%>
+								<li >
+									<a style="color:red"  href="${path2}activity/searchByDay.action?day=<%=i%>&month=<%=month%>"><%if(i<=9){%>0<%}%><%=i%></a>
+								</li>
+								<%}else{ %>
+								<li><%if(day==i){ %> <u><%}%><a href="javascript:void(0);"><%if(i<=9){%>0<%}%><%=i %></a><%if(day==i){ %> </u><%}%></li>
+								<%} %>
+								<%} %>
+								<% if((year%400==0)||((year%100!=0)&&(year%4==0))){//如果是闰年
+   if(month==2){//如果是闰年的二月必有29%>
+								<%if(days!=null&&days.contains(29)){%>
+								<li >
+									<a style="color:red" href="${path2}activity/searchBy.action?day=<%=29%>&month=<%=month%>"><%=29%></a>
+								</li>
+								<%}else{ %>
+								<li><%if(day==29){ %> <u><%}%><a href="javascript:void(0);"><%=29 %></a><%if(day==29){ %> </u><%}%></li>
+								<%} }}%>
+								<%if(month!=2){//如果不是二月 必有29、30%>
+								<%if(days!=null&&days.contains(29)){%>
+								<li >
+									<a style="color:red" href="${path2}activity/searchByDay.action?day=<%=29%>&month=<%=month%>"><%=29%></a>
+								</li>
+								<%}else{ %>
+								<li><%if(day==29){ %> <u><%}%><a href="javascript:void(0);"><%=29 %></a><%if(day==29){ %> </u><%}%></li>
+								<%}
+								if(days!=null&&days.contains(30)){%>
 								<li>
-									<a href="#">02</a>
+									<a style="color:red"  href="${path2}activity/searchByDay.action?day=<%=30%>&month=<%=month%>"><%=30%></a>
 								</li>
+								<%}else{ %>
+								<li><%if(day==30){ %> <u><%}%><a href="javascript:void(0);"><%=30 %></a><%if(day==30){ %> </u><%}%></li>
+								<%} 
+								 }%>
+
+								<%if((month==1)||(month==3)||(month==5)||(month==7)||(month==8)||(month==10)||(month==12) ){System.out.println(month);%>
+								<%if(days!=null&&days.contains(31)){%>
 								<li>
-									<a href="#">03</a>
+									<a style="color:red"  href="${path2}activity/searchByDay.action?day=<%=31%>&month=<%=month%>"><%=31%></a>
 								</li>
-								<li>
-									<a href="#">04 </a>
-								</li>
-								<li>
-									<a href="#">05</a>
-								</li>
-								<li>
-									<a href="#">06 </a>
-								</li>
-								<li>
-									<a href="#">07 </a>
-								</li>
-								<li>
-									<a href="#">08</a>
-								</li>
-								<li>
-									<a href="#">09</a>
-								</li>
-								<li>
-									<a href="#">10</a>
-								</li>
-								<li>
-									<a href="#">11</a>
-								</li>
-								<li>
-									<a href="#">12</a>
-								</li>
-								<li>
-									<a href="#">13</a>
-								</li>
-								<li>
-									<a href="#">14 </a>
-								</li>
-								<li>
-									<a href="#">15</a>
-								</li>
-								<li>
-									<a href="#">16 </a>
-								</li>
-								<li>
-									<a href="#">17</a>
-								</li>
-								<li>
-									<a href="#">18</a>
-								</li>
-								<li class="current_page_item">
-									<a href="#">19 </a>
-								</li>
-								<li>
-									<a href="#">20 </a>
-								</li>
-								<li>
-									<a href="#">21</a>
-								</li>
-								<li>
-									<a href="#">22 </a>
-								</li>
-								<li>
-									<a href="#">23 </a>
-								</li>
-								<li>
-									<a href="#">24 </a>
-								</li>
-								<li>
-									<a href="#">25 </a>
-								</li>
-								<li>
-									<a href="#">26 </a>
-								</li>
-								<li>
-									<a href="#">27 </a>
-								</li>
-								<li>
-									<a href="#">28 </a>
-								</li>
-								<li>
-									<a href="#">29 </a>
-								</li>
-								<li>
-									<a href="#">30</a>
-								</li>
-								<li>
-									<a href="#">31 </a>
-								</li>
+								<%}else{ %>
+								<li><%if(day==31){ %> <u><%}%><a href="javascript:void(0);"><%=31 %></a><%if(day==31){ %> </u><%}%></li>
+								<%} }%>
 							</ul>
 							<div class="month">
-								<span>MARCH 01</span>
+								<span><%=new Date().toString().substring(4, 7)%></span>
 							</div>
 							<div class="next_home">
 								<a href="#"></a>
@@ -305,34 +252,37 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 						</div>
 						<!--//end .calender-->
 						<div class="ranger">
-							<img src="../tribus/view/activity/img/bgr_ranger.png" alt="" />
+							<img src="${path1}activity/img/bgr_ranger.png" alt="" />
 						</div>
-						<div class="ranger_icon">
-							<a href="activity/activityCreatInit.action"><img src="../tribus/view/activity/img/icon_ranger.png" alt="" />
-							</a>
-						</div>
-						<div class="event_btn">
-							<a href="activity/activityCreatInit.action"><span><span>Create your Event</span>
-							</span>
-							</a>
-						</div>
+						<c:choose>
+							<c:when test="${flag==1}">
+								<div class="ranger_icon">
+									<a href="${path2}activity/activityCreatInit.action"><img
+											src="${path1}activity/img/icon_ranger.png" alt="" /> </a>
+								</div>
+
+								<div class="event_btn">
+									<a href="${path2}activity/activityCreatInit.action"><span><span>Create
+												your Event</span> </span> </a>
+								</div>
+							</c:when>
+						</c:choose>
 						<div id="common_content_area">
 							<!--start common_content_area-->
 							<%if(session.getAttribute("user")==null) {%>
 
-							<c:forEach items="${commentListRandom}" var="item"
-								varStatus="i">
+							<c:forEach items="${commentListRandom}" var="item" varStatus="i">
 
 								<div class="common_box">
 									<!--start common_box-->
 									<c:choose>
-									<c:when test="${i.index == 0}">
-										<div class="title">
-											<h2>
-												Random Recommend
-											</h2>
-										</div>
-									</c:when>
+										<c:when test="${i.index == 0}">
+											<div class="title">
+												<h2>
+													Random Recommend
+												</h2>
+											</div>
+										</c:when>
 									</c:choose>
 									<div class="common_box_bg">
 										<div class="common_box_top">
@@ -343,15 +293,17 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 													<div class="scnd_feature_lft">
 														<!--start scnd_feature_lft-->
 														<a
-															href="activity/info.action?activityId=${item.activity.activityId }"><img src="${item.activity.activityPic}" alt="" width=137 height=187/>
-														</a>
+															href="${path2}activity/info.action?activityId=${item.activity.activityId }"><img
+																src="${item.activity.activityPic}" alt="" width=137
+																height=187 /> </a>
 														<div class="feature_info">
 															<div class="feature_txt">
 																<p>
 																	<a
-																		href="activity/info.action?activityId=${item.activity.activityId}">${item.activity.activityName}</a>
+																		href="${path2}activity/info.action?activityId=${item.activity.activityId}">${item.activity.activityName}</a>
 																	<br />
-																	${item.activity.activityCity}&nbsp ${item.activity.activityStreet}
+																	${item.activity.activityCity}&nbsp
+																	${item.activity.activityStreet}
 																	<br />
 																	${item.activity.activityState }&nbsp
 																	<br />
@@ -360,9 +312,11 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 															</div>
 															<div class="feature_social">
 																<div class="feature_icon">
-																	<a href="#"><img src="../tribus/view/activity/img/icon_feature1.png" alt="" />
+																	<a href="#"><img
+																			src="${path1}activity/img/icon_feature1.png" alt="" />
 																	</a>
-																	<a href="#"><img src="../tribus/view/activity/img/icon_feature2.png" alt="" />
+																	<a href="#"><img
+																			src="${path1}activity/img/icon_feature2.png" alt="" />
 																	</a>
 																</div>
 																<div class="feature_list">
@@ -378,8 +332,9 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 														<ul>
 															<c:forEach items="${item.userComments}" var="item">
 																<li>
-																	<span><a href="user/my/${item.userId}"><img src="${item.userPic}" alt="" width=41 height=39/>
-																	</span><small>: ${item.userComment }</small>
+																	<span><a href="${path2}user/friendHome/${item.userId}.action"><img
+																				src="${item.userPic}" alt="" width=41 height=39 />
+																	</a> </span><small>: ${item.userComment}</small>
 																</li>
 															</c:forEach>
 														</ul>
@@ -418,15 +373,17 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 													<div class="scnd_feature_lft">
 														<!--start scnd_feature_lft-->
 														<a
-															href="activity/info.action?activityId=${item.activity.activityId }"><img src="${item.activity.activityPic}" alt="" width="137" height="187"/>
-														</a>
+															href="${path2}activity/info.action?activityId=${item.activity.activityId }"><img
+																src="${item.activity.activityPic}" alt="" width="137"
+																height="187" /> </a>
 														<div class="feature_info">
 															<div class="feature_txt">
 																<p>
 																	<a
-																		href="activity/info.action?activityId=${item.activity.activityId}">${item.activity.activityName}</a>
+																		href="${path2}activity/info.action?activityId=${item.activity.activityId}">${item.activity.activityName}</a>
 																	<br />
-																	${item.activity.activityCity}&nbsp ${item.activityStreet}
+																	${item.activity.activityCity}&nbsp
+																	${item.activityStreet}
 																	<br />
 																	${item.activity.activityState }&nbsp
 																	<br />
@@ -435,9 +392,11 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 															</div>
 															<div class="feature_social">
 																<div class="feature_icon">
-																	<a href="#"><img src="../tribus/view/activity/img/icon_feature1.png" alt="" />
+																	<a href="#"><img
+																			src="${path1}activity/img/icon_feature1.png" alt="" />
 																	</a>
-																	<a href="#"><img src="../tribus/view/activity/img/icon_feature2.png" alt="" />
+																	<a href="#"><img
+																			src="${path1}activity/img/icon_feature2.png" alt="" />
 																	</a>
 																</div>
 																<div class="feature_list">
@@ -453,8 +412,9 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 														<ul>
 															<c:forEach items="${item.userComments}" var="item">
 																<li>
-																	<span><a href="user/my/${item.userId}"><img src="${item.userPic}" alt="" />
-																	</span><small>: ${item.userComment }</small>
+																	<span><a href="${path2}user/friendHome/${item.userId}.action"><img
+																				src="${item.userPic}" alt="" />
+																	</span><small>: ${item.userComment}</small>
 																</li>
 															</c:forEach>
 														</ul>
@@ -479,7 +439,7 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 					<!--//end #content-->
 					<div id="side_bar">
 						<!--start side_bar-->
-						
+
 						<!--//end .blue_widget-->
 						<div class="widget">
 							<!--start widget-->
@@ -488,16 +448,26 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 							</h2>
 
 							<c:forEach items="${activityGoingMaxList}" var="item">
-                        <div class="bar_widget">
-                        	<a href="activity/info.action?activityId=${item.activityId }"><img src="${item.picPath}" width="65" height="96" /></a>
-                            <div class="bar_info">
-                            	<h3><a href="activity/info.action?activityId=${item.activityId }">${item.activityName }</h3>
-                                <span>Host: ${item.userName }</span>
-                                <p>Open:${item.activityStartTime }<br /></p>
-                                <div class="join"><small>${item.numbers } (people)</small>      <a>Join in</a> </div>
-                            </div>
-                        </div>
-                        </c:forEach>
+								<div class="bar_widget">
+									<a href="${path2}activity/info.action?activityId=${item.activityId }"><img
+											src="${item.picPath}" width="65" height="96" /> </a>
+									<div class="bar_info">
+										<h3>
+											<a href="${path2}activity/info.action?activityId=${item.activityId }">${item.activityName
+												} 
+										</h3>
+										<span>Host: ${item.userName }</span>
+										<p>
+											Open:${item.activityStartTime }
+											<br />
+										</p>
+										<div class="join">
+											<small>${item.numbers} (people)</small>
+											<a>Join in</a>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
 
 						</div>
 						<!--//end .widget-->
@@ -509,19 +479,19 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 							<div class="widget_info">
 								<p>
 									<a
-										href="activity/searchByTag.action?tagName=<%=activityTagsList.get(0).getClassifiedName() %>"><%=activityTagsList.get(0).getClassifiedName() %></a>/
+										href="${path2}activity/searchByTag.action?tagName=<%=activityTagsList.get(0).getClassifiedName() %>"><%=activityTagsList.get(0).getClassifiedName() %></a>/
 									<a
-										href="activity/searchByTag.action?tagName=<%=activityTagsList.get(1).getClassifiedName()%>"><%=activityTagsList.get(1).getClassifiedName()%></a>
+										href="${path2}activity/searchByTag.action?tagName=<%=activityTagsList.get(1).getClassifiedName()%>"><%=activityTagsList.get(1).getClassifiedName()%></a>
 									<br />
 									<a
-										href="activity/searchByTag.action?tagName=<%=activityTagsList.get(2).getClassifiedName()%>"><%=activityTagsList.get(2).getClassifiedName()%></a>/
+										href="${path2}activity/searchByTag.action?tagName=<%=activityTagsList.get(2).getClassifiedName()%>"><%=activityTagsList.get(2).getClassifiedName()%></a>/
 									<a
-										href="activity/searchByTag.action?tagName=<%=activityTagsList.get(3).getClassifiedName() %>"><%=activityTagsList.get(3).getClassifiedName() %></a>
+										href="${path2}activity/searchByTag.action?tagName=<%=activityTagsList.get(3).getClassifiedName() %>"><%=activityTagsList.get(3).getClassifiedName() %></a>
 									<br />
 									<a
-										href="activity/searchByTag.action?tagName=<%=activityTagsList.get(4).getClassifiedName() %>"><%=activityTagsList.get(4).getClassifiedName() %></a>/
+										href="${path2}activity/searchByTag.action?tagName=<%=activityTagsList.get(4).getClassifiedName() %>"><%=activityTagsList.get(4).getClassifiedName() %></a>/
 									<a
-										href="activity/searchByTag.action?tagName=<%=activityTagsList.get(5).getClassifiedName() %>"><%=activityTagsList.get(5).getClassifiedName() %></a>
+										href="${path2}activity/searchByTag.action?tagName=<%=activityTagsList.get(5).getClassifiedName() %>"><%=activityTagsList.get(5).getClassifiedName() %></a>
 								</p>
 							</div>
 						</div>
@@ -535,12 +505,11 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 								<ul>
 									<c:forEach items="${topTribusCity}" var="item">
 										<li>
-											<a href="activity/byCityTag.action?city=${item}">${item}</a>
+											<a href="${path2}activity/byCityTag.action?city=${item}">${item}</a>
 										</li>
 									</c:forEach>
 								</ul>
-								<small><a href="#">Add</a> / <a href="#">Change</a>
-									Locations</small>
+
 							</div>
 						</div>
 						<!--//end .widget-->
@@ -553,6 +522,9 @@ onblur="if(this.value=='')(this.value='Music, Musicial, Album, tribus music list
 						Copyright @ Tribus.us 2012.
 						<span>All rights reserved</span>
 					</p>
+				</div>
+				<div id="back_to_top">
+					<a href="#top"></a>
 				</div>
 			</div>
 			<!--//end #main_area-->

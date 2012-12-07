@@ -7,18 +7,22 @@
 
     <session-factory>
 
-        <!-- Database connection settings -->
+        <!-- Database connection settings --><!--
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/tribus?characterEncoding=gbk</property>
-        <property name="connection.username">localhost</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/tribus_data?characterEncoding=gbk</property>
+        <property name="connection.username">root</property>
         <property name="connection.password"></property>
-        <!--
+        
+        --><!--<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/test?characterEncoding=gbk</property>
+        <property name="connection.username">localhost</property>
+        <property name="connection.password"></property>        
+        
+        
+        --><property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://50.31.147.38/tribus_tribus</property>
         <property name="connection.username">tribus_admin</property>
         <property name="connection.password">fuzan19841022</property>
-
-        -->
-        <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">32</property>
 
         <!-- SQL dialect -->
@@ -27,7 +31,7 @@
         <!-- Enable Hibernate's automatic session context management -->
                 
 		<property name="hibernate.transaction.auto_close_session">false</property>
-		<property name="hibernate.transaction.flush_before_completion">true</property>        
+		<property name="hibernate.transaction.flush_before_completion">false</property>        
 		<property name="hibernate.connection.release_mode">after_statement</property>
 		
         <!-- Disable the second-level cache  -->
@@ -41,6 +45,8 @@
            
         <mapping class="model.Movie"/>
         <mapping class="model.User"/>
+        <mapping class="model.UserProfile"/>
+        
         <mapping class="model.MovieComment"/>
         <mapping class="model.MovieTag"/>
         <mapping class="model.Starring"/>
@@ -52,6 +58,7 @@
         <mapping class="model.MovieImage"/>
         <mapping class="model.MovieQuickComment"/>
         <mapping class="model.MovieCommentDraft"/>
+        <mapping class="model.MyTribusList"/>
         
         <mapping class="model.Book"/>
         <mapping class="model.BookComment"/>
@@ -70,10 +77,12 @@
         <mapping class="model.MusicComment"/>
         <mapping class="model.MusicMark"/>
         <mapping class="model.MusicTrack"/>
+        <mapping class="model.MusicTag"/>
         <mapping class="model.MusicQuickComment"/>
         <mapping class="model.MusicCommentDraft"/>
         
         <mapping class="model.Activity"/>
+        <mapping class="model.TribusClassify"/>
               
 
     </session-factory>

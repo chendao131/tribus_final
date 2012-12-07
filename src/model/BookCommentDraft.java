@@ -29,7 +29,7 @@ public class BookCommentDraft {
 	public void setDraftId(int draftId) {
 		this.draftId = draftId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -55,7 +55,7 @@ public class BookCommentDraft {
 	public void setDraftDate(Date draftDate) {
 		this.draftDate = draftDate;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "bookId")
 	public Book getBook() {
 		return book;

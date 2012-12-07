@@ -10,21 +10,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="activity")
-public class Activity implements Comparator {// ÊµÏÖcomparator½Ó¿Ú£¬»»¾ä»°Ëµ¾ÍÊÇ¶¨ÒåÅÅÐò¹æÔò
+@Table(name = "activity")
+public class Activity implements Comparator {// Êµï¿½ï¿½comparatorï¿½Ó¿Ú£ï¿½ï¿½ï¿½ï¿½ä»°Ëµï¿½ï¿½ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	public Double getActivityFeesFrom() {
+		return activityFeesFrom;
+	}
+
+	public void setActivityFeesFrom(Double activityFeesFrom) {
+		this.activityFeesFrom = activityFeesFrom;
+	}
+
 	private int activityId;
 	private String activityPic;
+	private String activityPic_small;
+	private String activityPic_big;
 	private String activityName;
 	private Date activityStartTime;
 	private Date activityFinishTime;
-
 	private Integer classifiedId;
 	private String activityDuration;
 	private String activityDetail;
 	private Integer activityVisible;
-
 	private Integer activityRequire;
-
 	private String activityVideo;
 	private String activityState;
 	private String activityCity;
@@ -32,13 +39,38 @@ public class Activity implements Comparator {// ÊµÏÖcomparator½Ó¿Ú£¬»»¾ä»°Ëµ¾ÍÊÇ
 	private String activityApt;
 	private String activityLati;
 	private String activityLongi;
-
 	private Integer activityMaxNumber;
 	private Integer activityStatus;
-	private Double activityFees;
+	private Double activityFeesFrom;
+	private Double activityFeesTo;
 	private Integer userId;
 	private Date recordDate;
 	private Integer activityPriority;
+
+	public String getActivityPic_small() {
+		return activityPic_small;
+	}
+
+	public String getActivityPic_big() {
+		return activityPic_big;
+	}
+
+	public void setActivityPic_big(String activityPicBig) {
+		activityPic_big = activityPicBig;
+	}
+
+	public void setActivityPic_small(String activityPicSmall) {
+		activityPic_small = activityPicSmall;
+	}
+
+	public Double getActivityFeesTo() {
+		return activityFeesTo;
+	}
+
+	public void setActivityFeesTo(Double activityFeesTo) {
+		this.activityFeesTo = activityFeesTo;
+	}
+
 	public String getActivityState() {
 		return activityState;
 	}
@@ -71,9 +103,8 @@ public class Activity implements Comparator {// ÊµÏÖcomparator½Ó¿Ú£¬»»¾ä»°Ëµ¾ÍÊÇ
 		this.activityApt = activityApt;
 	}
 
-	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public int getActivityId() {
 		return activityId;
 	}
@@ -194,14 +225,6 @@ public class Activity implements Comparator {// ÊµÏÖcomparator½Ó¿Ú£¬»»¾ä»°Ëµ¾ÍÊÇ
 		this.activityStatus = activityStatus;
 	}
 
-	public Double getActivityFees() {
-		return activityFees;
-	}
-
-	public void setActivityFees(Double activityFees) {
-		this.activityFees = activityFees;
-	}
-
 	public Integer getUserId() {
 		return userId;
 	}
@@ -226,10 +249,12 @@ public class Activity implements Comparator {// ÊµÏÖcomparator½Ó¿Ú£¬»»¾ä»°Ëµ¾ÍÊÇ
 		this.activityPriority = activityPriority;
 	}
 
-
-
 	public int compare(Object o1, Object o2) {
 		// TODO Auto-generated method stub
+
+		if (o1 == null || o2 == null) {
+			return -1;
+		}
 		Activity a1 = (Activity) o1;
 		Activity a2 = (Activity) o2;
 		if (a1.getActivityStartTime().before(a2.getActivityStartTime())) {

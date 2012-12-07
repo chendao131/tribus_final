@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Tribus_Single_review</title>
+	<title>Review</title>
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
     <link rel="stylesheet" type="text/css" media="screen,projection" href="${my_local}/music/font/font.css" />
@@ -28,21 +28,22 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
-                    	<li class="current_page_item"><a href="${my_domain }/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
-                        <li><a href="${my_domain }/book/bookHomePage.action" title="BOOK">BOOK</a></li>
-                        <li><a href="${my_domain }/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
-                        <li><a href="${my_domain}/my.action" title="MY TRIBUS">MY TRIBUS</a></li>
+                    	<li><a href="${my_domain}/activity/index.action">EVENT</a></li>
+                    	<li><a href="${my_domain}/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
+                        <li><a href="${my_domain}/book/bookHomePage.action" title="BOOK">BOOK</a></li>
+                        <li class="current_page_item"><a href="${my_domain}/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
+                        <li><a id="bb" onMouseOver="get()" style="display:block" href="${my_domain}/user/my.action" title="MY TRIBUS">MY TRIBUS</a>
+						<a id="aa" onMouseOut="bu()" style="font-size:24px; display:none"  href="${my_domain}/user/my.action" title="MY TRIBUS">MyTRIBUS</a></li>
                     </ul>
                     <div class="header_search">
-                    	<form action="#">
-                        	<p class="txt_header"><input type="text" /></p>
-                            <p class="submit_header"><input type="submit" value=" " /></p>
+						<form action="${my_domain}/user/ searchAll.action">
+                         	<p class="txt_header"><input type="text" name="search" value="" /></p>
+                            <p class="submit_header"><input type="submit"  value="" /></p>
                         </form>
                     </div>
                     <div class="header_icon_area">
                     	<span class="space_btm"><a href="#"><img src="${my_local}/music/img/icon_header1.png" alt="" width="10" height="11" /></a></span>
-                        <span><a href="#"><img src="${my_local}/music/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
+                        <span><a href="${my_domain }/user/editForm.action"><img src="${my_local}/music/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
                     </div>
                 </div></div></div>
             </div><!--//end #header_rgt-->
@@ -50,22 +51,22 @@
         <div id="main_area"><!--start main_area-->
         	<div id="saerch_area"><!--start saerch_area-->
             	<div id="search_bg" class="space_lft"><!--start search_bg-->
-                	<form action="#">
-                    	<p class="search_text"><input type="text" value="Seach movie, actors, comment, tribus music list" onclick="if(this.value=='Seach movie, actors, comment, tribus music list')(this.value='')"  onblur="if(this.value=='')(this.value='Seach movie, actors, comment, tribus music list')" /></p>
+                	<form action="${my_domain }/music/search/1.action" id="single_search_bar" name="single_search_bar">
+                    	<p class="search_text"><input name="single_search_name" type="text" value="Seach for music, celebrity, tribus list" onclick="if(this.value=='Seach for music, celebrity, tribus list')(this.value='')"  onblur="if(this.value=='')(this.value='Seach for music, celebrity, tribus list')" /></p>
                         <p class="search_submit"><input type="submit" value=" " /></p>
                     </form>
                 </div><!--//end #search_bg-->
                 <div id="social_media"><!--start social_media-->
                 	<div id="social_lftcol">
-                    	<a href="#"><img src="${my_local}/music/img/icon_facebook.jpg" alt="" width="24" height="24" /></a>
+                    	<a href="https://www.facebook.com/TheTribus"><img src="${my_local}/music/img/icon_facebook.jpg" alt="" width="24" height="24" /></a>
                         <a href="#"><img src="${my_local}/music/img/icon_tweet.jpg" alt="" width="24" height="24" /></a>
                     </div>
                     <div id="social_box"><!--start social_box-->
                     	<div id="message">
-                        	<a href="#"><img src="${my_local}/music/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
-                            <a href="#"><img src="${my_local}/music/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
-                            <a href="#"><img src="${my_local}/music/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
-                            <a href="#"><img src="${my_local}/music/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
+                        	<a href="${my_domain }/userMail/box/0.action"><img src="${my_local }/music/img/icon_message1.jpg" alt="" width="22" height="22" /><c:if test="${unreadMail > 0}"><span><c:out value="${unreadMail}"/></span></c:if></a>
+                            <a href="${my_domain }/user/police.action"><img src="${my_local }/music/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${my_domain }/user/about.action"><img src="${my_local }/music/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${my_domain }/user/logout.action"><img src="${my_local }/music/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
                         	<h3><c:out value="${userName}" /></h3>
@@ -84,11 +85,50 @@
                                 <span>(<a href="#"><c:out value="${singleReviewMain.commentNumber}" /></a>)</span>
                                 <h4><a href="${my_domain }/review/musicReviewAction/${singleReviewMain.itemId }.action">Create a Review</a></h4>
                                 <div class="rating_icon">
-                                	<a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating2.jpg" alt="" width="12" height="12" /></a>
+									<c:choose>
+                                		<c:when test="${singleReviewMain.itemRating>=0.5 && singleReviewMain.itemRating<1.5}">                                		
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>		                                    		                                   
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                               </c:when>
+		                               <c:when test="${singleReviewMain.itemRating>=1.5 && singleReviewMain.itemRating<2.5}">
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                               </c:when>
+		                               <c:when test="${singleReviewMain.itemRating>=2.5 && singleReviewMain.itemRating<3.5}">
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                               </c:when>
+		                               <c:when test="${singleReviewMain.itemRating>=3.5 && singleReviewMain.itemRating<4.5}">
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                               </c:when>
+		                               <c:when test="${singleReviewMain.itemRating>=4.5}">
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting.jpg" alt="" width="20" height="19" /></a>
+		                               </c:when>
+		                               <c:otherwise>
+		                               		<a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                                    <a href="#"><img src="${my_local}/movie/img/icon_ratting2.jpg" alt="" width="20" height="19" /></a>
+		                               </c:otherwise>
+		                           	</c:choose>
                                 </div>
                             </div><!--//end .review_ratting-->
                             <div class="rating_descript"><!--start rating_descript-->
@@ -101,27 +141,68 @@
                         
                         <div class="review_post"><!--start review_post-->
                             <div class="review_ratting space_rating"><!--start review_ratting-->
-                            	<img src="${my_local}/music/img/pic_review.jpg" alt="" class="pic_review" width="44" height="43" />
+                            	<a href="${my_domain }/user/friendHome/${singleReviewMain.userId }.action"><img src="${singleReviewMain.userPic}" alt="" class="pic_review" width="44" height="43" /></a>
                             	<h2><c:out value="${singleReviewMain.commentTitle}" /></h2>
                                 <div class="rating_icon">
-                                	<a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12" /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating1.jpg" alt="" width="12" height="12"  /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_rating2.jpg" alt="" width="12" height="12"  /></a>
+												<c:choose>
+		                                		<c:when test="${thisRecommend.rating>=0.5 && thisRecommend.rating<1.5}">
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                               </c:when>
+				                               <c:when test="${thisRecommend.rating>=1.5 && thisRecommend.rating<2.5}">
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                               </c:when>
+				                               <c:when test="${thisRecommend.rating>=2.5 && thisRecommend.rating<3.5}">
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                               </c:when>
+				                               <c:when test="${thisRecommend.rating>=3.5 && thisRecommend.rating<4.5}">
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                               </c:when>
+				                               <c:when test="${thisRecommend.rating>=4.5}">
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star1.jpg" alt="" width="20" height="19" /></a>
+				                               </c:when>
+				                               <c:otherwise>
+				                               		<a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                                    <a href="#"><img src="${my_local}/movie/img/blue_star2.jpg" alt="" width="20" height="19" /></a>
+				                               </c:otherwise>
+				                           	</c:choose>
                                 </div>
                             </div><!--//end .review_ratting-->
                         </div><!--//end .review_post-->
                         <div class="games_info"><!--start games_info-->
                         	<div class="games_btm_icon"><img src="${my_local}/music/img/icon_album.jpg" alt="" width="20" height="19"/></div>
                         	<div class="games_social">
-                            	<span>By <c:out value="${singleReviewMain.userName}" /></span>
+                            	<span>By <a href="${my_domain }/user/friendHome/${singleReviewMain.userId }.action"><c:out value="${singleReviewMain.userName}" /></a></span>
                                 <div class="games_media">
-                                	<a href="#"><img src="${my_local}/music/img/icon_facebook2.jpg" alt="" width="15" height="15" /></a>
-                                    <a href="#"><img src="${my_local}/music/img/icon_tweet2.jpg" alt="" width="16" height="15" /></a>
+                                	<div id='fb-root'></div>
+                                	<a onclick='postToFeed(); return false;'><img src="${my_local}/music/img/icon_facebook2.jpg" alt="" width="15" height="15" /></a>
+                                    <a id='msg'></a>
+                                    <a href="#"><img src="${my_local}/music/img/icon_tweet2.jpg" alt="" width="16" height="15" /></a><!--
                                     <a href="#">+ Wish List</a>
                                     <a href="#">+Tribus List</a>
-                                </div>
+                                --></div>
                             </div>
                             <div class="games_descript"><!--start games_descript-->
                             	<p><c:out value="${singleReviewMain.commentContent}" /></p>
@@ -132,44 +213,47 @@
                         	<h2>RELATED ARTICLES</h2>
                             <ul>
                             	<c:forEach items="${relatedArticles}" var="thisArticle">
-                            	<li><c:out value="${thisArticle.itemName}" />, <c:out value="${thisArticle.commentTitle}" /> <c:out value="${thisArticle.commentDate}" /></li>
+                            	<li><a href="${my_domain }/review/musicReview/${thisArticle.itemId}.action"><c:out value="${thisArticle.itemName}" />, <c:out value="${thisArticle.commentTitle}" /> <c:out value="${thisArticle.commentDate}" /></a></li>
                             	</c:forEach>
                             </ul>
                         </div><!--//end .realted_article-->
                         
                         <div id="comment_box_area"><!--start comment_box_area-->
                         
-                        	<div class="comment_box"><!--start comment_box-->
+                        	<div class="comment_box" id="comment_box_write"><!--start comment_box-->
                             	<div class="arrow_author2"></div>
                             	<div class="comment_first_content"><!--start comment_first_content-->
                                 	<div class="pic_author">
                                     	<div class="arrow_author1"></div>
-                                        <img src="${my_local}/music/img/pic_author1.png" alt="" width="73" height="73" />
+                                        <img src="${myPic}" alt="" width="73" height="73" />
                                     </div>
                                     <div class="author_total_rgt">
                                     	<div class="author_speech">
-                                            <textarea rows="10" cols="10" onclick="if(this.value=='Name Says : ...')(this.value='')"  onblur="if(this.value=='')(this.value='Name Says : ...')">Name Says : ...</textarea>
+                                            <textarea id="quick_comment_content" rows="10" cols="10" onclick="if(this.value=='Name Says : ...')(this.value='')"  onblur="if(this.value=='')(this.value='Name Says : ...')">Name Says : ...</textarea>
                                         </div>
                                         <div class="author_icon">
                                         	<span><img src="${my_local}/music/img/icon_album.jpg" alt="" width="20" height="19" /></span>
-                                            <div class="btn_done"><a href="#">Done</a></div>
+                                            <div class="btn_done"><a href="javascript:add_comment()">Done</a></div>
                                         </div>
                                     </div>
                                 </div><!--//end .comment_first_content-->
                             </div><!--//end .comment_box-->
                             
-                            <c:forEach items="${singleReviewQuickComments}" var="thisQuickComment">
+                            <c:forEach items="${singleReviewQuickComments}" var="thisQuickComment" varStatus="r">
+                            <c:if test="${r.index%2== 0 }">
                             <div class="comment_box bg_differ"><!--start comment_box-->
                             	<div class="comment_scnd_content"><!--start comment_scnd_content-->
                                 	<div class="pic_author">
-                                        <img src="${my_local}/music/img/pic_author2.png" alt="" width="72" height="72" />
+                                        <img src="${thisQuickComment.userPic}" alt="" width="72" height="72" />
                                     </div>
                                     <div class="author_total_rgt">
                                     	<div class="author_speech">
                                         	<h3><c:out value="${thisQuickComment.userName}" /> (New York)</h3>
                                             <div class="edit_tools">
                                         	<label  class="text_label"><c:out value="${thisQuickComment.commentContent}" /></label>
+                                            <c:if test="${thisQuickComment.userId == singleReviewMain.userId}" >
                                             <div style="display: block;" class="edit"></div>
+                                            </c:if>
                                             <input type="text" />
                                          </div>
                                             <span><c:out value="${thisQuickComment.commentDate}" /></span>
@@ -177,21 +261,41 @@
                                     </div>
                                 </div><!--//end .comment_scnd_content-->
                             </div><!--//end .comment_box-->
+                            </c:if>
+                            <c:if test="${r.index%2!= 0 }">
+                            <div class="comment_box"><!--start comment_box-->
+                            	<div class="comment_scnd_content"><!--start comment_scnd_content-->
+                                	<div class="pic_author">
+                                        <img src="${thisQuickComment.userPic}" alt="" width="72" height="72" />
+                                    </div>
+                                    <div class="author_total_rgt">
+                                    	<div class="author_speech">
+                                        	<h3><c:out value="${thisQuickComment.userName}" /></h3>
+                                            <div class="edit_tools">
+                                        	<label  class="text_label"><c:out value="${thisQuickComment.commentContent}" /></label>
+                                            <c:if test="${thisQuickComment.userId == singleReviewMain.userId}" >
+                                            <div style="display: block;" class="edit"></div>
+                                            </c:if>
+                                            <input type="text" />
+                                         </div>
+                                            <span><c:out value="${thisQuickComment.commentDate}" /></span>
+                                        </div>
+                                    </div>
+                                </div><!--//end .comment_scnd_content-->
+                            </div><!--//end .comment_box-->
+                            </c:if>
                             </c:forEach>
                             
                         </div><!--//end #comment_box_area-->
                         <div id="comment_pagination">
-                        	<a href="#" class="prev"></a>
-                            <a href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#" class="next"></a>
+                            ${pageStr}
                         </div>
                     </div><!--//end #review_lftcol-->
                     <div id="review_side_bar"><!--start review_side_bar-->
                     	<div class="review_btn"><a href="${my_domain }/review/musicReviewAction/${singleReviewMain.itemId }.action">Create a Review</a></div>
                     	<div class="review_feature">
-                        	<img src="${singleReviewMain.itemPic}" alt="" width="142" height="217"/>
-                            <h3><c:out value="${singleReviewMain.itemName}" /> Page <a href="#"><img src="${my_local}/music/img/tripple_arrow3.jpg" alt="" /></a></h3>
+                        	<img src="${singleReviewMain.itemPic}" alt="" width="142" height="142"/>
+                            <h3><c:out value="${singleReviewMain.itemName}" /> Page <a href="${my_domain }/music/${singleReviewMain.itemId }.action"><img src="${my_local}/music/img/tripple_arrow3.jpg" alt="" /></a></h3>
                         </div>
                         <div class="rating_widget">
                         	<h2>Seach by Rating <span>(<a href="#"><c:out value="${singleReviewMain.commentNumber}" /></a>)</span></h2>
@@ -242,13 +346,93 @@
                     <div class="clear"></div>
                 </div><!--//end #review_main-->
             </div><!--//end #common_maincontent-->
-            <div id="footer"><p>Copyright @ Tribus.us 2012.      <span>All rights reserved</span> </p></div>
+            <div id="footer"><p> &copy;2012 goTribus |<span>All rights reserved</span> </p></div>
             <div id="back_to_top"><a href="#top"></a></div>
         </div><!--//end #main_area-->
     </div><!--//end #wrapper-->
     <script src="${my_local}/music/js/smoothscroll.js" type="text/javascript"></script>
     <script src="${my_local}/music/js/jquery-1.js" type="text/javascript"></script>
     <script src="${my_local}/music/js/easy-editable-text.js" type="text/javascript"></script>
+	<script type="text/javascript">
+			var i = 33;
+			var j = 36;
+		function add_comment(){
+			var d = new Date();
+			var userName= "${userName}";
+			var content = $("#quick_comment_content").val();
+			var text = "<div class=\"comment_scnd_content\"><!--start comment_scnd_content-->"+
+                                	"<div class=\"pic_author\">"+			
+                 "<img src=\"${myPic}\" alt=\"\" width=\"72\" height=\"72\" />"+                           "</div>"+ 	
+				"<div class=\"author_total_rgt\">"+
+                      "<div class=\"author_speech\">"+
+                      		"<h3>"+userName+"</h3>"+
+                      			"<div class=\"edit_tools\">"+
+                                     "<label  class=\"text_label\">"+content+"</label>"+
+                                            	"<div style=\"display: block;\" class=\"edit\"></div>" +
+                                            	"<input type=\"text\" />"+
+                                "</div>"+    
+                                "<span>"+d.toLocaleTimeString()+"</span>"+                               
+                      "</div>"+
+                "</div>"+
+                       "</div>";                             
+			var content_div = document.createElement("div");
+			//content_div.id = j+"";			
+			if(j%2 == 0){
+     			content_div.className = "comment_box";
+     			j=j+1;
+			}else{			
+				content_div.className="comment_box bg_differ";
+				j=j+1;
+			}
+			content_div.innerHTML = text;
+			//document.getElementById("comment_box_area").appendChild(content_div);
+			$("#comment_box_write").after(content_div);
+			$("#"+i).slideDown();
+			i++;		
+			
+			var dataString = "comment="+ content+"&date="+d;
+			$.ajax({  
+				type: "POST",  
+				url: "${my_domain}/review/addMusicComment/"+${commentId}+".action",  
+				data: dataString,  
+				success: function() {  
+				}  
+			});
+		}
+	</script>
+	
+		    <script> 
+      FB.init({appId: "167819743335514", status: true, cookie: true});
 
+      function postToFeed() {
+
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          link: '${my_domain}/review/musicReview/${singleReviewMain.itemId}.action',
+          picture: '${singleReviewMain.itemPic}',
+          name: '${singleReviewMain.itemName}',
+          caption: '${singleReviewMain.commentTitle}',
+          description: ''
+        };
+
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+
+        FB.ui(obj, callback);
+      }
+    </script>
+    
+	<script type="text/javascript">
+            function get(){
+					document.getElementById("aa").style.display="block";
+					document.getElementById("bb").style.display="none";
+					}
+					function bu(){
+					document.getElementById("bb").style.display="block";
+					document.getElementById("aa").style.display="none";
+				}
+    </script>
 </body>
 </html>                                                                                                   

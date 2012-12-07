@@ -36,7 +36,7 @@ public class BookDiary implements Serializable{
 	public void setDiaryContent(String diaryContent) {
 		this.diaryContent = diaryContent;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "bookId")
 	public Book getBook() {
 		return book;
@@ -50,7 +50,7 @@ public class BookDiary implements Serializable{
 	public void setDiaryDate(Date diaryDate) {
 		this.diaryDate = diaryDate;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;

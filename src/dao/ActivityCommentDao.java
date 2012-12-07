@@ -27,14 +27,15 @@ public class ActivityCommentDao {
 	public List<ActivityComment> getActivityCommentByCondition(int activityId,
 			int userId) {// 提取留言
 		// 组合语句
-		String hql = "from ActivityComment where  1=1";
+		String hql = "from ActivityComment where  1=1 ";
 		if (activityId != 0) {
 			hql = hql + " and activityId = '" + activityId + "'";
 		}
 		if (userId != 0) {
 			hql += "and userId='" + userId + "'";
 		}
-		return TribusHibernateSessionFactory.currentSession().createQuery(hql)
+		String hql1=" order by commentDate desc";
+		return TribusHibernateSessionFactory.currentSession().createQuery(hql+ hql1)
 				.list();
 	}
 

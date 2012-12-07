@@ -14,30 +14,16 @@ import org.hibernate.Transaction;
 public class SingerDao {
 	@SuppressWarnings("unchecked")
 	public List<Singer> searchSingerByName(String name){
-		//String sql = "from Movie where tags.tagName = :movieTag";
-		//String[] tags = {"Drama"};
-		/*String hql = "select m from Movie m "+
-						"join m.tags t "+
-						"where t.tagName in (:tags)";*/
-		String hql = "from Singer";
+		String hql ="select s from Singer s where lower(s.singerName) like :name";
+		List<Singer> singers = null;
 		Session session = TribusHibernateSessionFactory.currentSession();
-		List<Singer> singers = new ArrayList<Singer>();
-		List<Singer> result = new ArrayList<Singer>();
 		try{
-			singers = session.createQuery(hql).list();
-			 Iterator<Singer> iterator = singers.iterator();
-			 while(iterator.hasNext()){
-				 Singer s = iterator.next();
-				 if(s.getSingerName().indexOf(name)!=-1){
-					 result.add(s);
-				 }
-			 }
-			 System.out.println("success");
+			singers = session.createQuery(hql).setString("name", "%"+name.toLowerCase()+"%").list();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		System.out.println(result.size());
-		return result;
+		return singers;		
+		
 	}
 	
 	public int save(Singer s) {

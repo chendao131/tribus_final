@@ -138,11 +138,5 @@ public class UserProfile {
 	}
 	public void setProfSecAnsw(String profSecAnsw) {
 		this.profSecAnsw = profSecAnsw;
-	}
-	
-	
-	
-	
-	
-	
+	}	
 }

@@ -32,7 +32,7 @@ public class MovieAlbum implements Serializable{
 	public void setAlbumId(Integer albumId) {
 		this.albumId = albumId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "movieId")
 	public Movie getMovie() {
 		return movie;

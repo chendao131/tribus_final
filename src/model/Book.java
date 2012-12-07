@@ -32,7 +32,7 @@ public class Book implements Serializable{
 	private String bookTranslator;
 	private double bookPrice;
 	private String bookPublisher;
-	private String bookPublishDate;
+	private Date bookPublishDate;
 	private int bookPages;
 	private String bookBrief;
 	private String bookPic;
@@ -90,10 +90,11 @@ public class Book implements Serializable{
 	public void setBookPublisher(String bookPublisher) {
 		this.bookPublisher = bookPublisher;
 	}
-	public String getBookPublishDate() {
+
+	public Date getBookPublishDate() {
 		return bookPublishDate;
 	}
-	public void setBookPublishDate(String bookPublishDate) {
+	public void setBookPublishDate(Date bookPublishDate) {
 		this.bookPublishDate = bookPublishDate;
 	}
 	public int getBookPages() {
@@ -125,7 +126,7 @@ public class Book implements Serializable{
 	public void setTags(Set<BookTag> tags) {
 		this.tags = tags;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;

@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,17 +9,22 @@ import java.util.List;
 import java.util.Set;
 
 import model.Activity;
+import model.Message;
 import model.Movie;
 import model.MovieComment;
+import model.MovieImage;
 import model.MovieMark;
 import model.MovieQuickComment;
 import model.MovieTag;
+import model.MyTribusList;
+import model.StarType;
 import model.Starring;
+import model.TribusClassify;
 import model.User;
 import model.UserProfile;
 import dao.ActivityDao;
-import dao.FollowDao;
 import dao.HomePageDao;
+import dao.MessageDao;
 import dao.MovieCommentDao;
 import dao.MovieDao;
 import dao.MovieImageDao;
@@ -26,7 +32,10 @@ import dao.MovieMarkDao;
 import dao.MovieQuickCommentDao;
 import dao.MovieTagDao;
 import dao.SinglePageDao;
+import dao.StarTypeDao;
 import dao.StarringDao;
+import dao.TribusListClassifyDao;
+import dao.TribusListDao;
 import dao.UserDao;
 import dao.UserProfileDao;
 
@@ -34,19 +43,25 @@ import dao.UserProfileDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.validator.GenericValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import config.GlobleConfig;
+
 import util.DateToString;
 import util.GetSessionUser;
-import vo.FriendsRecommendMovie;
+import util.PageObject;
+import util.Paging;
 import vo.HomePageFriendRecommend;
 import vo.HomePageReview;
-import vo.MovieReview;
+import vo.MessageVO;
+import vo.MyTribusListVO;
 import vo.SearchResult;
+import vo.SinglePageFriendsRecord;
 import vo.SinglePageMain;
 import vo.SinglePageReview;
 import vo.SingleReviewMain;
@@ -64,12 +79,300 @@ import vo.SingleReviewRelatedArticle;
 @Controller
 @RequestMapping("movie")
 public class MovieController {
+	@RequestMapping("picsSubmit/{movieId}")
+	public String picsSubmit(HttpServletRequest request, HttpServletResponse response, 
+			@PathVariable("movieId")int movieId){
+		String redirect = "redirect:/movie/"+movieId+".action";
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
+		MovieDao md = new MovieDao();
+		MovieImageDao mid = new MovieImageDao();
+		for(int i=1 ; i<=6; i++){
+			if(!request.getParameter("successful_img_path_"+i).equals("none")){
+				MovieImage mi = new MovieImage();
+				mi.setMovie(md.getMovieById(movieId));
+				mi.setImagePath(request.getParameter("successful_img_path_"+i));
+				mi.setImageDescription(request.getParameter("successful_img_decs_"+i));
+				mid.save(mi);
+				//mid.saveImageByMovieIdAndPath(movieId, request.getParameter("successful_img_path_"+i));
+			}
+		}
+		return redirect;
+	}
+	
+	@RequestMapping("uploadPicsAction/{movieId}")
+	public ModelAndView uploadPics(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("movieId")int movieId){
+		ModelAndView mv = new ModelAndView("movie/Upload_pics");
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		mv.addObject("itemId", movieId);
+		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
+		return mv;
+	}
+	
+	@RequestMapping("saveMovieCreation")
+	public String saveMovieCreation(HttpServletRequest request, HttpServletResponse response){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		MovieDao md = new MovieDao();
+		Movie m = new Movie();
+		Set<Starring> stars = new HashSet<Starring>();
+		Set<MovieTag> tags = new HashSet<MovieTag>();
+		StarringDao sd= new StarringDao();
+		StarTypeDao std = new StarTypeDao();
+		System.out.println("input director is:"+request.getParameter("movieDirector"));
+		String directors[] = request.getParameter("movieDirector").split(",");
+		for(int i=0; i<directors.length; i++){
+			Starring s = sd.getStarringByName(directors[i]);
+			if(s!=null){
+				stars.add(s);
+			}
+			else{
+				Starring newStar = new Starring();
+				newStar.setStarName(directors[i]);
+				newStar.setStarType(std.getStarTypeById(1));
+				sd.save(newStar);
+				stars.add(newStar);
+			}
+		}
+		System.out.println("input director is:"+request.getParameter("movieActor"));
+		String actors[] = request.getParameter("movieActor").split(",");
+		for(int i=0; i<actors.length; i++){
+			Starring s = sd.getStarringByName(actors[i]);
+			if(s!=null){
+				stars.add(s);
+			}
+			else{
+				Starring newStar = new Starring();
+				newStar.setStarName(actors[i]);
+				newStar.setStarType(std.getStarTypeById(2));
+				sd.save(newStar);
+				stars.add(newStar);
+			}
+		}
+		
+		MovieTagDao mtd = new MovieTagDao();
+		MovieTag mt = mtd.getMovieTagByName(request.getParameter("movieTag"));
+		tags.add(mt);
+		m.setTags(tags);
+		
+		m.setMoviePic(request.getParameter("successful_img_path"));
+		m.setMoviePicBig(request.getParameter("successful_img_path_big"));
+		m.setMoviePicMiddle(request.getParameter("successful_img_path_middle"));
+		m.setMoviePicSmall(request.getParameter("successful_img_path_small"));
+		m.setMovieNameOriginal(request.getParameter("movieNameOriginal"));
+		m.setMovieRegion(request.getParameter("movieRegion"));
+		if(!GenericValidator.isBlankOrNull(request.getParameter("movieDate")))
+			m.setMovieDate(Date.valueOf(request.getParameter("movieDate")));
+		m.setMovieBrief(request.getParameter("movieBrief"));
+		m.setMovieRating(request.getParameter("movieRating"));
+		m.setStars(stars);
+		md.save(m);
+		
+
+		return "redirect:/movie/"+m.getMovieId()+".action";
+	}
+	
+	@RequestMapping("createMovie")
+	public ModelAndView createMovieAction(HttpServletRequest request, HttpServletResponse response){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		ModelAndView mv = new ModelAndView("movie/create_movie");
+		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		mv.addObject("userId", userId);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
+		return mv;
+	}
+	
+	@RequestMapping("markMovie/{movieId}")
+	public void markMovie(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("movieId")int movieId){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		String mark = request.getParameter("mark");
+		System.out.println(mark);
+		if(mark.equals("wanted")){
+			System.out.println("1");
+			MovieMarkDao mmd = new MovieMarkDao();
+			mmd.markWatchWantedByMovieIdAndUserId(movieId, userId);
+			System.out.println("wanted success");
+		}else if(mark.equals("done")){
+			System.out.println("2");
+			MovieMarkDao mmd = new MovieMarkDao();
+			mmd.markWatchDoneByMovieIdAndUserId(movieId, userId);
+			System.out.println("done success");
+		}
+	}
+	
+	@RequestMapping("rateMovie/{movieId}")
+	public void rateMovie(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("movieId")int movieId){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		MovieMarkDao mmd = new MovieMarkDao();
+		mmd.rateByMovieIdAndUserId(movieId, userId, Integer.parseInt(request.getParameter("rate")));
+		mmd.markWatchDoneByMovieIdAndUserId(movieId, userId);
+		System.out.println(movieId+"*"+userId+"*"+request.getParameter("rate"));
+	}
+	
+	@RequestMapping("deleteRate/{movieId}")
+	public void deleteRate(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("movieId")int movieId){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		MovieMarkDao mmd = new MovieMarkDao();
+		mmd.deleteRate(movieId, userId);
+		System.out.println("21");
+	}
+	
+	@RequestMapping("editMovie/{movieId}")
+	public ModelAndView editMovie(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("movieId")int movieId){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		ModelAndView mv = new ModelAndView("movie/edit_movie");
+		MovieDao md = new MovieDao();
+		Movie m = md.getMovieById(movieId);
+
+		Set<Starring> stars = m.getStars();
+		Iterator<Starring> iterator = stars.iterator();
+		String directors="", actors="";
+		int directorFlag=0, actorFlag=0;
+		while(iterator.hasNext()){
+			Starring s = iterator.next();
+			if(s.getStarType().getTypeId()==1){
+				if(directorFlag==0){
+					directors = s.getStarName();
+					directorFlag = 1;
+				}else{
+					directors=directors+", "+s.getStarName();
+				}
+			}else{
+				if(actorFlag==0){
+					actors = s.getStarName();
+					actorFlag = 1;
+				}else{
+					actors = actors+", "+s.getStarName();
+				}
+			}
+		}
+
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		mv.addObject("movie", m);
+		mv.addObject("movieDirectors", directors);
+		mv.addObject("movieActors", actors);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
+		return mv;
+	}
+	
+	@RequestMapping("saveMovieEdition/{movieId}")
+	public String saveMovieEdition(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("movieId")int movieId){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		MovieDao md = new MovieDao();
+		Movie m = md.getMovieById(movieId);
+		StarringDao sd = new StarringDao();
+		StarTypeDao std = new StarTypeDao();
+		Set<Starring> stars = new HashSet<Starring>();
+		Set<MovieTag> tags = new HashSet<MovieTag>();
+		String directors[] = request.getParameter("movieDirector").split(",");
+		for(int i=0; i<directors.length; i++){
+			Starring s = sd.getStarringByName(directors[i]);
+			if(s!=null){
+				stars.add(s);
+			}
+			else{
+				Starring newStar = new Starring();
+				newStar.setStarName(directors[i]);
+				newStar.setStarType(std.getStarTypeById(1));
+				sd.save(newStar);
+				stars.add(newStar);
+			}
+				
+		}
+		System.out.println("input director is:"+request.getParameter("movieActor"));
+		String actors[] = request.getParameter("movieActor").split(",");
+		for(int i=0; i<actors.length; i++){
+			Starring s = sd.getStarringByName(actors[i]);
+			if(s!=null){
+				stars.add(s);
+			}
+			else{
+				Starring newStar = new Starring();
+				newStar.setStarName(actors[i]);
+				newStar.setStarType(std.getStarTypeById(2));
+				sd.save(newStar);
+				stars.add(newStar);
+			}
+		}
+		
+		MovieTagDao mtd = new MovieTagDao();
+		MovieTag mt = mtd.getMovieTagByName(request.getParameter("movieTag"));
+		tags.add(mt);
+		m.setTags(tags);
+		
+		m.setMoviePic(request.getParameter("successful_img_path"));
+		m.setMovieNameOriginal(request.getParameter("movieNameOriginal"));
+		m.setMovieRegion(request.getParameter("movieRegion"));
+		if(!GenericValidator.isBlankOrNull(request.getParameter("movieDate")))
+			m.setMovieDate(Date.valueOf(request.getParameter("movieDate")));
+		m.setMovieBrief(request.getParameter("movieBrief"));
+		m.setStars(stars);
+		m.setMovieRating(request.getParameter("movieRating"));
+		md.update(m);
+		return "redirect:/movie/"+movieId+".action";
+	}
 	
 	@RequestMapping("movieHomePage")
 	public ModelAndView displayMovieHomePage(HttpServletRequest request, HttpServletResponse response){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
-
+		
 		//get user
 		UserProfileDao upd = new UserProfileDao();
 		UserProfile up = upd.getUserProfileById(userId);
@@ -79,50 +382,61 @@ public class MovieController {
 		MovieDao md = new MovieDao();
 		//home page recent hot movie
 		List<Movie> recentHotMovies_1 = new ArrayList<Movie>();
-		for(int i = 8380; i< 8395; i++){
-			Movie hotMovie = md.getMovieById(i);
-			recentHotMovies_1.add(hotMovie);
-		}
+		//recentHotMovies_1.add(md.getMovieById(8772));
+		recentHotMovies_1.add(md.getMovieById(20684));recentHotMovies_1.add(md.getMovieById(20637));
+		recentHotMovies_1.add(md.getMovieById(19222));recentHotMovies_1.add(md.getMovieById(18897));
+		recentHotMovies_1.add(md.getMovieById(13780));recentHotMovies_1.add(md.getMovieById(18648));
+		recentHotMovies_1.add(md.getMovieById(20447));recentHotMovies_1.add(md.getMovieById(60));
+		recentHotMovies_1.add(md.getMovieById(61));recentHotMovies_1.add(md.getMovieById(5619));
 		List<Movie> recentHotMovies_2 = new ArrayList<Movie>();
-		for(int i = 8500; i< 8515; i++){
-			Movie hotMovie = md.getMovieById(i);
-			recentHotMovies_2.add(hotMovie);
-		}
-		List<Movie> recentHotMovies_3 = new ArrayList<Movie>();
-		for(int i = 8515; i< 8530; i++){
-			Movie hotMovie = md.getMovieById(i);
-			recentHotMovies_3.add(hotMovie);
-		}
+		recentHotMovies_2.add(md.getMovieById(19948));recentHotMovies_2.add(md.getMovieById(116));
+		recentHotMovies_2.add(md.getMovieById(20690));recentHotMovies_2.add(md.getMovieById(6161));
+		recentHotMovies_2.add(md.getMovieById(19316));recentHotMovies_2.add(md.getMovieById(20691));
+		recentHotMovies_2.add(md.getMovieById(16622));recentHotMovies_2.add(md.getMovieById(79));
+		recentHotMovies_2.add(md.getMovieById(20689));recentHotMovies_2.add(md.getMovieById(14266));
+		
 		//home page review
 		List<HomePageReview> homePageReviews = new ArrayList<HomePageReview>();
 		for(int i=1; i<3; i++){
 			HomePageReview homePageReview = homePageDao.getMovieHomePageReviewByCommentId(i);
-			homePageReviews.add(homePageReview);
+			if(homePageReview!=null)
+				homePageReviews.add(homePageReview);
 		}
 		
-		
 		//home page friend recommend
-		List<HomePageFriendRecommend> homePageFriendRecommends = new ArrayList<HomePageFriendRecommend>();
-		HomePageFriendRecommend homePageFriendRecommend1 = homePageDao.getMovieHomePageFriendRecommend(2);
-		homePageFriendRecommends.add(homePageFriendRecommend1);
-		HomePageFriendRecommend homePageFriendRecommend2 = homePageDao.getMovieHomePageFriendRecommend(3);
-		homePageFriendRecommends.add(homePageFriendRecommend2);
+		List<HomePageFriendRecommend> homePageFriendRecommends = homePageDao.getMovieHomePageFriendRecommend(u.getUserId());
+
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
 		
 		mv.addObject("userId", userId);
 		mv.addObject("userName", u.getUserAlias());
-		//mv.addObject("userCity", up.getProfCity());
+		mv.addObject("userCity", up.getProfCity());
+		
+		//tribus list
+		dao.TribusListDao td = new dao.TribusListDao();
+		List<MyTribusList> tribusList = td.getHotMovieTribusList();
+		
 		mv.addObject("recentHotMovies_1", recentHotMovies_1);
 		mv.addObject("recentHotMovies_2", recentHotMovies_2);
-		mv.addObject("recentHotMovies_3", recentHotMovies_3);
-		mv.addObject("homePageReviews",homePageReviews);
-		mv.addObject("homePageFriendRecommends", homePageFriendRecommends);
+		//mv.addObject("recentHotMovies_3", recentHotMovies_3);
+		if(!homePageReviews.isEmpty())
+			mv.addObject("homePageReviews",homePageReviews);
+		if(homePageFriendRecommends!=null)
+			mv.addObject("homePageFriendRecommends", homePageFriendRecommends);
+		mv.addObject("tribusList", tribusList);
+		
 		//guess you like
-/*		ActivityDao ad = new ActivityDao();
-		List<Activity> activities = new ArrayList<Activity>();
-		activities.add(ad.getActivityById(1));
-		activities.add(ad.getActivityById(2));
-		System.out.println(ad.getActivityById(1).getActivityDuration());
-		mv.addObject("guessYouLike", activities);*/
+		ActivityDao ad = new ActivityDao();
+		List<Activity> activities = ad.getHottestActivity();
+		mv.addObject("guessYouLike", activities);
 		return mv;
 		
 	}
@@ -133,10 +447,11 @@ public class MovieController {
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		
+		TribusListClassifyDao tcDao = new TribusListClassifyDao();
+		MovieMarkDao mmd = new MovieMarkDao();
 		//get user
 		UserProfileDao upd = new UserProfileDao();
 		UserProfile up = upd.getUserProfileById(userId);
-		
 		
 		ModelAndView mv = new ModelAndView("movie/singleMoviePage");
 		SinglePageDao singlePageDao = new SinglePageDao();
@@ -144,21 +459,67 @@ public class MovieController {
 		
 		SinglePageMain singlePageMain = singlePageDao.getMovieSinglePage(movieId);
 		List<SinglePageReview> singlePageReviews = singlePageDao.getMovieSinglePageReviewById(movieId);
-		System.out.println(singlePageReviews.size());
+		List<SinglePageFriendsRecord> friendRecords = singlePageDao.getMovieSinglePageFriendsRecord(userId, movieId);
+		Integer markWatch = 0;
+		if(mmd.getMarkByMovieAndUserId(movieId, userId)!=null)
+			markWatch = mmd.getMarkByMovieAndUserId(movieId, userId).getMovieWatch();
+		mv.addObject("markWatch", markWatch);
 		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		List<TribusClassify> l = tcDao.getTribusListClassByUserId(u.getUserId());
+		mv.addObject("list", l);
 		mv.addObject("userId", userId);
 		mv.addObject("userName", u.getUserAlias());
-		//mv.addObject("userCity", up.getProfCity());
+		mv.addObject("userCity", up.getProfCity());
 		mv.addObject("singlePageReviews", singlePageReviews);
 		mv.addObject("singlePageMain", singlePageMain);
+		mv.addObject("SinglePageFriendsRecord", friendRecords);
+		mv.addObject("singlePageImages", singlePageDao.getMovieSinglePageGallery(movieId));
+		
+		mv.addObject("myRate", mmd.getMovieGradeByMovieIdAndUserId(movieId, userId));
 		return mv;
 	}
 	
+	@RequestMapping("search/{type}")
+	public String searchMovieAction(HttpServletRequest request, HttpServletResponse response, 
+			@PathVariable("type")int type){
+		
+		String redirect = null;
+		String name = request.getParameter("single_search_name");
+		System.out.println("this:"+name);
+		switch(type){
+		case 1: redirect = "redirect:/movie/search/Movies="+name+".action";break;
+		case 2: redirect = "redirect:/movie/search/Celebrities="+name+".action";break;
+		case 3: redirect = "redirect:/movie/search/List="+name+".action";break;
+		}
+		System.out.println(redirect);
+/*		if(type == "movie")
+			redirect = "redirect:/movie/search/Movies="+name+".action";
+		else if(type == "celebrity")
+			redirect = "redirect:/movie/search/Celebrities="+name+".action";
+		else 
+			redirect = "redirect:/movie/search/TribusLists="+name+".action";*/
+		return redirect;
+	}
+	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("search/Movies={movieName}")
 	public ModelAndView searchMoviesByName(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("movieName")String movieName){
+		System.out.println("444");
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
 		ModelAndView mv = new ModelAndView("movie/Search_Movie_Result_movie");
 		SinglePageDao singlePageDao = new SinglePageDao();
 		MovieDao md = new MovieDao();
@@ -168,13 +529,10 @@ public class MovieController {
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
 		while(iterator.hasNext()){
 			Movie m = iterator.next();
-			System.out.println(m.getMovieId());
-			System.out.println(m.getMoviePic());
-			System.out.println(m.getMovieNameOriginal());
 			SearchResult sr = new SearchResult();
 			sr.setItemId(m.getMovieId());
 			sr.setItemPic(m.getMoviePic());
-			sr.setItemName(m.getMovieNameOriginal());
+			sr.setItemName(m.getMovieNameOriginal().length()>15? (m.getMovieNameOriginal().subSequence(0, 15)+"..."): m.getMovieNameOriginal());
 			if(m.getMovieDate()!=null){
 				sr.setItemDate(DateToString.convertDateToString(m.getMovieDate()));
 			}else{
@@ -183,17 +541,47 @@ public class MovieController {
 			
 			searchResults.add(sr);
 		}
-		System.out.println(searchResults.size());
-		mv.addObject("searchResults", searchResults);
+
+		int page=0;
+		 if(GenericValidator.isInt(request.getParameter("page"))){
+			 page = Integer.parseInt(request.getParameter("page"));
+			  
+		}
+	 	Paging p = new Paging();
+		p.setObj(searchResults);			
+		p.setHaveOtherParameters(false);
+		p.setEvery_page_item_num(20);
+		if(page <= 0){
+			page = 1;
+		}
+		PageObject po = p.getResult(GlobleConfig.my_domain+"/movie/search/Movies="+movieName+".action",page);
+		mv.addObject("searchResults", po.getL());
+		mv.addObject("pageStr", po.getPageCode());
 		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+//		mv.addObject("searchResults", searchResults);
+		mv.addObject("searchName", movieName);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
-	@RequestMapping("search/Celebrity={starName}")
+	@RequestMapping("search/Celebrities={starName}")
 	public ModelAndView searchCelebrityByName(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("starName")String starName){
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
 		ModelAndView mv = new ModelAndView("movie/Search_Movie_Result_celebrities");
 		StarringDao sd = new StarringDao();
 		List<Starring> stars = sd.searchStarByName(starName);
@@ -208,29 +596,122 @@ public class MovieController {
 			sr.setSearchString(starName);
 			searchResults.add(sr);
 		}
-		System.out.println(searchResults.size());
-		mv.addObject("searchString", starName);
-		mv.addObject("searchResults", searchResults);
+
+		int page=0;
+		 if(GenericValidator.isInt(request.getParameter("page"))){
+			 page = Integer.parseInt(request.getParameter("page"));
+			  
+		}
+	 	Paging p = new Paging();
+		p.setObj(searchResults);			
+		p.setHaveOtherParameters(false);
+		p.setEvery_page_item_num(20);
+		if(page <= 0){
+			page = 1;
+		}
+		PageObject po = p.getResult(GlobleConfig.my_domain+"/movie/search/Celebrities="+starName+".action",page);
+		mv.addObject("searchResults", po.getL());
+		mv.addObject("pageStr", po.getPageCode());
 		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		mv.addObject("searchName", starName);
+//		mv.addObject("searchResults", searchResults);
+		
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
+		return mv;
+	}
+	
+	@RequestMapping("search/List={listName}")
+	public ModelAndView searchTribusListByName(HttpServletRequest request, HttpServletResponse response,  
+			@PathVariable("listName")String listName){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		TribusListDao tld = new TribusListDao();
+		ModelAndView mv = new ModelAndView("movie/Search_Movie_Result_list");
+		List<MyTribusListVO> searchResults = tld.getTribusListMovieByResourceName(listName);
+		
+		int page=0;
+		 if(GenericValidator.isInt(request.getParameter("page"))){
+			 page = Integer.parseInt(request.getParameter("page"));
+			  
+		}
+	 	Paging p = new Paging();
+		p.setObj(searchResults);			
+		p.setHaveOtherParameters(false);
+		p.setEvery_page_item_num(20);
+		if(page <= 0){
+			page = 1;
+		}
+		PageObject po = p.getResult(GlobleConfig.my_domain+"/movie/search/List="+listName+".action",page);
+		mv.addObject("searchResults", po.getL());
+		mv.addObject("pageStr", po.getPageCode());
+		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		mv.addObject("searchName", listName);
+//		mv.addObject("searchResults", searchResults);	
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
 	@RequestMapping("reviews/{movieId}/{userId}")
 	public ModelAndView getReviews(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("movieId")int movieId, @PathVariable("userId")int userId){
+		User u = GetSessionUser.getUser(request, response);
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("review/Review_page");
 		MovieCommentDao mcd = new MovieCommentDao();
 		MovieMarkDao mmd = new MovieMarkDao();
 		MovieDao md = new MovieDao();
 		List<MovieComment> mcs = mcd.getMovieCommentByMovieId(movieId);
+		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
 		mv.addObject("movie", md.getMovieById(movieId));
 		mv.addObject("movieComments", mcs);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
 	@RequestMapping("review/{commentId}")
 	public ModelAndView getSingleReview(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("commentId")int commentId){
+		User me = GetSessionUser.getUser(request, response);
+		int meId = me.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(meId);
 		MovieCommentDao mcd = new MovieCommentDao();
 		MovieComment mc = mcd.getMovieCommentByCommentId(commentId);
 		System.out.println(mc.getUser().getUserId());
@@ -302,28 +783,64 @@ public class MovieController {
 /*		List<MovieComment> mcs = mcd.getMovieCommentByMovieId(movieId);
 		mv.addObject("movie", md.getMovieById(movieId));
 		mv.addObject("movieComments", mcs);*/
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
 		mv.addObject("relatedArticles", relatedArticles);
 		mv.addObject("singleReviewMain", singleReviewMain);
 		mv.addObject("singleReviewQuickComments", singleReviewQuickComments);
+		
+		mv.addObject("userName", me.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
 	@RequestMapping("get/{movieId}")
 	public ModelAndView getMovie(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("movieId")int movieId){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
 		
 		//ModelAndView mv = new ModelAndView("movie");
 		ModelAndView mv = new ModelAndView("movie/Movie_Final");
 		MovieDao md = new MovieDao();
 		Movie m = md.getMovieById(movieId);
+		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
 		mv.addObject("movie", m);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		//mv.setViewName("");
 		return mv;
 	}
 	
 	
 	@RequestMapping("edit/{movieId}")
-	public ModelAndView edit(@PathVariable("movieId")int movieId) {
+	public ModelAndView edit(HttpServletRequest request,
+			HttpServletResponse response, @PathVariable("movieId")int movieId) {
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("movie/edit/editAction");
 		MovieDao md = new MovieDao();
 		Movie m = md.getMovieById(movieId);
@@ -346,6 +863,9 @@ public class MovieController {
 		}
 		mv.addObject("movie", m);
 		mv.addObject("stars", m.getStars());
+		
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;		
 	}
 
@@ -353,6 +873,11 @@ public class MovieController {
 	@RequestMapping(value="editForm" , method = RequestMethod.POST)
 	public ModelAndView editForm(HttpServletRequest request,
 			HttpServletResponse response){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("movie/edit/editForm");
 		MovieDao md = new MovieDao();
 		Movie movie = md.getMovieById(1);  // movieId
@@ -364,6 +889,8 @@ public class MovieController {
 		
 		movie.setStars(ss);
 		mv.addObject("movie", movie);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 
@@ -382,8 +909,15 @@ public class MovieController {
 	//add comment
 	@RequestMapping("comment")
 	public ModelAndView comment(HttpServletRequest request, HttpServletResponse response){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("movie/comment/commentAction");
 		mv.addObject("movieId", 23); // transform moviedId from here
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
@@ -414,7 +948,13 @@ public class MovieController {
 	}
 	
 	@RequestMapping("getComment/{movieId}")
-	public ModelAndView getComment(@PathVariable("movieId")int movieId) {
+	public ModelAndView getComment(HttpServletRequest request, HttpServletResponse response, @PathVariable("movieId")int movieId) {
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+
+		
 		ModelAndView mv = new ModelAndView("movie/comment/getComment");
 //		MovieDao md = new MovieDao();
 //		Movie m = md.getMovieById(movieId);
@@ -428,15 +968,24 @@ public class MovieController {
 		while(it.hasNext()){
 			System.out.println(it.next().getCommentDate());
 		}
-		mv.addObject("movieComments", mcs);	
+		mv.addObject("movieComments", mcs);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;		
 	}
 	
 	@RequestMapping(value ="commentForm" , method = RequestMethod.POST)
 	public ModelAndView commentForm(HttpServletRequest request, HttpServletResponse response){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		String movieId = request.getParameter("movieId");
 		System.out.println(movieId);
 		ModelAndView mv = new ModelAndView("movie/edit/editSuccess");
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
@@ -449,14 +998,10 @@ public class MovieController {
 	@RequestMapping("addSubmit")
 	public ModelAndView addSubmit(HttpServletRequest request,
 						HttpServletResponse response){
-		
-/*		System.out.println(request.getParameter("movieNameOriginal"));
-		System.out.println(request.getParameter("movieNameEn"));
-		System.out.println(request.getParameter("MovieNameChn"));
-		System.out.println(request.getParameter("directorStarName"));
-		System.out.println(request.getParameter("leadStarName"));
-		System.out.println(request.getParameter("tagName"));
-		System.out.println(request.getParameter("movieDate"));*/
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
 		
 		ModelAndView mv = new ModelAndView("movie/add/success");
 		StarringDao sd = new StarringDao();
@@ -489,15 +1034,16 @@ public class MovieController {
 		m.setMovieDemo(request.getParameter("movieDemo"));
 		m.setMovieBrief(request.getParameter("movieBrief"));
 		
-		UserDao ud = new UserDao();
-		User u = ud.getUserById(1);
+		
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
+
 		m.setUser(u);
 		
 //		m.setMovieId(3);
 		
 		MovieDao md = new MovieDao();
 		md.save(m);
-		System.out.println("222");
 		return mv;
 	}
 /*	public static void main(String[] args){
@@ -548,12 +1094,17 @@ public class MovieController {
 	@RequestMapping("getAverageGrade/{movieId}")
 	public ModelAndView getAverageGrade(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("movieId")int movieId){
-		System.out.println(movieId);
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
+		
 		ModelAndView mv = new ModelAndView("movie/mark/getAve");
 		MovieMarkDao mmd = new MovieMarkDao();
 		double aveGrade = mmd.getAverageGrade(movieId);
 		mv.addObject("averageGrade", aveGrade);
-		System.out.println(aveGrade);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 	
@@ -572,18 +1123,69 @@ public class MovieController {
 		return mv;
 	}
 	
-	@RequestMapping("search/{movieTag}")
+	@SuppressWarnings("unchecked")
+	@RequestMapping("searchByTag/{movieTag}")
 	public ModelAndView searchMovieByTag(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("movieTag")String movieTag){
+		User u = GetSessionUser.getUser(request, response);
+		int userId = u.getUserId();
+		UserProfileDao upd = new UserProfileDao();
+		UserProfile up = upd.getUserProfileById(userId);
 		
-		ModelAndView mv = new ModelAndView("list");
+		ModelAndView mv = new ModelAndView("movie/Search_Movie_Result_movie");
 		MovieDao md = new MovieDao();
+		MovieMarkDao mmd = new MovieMarkDao();
 //		Movie m = md.getMovieById(movieId);
-		List<Movie> moviesByTag = new ArrayList<Movie>();
-		moviesByTag = md.getMovieByTag(movieTag);
+		List<Movie> moviesByTag = md.searchMovieByTag(movieTag);
+		Iterator<Movie> iterator = moviesByTag.iterator();
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		while(iterator.hasNext()){
+			Movie m = iterator.next();
+			SearchResult sr = new SearchResult();
+			sr.setItemId(m.getMovieId());
+			if(m.getMoviePic()!=null)
+				sr.setItemPic(m.getMoviePic());
+			else
+				sr.setItemPic("none");
+			sr.setItemName(m.getMovieNameOriginal().length()>15? (m.getMovieNameOriginal().subSequence(0, 15)+"..."): m.getMovieNameOriginal());
+			if(m.getMovieDate()!=null){
+				sr.setItemDate(DateToString.convertDateToString(m.getMovieDate()));
+			}else{
+			}
+			sr.setItemRate(mmd.getAverageGrade(m.getMovieId()));
+			
+			searchResults.add(sr);
+		}
 		
-		mv.addObject("moviesByTag", moviesByTag);
-	
+		int page=0;
+		 if(GenericValidator.isInt(request.getParameter("page"))){
+			 page = Integer.parseInt(request.getParameter("page"));
+			  
+		}
+	 	Paging p = new Paging();
+		p.setObj(searchResults);			
+		p.setHaveOtherParameters(false);
+		p.setEvery_page_item_num(20);
+		if(page <= 0){
+			page = 1;
+		}
+		PageObject po = p.getResult(GlobleConfig.my_domain+"/movie/searchByTag/"+movieTag+".action",page);
+		mv.addObject("searchResults", po.getL());
+		mv.addObject("pageStr", po.getPageCode());
+		
+		MessageDao mgd = new MessageDao();
+		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
+		try {
+			unreadInboxmails = mgd.getUserInboxMessageAllUnread(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
+		
+		mv.addObject("searchName", movieTag);
+		mv.addObject("userName", u.getUserAlias());
+		mv.addObject("userCity", up.getProfCity());
 		return mv;
 	}
 }

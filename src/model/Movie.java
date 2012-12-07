@@ -27,7 +27,7 @@ public class Movie implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1523016625960386020L;
-	private int movieId;	
+	private int movieId;
 	private String movieNameOriginal;
 	private String movieNameEn;
 	private String movieNameChn;
@@ -46,6 +46,9 @@ public class Movie implements Serializable{
 	private User user;
 	private Date recordDate;
 	private String moviePic;
+	private String moviePicBig;
+	private String moviePicMiddle;
+	private String moviePicSmall;
 	private String movieRating;
 	
 	@Id
@@ -156,7 +159,7 @@ public class Movie implements Serializable{
 	public void setMovieBrief(String movieBrief) {
 		this.movieBrief = movieBrief;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -175,6 +178,24 @@ public class Movie implements Serializable{
 	}
 	public void setMoviePic(String moviePic) {
 		this.moviePic = moviePic;
+	}
+	public String getMoviePicBig() {
+		return moviePicBig;
+	}
+	public void setMoviePicBig(String moviePicBig) {
+		this.moviePicBig = moviePicBig;
+	}
+	public String getMoviePicMiddle() {
+		return moviePicMiddle;
+	}
+	public void setMoviePicMiddle(String moviePicMiddle) {
+		this.moviePicMiddle = moviePicMiddle;
+	}
+	public String getMoviePicSmall() {
+		return moviePicSmall;
+	}
+	public void setMoviePicSmall(String moviePicSmall) {
+		this.moviePicSmall = moviePicSmall;
 	}
 	public String getMovieRating() {
 		return movieRating;

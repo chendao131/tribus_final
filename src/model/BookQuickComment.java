@@ -20,7 +20,7 @@ public class BookQuickComment {
 	private String commentTitle;
 	private String commentContent;
 	private Date commentDate;
-	private MusicComment comment;
+	private BookComment comment;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getQuickCommentId() {
@@ -29,7 +29,7 @@ public class BookQuickComment {
 	public void setQuickCommentId(int quickCommentId) {
 		this.quickCommentId = quickCommentId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -55,12 +55,12 @@ public class BookQuickComment {
 	public void setCommentDate(Date commentDate) {
 		this.commentDate = commentDate;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "commentId")
-	public MusicComment getComment() {
+	public BookComment getComment() {
 		return comment;
 	}
-	public void setComment(MusicComment comment) {
+	public void setComment(BookComment comment) {
 		this.comment = comment;
 	}
 }

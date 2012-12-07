@@ -1,8 +1,10 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 
 import model.Book;
@@ -11,11 +13,87 @@ import model.Movie;
 import model.MovieComment;
 import model.Music;
 import model.MusicComment;
+import model.Starring;
+import model.User;
 import util.DateToString;
+import util.TimeCalculator;
+import vo.SinglePageFriendsRecord;
 import vo.SinglePageMain;
 import vo.SinglePageReview;
 
 public class SinglePageDao {
+	public List<String> getMovieSinglePageGallery(int movieId){
+		MovieImageDao mid = new MovieImageDao();
+		return mid.getImagesByMovieId(movieId);
+	}
+	public List<SinglePageFriendsRecord> getBookSinglePageFriendsRecord(Integer userId, Integer bookId){
+		UserDao ud = new UserDao();
+		BookMarkDao bmd = new BookMarkDao();
+		FollowDao fd = new FollowDao();
+		fd.getAllFriends(userId);
+		Iterator<User> iterator = fd.getAllFriends(userId).iterator();
+		List<SinglePageFriendsRecord> friendRecords = new ArrayList<SinglePageFriendsRecord>();
+		while(iterator.hasNext()){
+			User friend = iterator.next();
+			int friendId = friend.getUserId();
+			if(bmd.getMarkByBookAndUserId(bookId, friendId)!=null){
+				SinglePageFriendsRecord thisRecord = new SinglePageFriendsRecord();
+				thisRecord.setFriendPic(friend.getUserPic());
+				thisRecord.setFriendName(friend.getUserAlias());
+				thisRecord.setTimeSpan(TimeCalculator.getPastMins(bmd.getMarkDateByBookAndUserId(bookId, friendId)));
+				friendRecords.add(thisRecord);
+			}
+			if(friendRecords.size()>=3)
+				break;
+		}
+		return friendRecords;
+	}
+	
+	public List<SinglePageFriendsRecord> getMusicSinglePageFriendsRecord(Integer userId, Integer musicId){
+		UserDao ud = new UserDao();
+		MusicMarkDao mmd = new MusicMarkDao();
+		FollowDao fd = new FollowDao();
+		fd.getAllFriends(userId);
+		Iterator<User> iterator = fd.getAllFriends(userId).iterator();
+		List<SinglePageFriendsRecord> friendRecords = new ArrayList<SinglePageFriendsRecord>();
+		while(iterator.hasNext()){
+			User friend = iterator.next();
+			int friendId = friend.getUserId();
+			if(mmd.getMarkByMusicAndUserId(musicId, friendId)!=null){
+				SinglePageFriendsRecord thisRecord = new SinglePageFriendsRecord();
+				thisRecord.setFriendPic(friend.getUserPic());
+				thisRecord.setFriendName(friend.getUserAlias());
+				thisRecord.setTimeSpan(TimeCalculator.getPastMins(mmd.getMarkDateByMusicAndUserId(musicId, friendId)));
+				friendRecords.add(thisRecord);
+			}
+			if(friendRecords.size()>=3)
+				break;
+		}
+		return friendRecords;
+	}
+	
+	public List<SinglePageFriendsRecord> getMovieSinglePageFriendsRecord(Integer userId, Integer movieId){
+		UserDao ud = new UserDao();
+		MovieMarkDao mmd = new MovieMarkDao();
+		FollowDao fd = new FollowDao();
+		fd.getAllFriends(userId);
+		Iterator<User> iterator = fd.getAllFriends(userId).iterator();
+		List<SinglePageFriendsRecord> friendRecords = new ArrayList<SinglePageFriendsRecord>();
+		while(iterator.hasNext()){
+			User friend = iterator.next();
+			int friendId = friend.getUserId();
+			if(mmd.getMarkByMovieAndUserId(movieId, friendId)!=null){
+				SinglePageFriendsRecord thisRecord = new SinglePageFriendsRecord();
+				thisRecord.setFriendPic(friend.getUserPic());
+				thisRecord.setFriendName(friend.getUserAlias());
+				thisRecord.setTimeSpan(TimeCalculator.getPastMins(mmd.getMarkDateByMovieAndUserId(movieId, friendId)));
+				friendRecords.add(thisRecord);
+			}
+			if(friendRecords.size()>=3)
+				break;
+		}
+		return friendRecords;
+	}
 	public List<SinglePageReview> getMovieSinglePageReviewById(Integer movieId){
 		List<SinglePageReview> singlePageReviews = new ArrayList<SinglePageReview>();
 		MovieCommentDao md = new MovieCommentDao();
@@ -43,12 +121,41 @@ public class SinglePageDao {
 		MovieMarkDao mmd = new MovieMarkDao();
 		Movie m = md.getMovieById(movieId);
 		singlePageMain.setItemBrief(m.getMovieBrief());
-		singlePageMain.setItemDate(DateToString.convertDateToString(m.getMovieDate()));
+		if(m.getMovieBrief()!=null)
+			singlePageMain.setItemBrief_short(m.getMovieBrief().length()<50 ? m.getMovieBrief():m.getMovieBrief().substring(0, 49)+"...");
+		if(m.getMovieDate()!=null)
+			singlePageMain.setItemDate(DateToString.convertDateToString(m.getMovieDate()));
 		singlePageMain.setItemId(movieId);
 		singlePageMain.setItemName(m.getMovieNameOriginal());
 		singlePageMain.setItemPic(m.getMoviePic());
 		singlePageMain.setItemRate(m.getMovieRating());
 		singlePageMain.setItemAveGrade(mmd.getAverageGrade(movieId));
+		singlePageMain.setItemRegion(m.getMovieRegion());
+		Set<Starring> stars = m.getStars();
+		Iterator<Starring> iterator = stars.iterator();
+		String directors="", actors="";
+		int directorFlag=0, actorFlag=0;
+		while(iterator.hasNext()){
+			Starring s = iterator.next();
+			if(s.getStarType().getTypeId()==1){
+				if(directorFlag==0){
+					directors = s.getStarName();
+					directorFlag = 1;
+				}else{
+					directors=directors+", "+s.getStarName();
+				}
+			}else{
+				if(actorFlag==0){
+					actors = s.getStarName();
+					actorFlag = 1;
+				}else{
+					actors = actors+", "+s.getStarName();
+				}
+			}
+		}
+		singlePageMain.setItemDirectors(directors);
+		singlePageMain.setItemActors(actors);
+		
 		return singlePageMain;
 	}
 	
@@ -79,11 +186,15 @@ public class SinglePageDao {
 		MusicMarkDao mmd = new MusicMarkDao();
 		Music m = md.getMusicById(musicId);
 		singlePageMain.setItemBrief(m.getMusicBrief());
-		singlePageMain.setItemDate(m.getMusicPublishDate());
+		if(m.getMusicBrief()!=null)
+			singlePageMain.setItemBrief_short(m.getMusicBrief().length()<50 ? m.getMusicBrief():m.getMusicBrief().substring(0, 49)+"...");
+		if(m.getMusicPublishDate()!=null)
+			singlePageMain.setItemDate(DateToString.convertDateToString(m.getMusicPublishDate()));
 		singlePageMain.setItemId(musicId);
 		singlePageMain.setItemName(m.getMusicName());
 		singlePageMain.setItemPic(m.getMusicPic());
-		singlePageMain.setSingerName(m.getSinger().getSingerName());
+		if(m.getSinger()!=null)
+			singlePageMain.setSingerName(m.getSinger().getSingerName());
 		singlePageMain.setItemAveGrade(mmd.getAverageGrade(musicId));
 		return singlePageMain;
 	}
@@ -114,14 +225,24 @@ public class SinglePageDao {
 		BookDao bd = new BookDao();
 		BookMarkDao bmd = new BookMarkDao();
 		Book b = bd.getBookById(bookId);
-		singlePageMain.setItemBrief(b.getBookBrief());
-		singlePageMain.setItemDate(b.getBookPublishDate());
+		if(b.getBookBrief()!=null)
+			singlePageMain.setItemBrief(b.getBookBrief());
+		if(b.getBookBrief()!=null)
+			singlePageMain.setItemBrief_short(b.getBookBrief().length()<50 ? b.getBookBrief():b.getBookBrief().substring(0, 49)+"...");
+		//singlePageMain.setItemBrief(b.getBookBrief()==null? "":b.getBookBrief());
+		if(b.getBookPublishDate()!=null)
+			singlePageMain.setItemDate(DateToString.convertDateToString(b.getBookPublishDate()));
 		singlePageMain.setItemId(bookId);
 		singlePageMain.setItemName(b.getBookName());
 		singlePageMain.setItemPic(b.getBookPic());
 		singlePageMain.setBookAuthor(b.getBookAuthor());
 		singlePageMain.setBookISBN(b.getBookISBN());
+		singlePageMain.setBookPages(b.getBookPages());
 		singlePageMain.setItemAveGrade(bmd.getAverageGrade(bookId));
 		return singlePageMain;
 	}
+/*	public static void main(String args[]){
+		SinglePageDao spd = new SinglePageDao();
+		spd.getMovieSinglePage(10833);
+	}*/
 }

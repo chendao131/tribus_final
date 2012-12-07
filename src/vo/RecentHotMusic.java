@@ -1,11 +1,19 @@
 package vo;
 
 public class RecentHotMusic {
+	private Integer musicId;
 	private String trackName;
 	private String musicPic;
 	private String singerName;
 	private String musicName;
 	private double musicRating;
+	private String musicPublishDate;
+	public Integer getMusicId() {
+		return musicId;
+	}
+	public void setMusicId(Integer musicId) {
+		this.musicId = musicId;
+	}
 	public String getTrackName() {
 		return trackName;
 	}
@@ -35,5 +43,11 @@ public class RecentHotMusic {
 	}
 	public void setMusicRating(double musicRating) {
 		this.musicRating = musicRating;
+	}
+	public String getMusicPublishDate() {
+		return musicPublishDate;
+	}
+	public void setMusicPublishDate(String musicPublishDate) {
+		this.musicPublishDate = musicPublishDate;
 	}
 }

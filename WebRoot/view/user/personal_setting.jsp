@@ -47,7 +47,7 @@
  	function goto(){
 	 	document.forms["basic"].submit();
 	 }
-</script>
+	</script>
 
 
 
@@ -57,15 +57,16 @@
 <body>
 	<div id="wrapper"><!--start wrapper-->
     	<div id="header"><!--start header-->
-        	<div class="logo"><a name="top" href="index.html"><img src="${domain }user/img/logo.png" alt="" width="59" height="65" /></a></div>
+        	<div class="logo"><a name="top" href="index.html">
+        	<img src="${domain }user/img/logo.png" alt="" width="59" height="65" /></a></div>
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="#">CITY</a></li>
-                    	<li><a href="#" title="MOVIE">MOVIE</a></li>
-                        <li><a href="#" title="BOOK">BOOK</a></li>
-                        <li><a href="#" title="MUSIC">MUSIC</a></li>
-                        <li><a href="#" title="MY TRIBUS">MY TRIBUS</a></li>
+                    	<li><a href="${no_view_url}acitivity/index.action">EVENT</a></li>
+                    	<li><a href="${no_view_url}movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
+                        <li><a href="${no_view_url}book/bookHomePage.action" title="BOOK">BOOK</a></li>
+                        <li><a href="${no_view_url}music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
+                        <li><a href="${no_view_url}user/my.action" title="MY TRIBUS">MY TRIBUS</a></li>
                     </ul>
                     <div class="header_search">
                     	<form action="#">
@@ -74,8 +75,14 @@
                         </form>
                     </div>
                     <div class="header_icon_area">
-                    	<span class="space_btm"><a href="#"><img src="img/icon_header1.png" alt="" width="10" height="11" /></a></span>
-                        <span><a href="#"><img src="img/icon_header2.png" alt="" width="12" height="13" /></a></span>
+                    	<span class="space_btm">
+                    		<a href="#">
+                    			<img src="${domain }user/img/icon_header1.png" alt="" width="10" height="11" />
+                    		</a>
+                    	</span>
+                        <span>
+                        	<a href="#"><img src="${domain }user/img/icon_header2.png" alt="" width="12" height="13" /></a>
+                        </span>
                     </div>
                 </div></div></div>
             </div><!--//end #header_rgt-->
@@ -90,15 +97,15 @@
                 </div><!--//end #search_bg-->
                 <div id="social_media"><!--start social_media-->
                 	<div id="social_lftcol">
-                    	<a href="#"><img src="img/icon_facebook.jpg" alt="" width="24" height="24" /></a>
-                        <a href="#"><img src="img/icon_tweet.jpg" alt="" width="24" height="24" /></a>
+                    	<a href="#"><img src="${domain }user/img/icon_facebook.jpg" alt="" width="24" height="24" /></a>
+                        <a href="#"><img src="${domain }user/img/icon_tweet.jpg" alt="" width="24" height="24" /></a>
                     </div>
                     <div id="social_box"><!--start social_box-->
                     	<div id="message">
-                        	<a href="#"><img src="img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
-                            <a href="#"><img src="img/icon_message2.jpg" alt="" width="22" height="22" /></a>
-                            <a href="#"><img src="img/icon_message3.jpg" alt="" width="22" height="22" /></a>
-                            <a href="#"><img src="img/icon_message4.jpg" alt="" width="22" height="22" /></a>
+                        	<a href="#"><img src="${domain }user/img/icon_message1.jpg" alt="" width="22" height="22" /><span>5</span></a>
+                            <a href="#"><img src="${domain }user/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
+                            <a href="#"><img src="${domain }user/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
+                            <a href="#"><img src="${domain }user/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
                         	<h3>${user.userAlias }</h3>
@@ -119,7 +126,7 @@
                                     <span><a href="#">${user.userEmail }</a></span>
                                 </div>
                                 <div class="personal_img">
-                                	<img src="img/pic_follower2.jpg" alt="" width="48" height="48" />
+                                	<img src="${domain }user/img/pic_follower2.jpg" alt="" width="48" height="48" />
                                     <h5><a href="#">${user.userAlias }</a></h5>
                                 </div>
                                 <div class="personal_upload">

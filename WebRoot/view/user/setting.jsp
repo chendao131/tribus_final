@@ -121,7 +121,7 @@
                     </div><!--//end #gallery-->
                 </div><!--//end #album_content-->
             </div><!--//end #common_maincontent-->
-            <div id="footer"><p>Copyright @ Tribus.us 2012.      <span>All rights reserved</span> </p></div>
+            <div id="footer"><div id="footer"><p> &copy;2012 goTribus |<span>All rights reserved</span> </p></div></div>
         </div><!--//end #main_area-->
     </div><!--//end #wrapper-->
 </body>

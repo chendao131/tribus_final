@@ -13,6 +13,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MovieQuickCommentDao {
+/*	public int addQuickCommentByReviewIdAndUserId(int reviewId, int userId){
+		int saveSuccess=0;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		Transaction tx = session.beginTransaction();
+		try{
+			session.save(mqc);
+			session.flush();
+			tx.commit();
+			saveSuccess = 1;
+			
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			tx.rollback();			
+		}
+		return saveSuccess;
+	}*/
+	
 	public int save(MovieQuickComment mqc){
 		int saveSuccess=0;
 		Session session = TribusHibernateSessionFactory.currentSession();
@@ -35,7 +52,7 @@ public class MovieQuickCommentDao {
 		List<MovieQuickComment> mqcs = null;
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
-			String hql = "from MovieQuickComment as mqc where mqc.comment.commentId=:commentId";
+			String hql = "from MovieQuickComment as mqc where mqc.comment.commentId=:commentId order by mqc.quickCommentId desc";
 			 mqcs = session.createQuery(hql).setInteger("commentId",commentId).list();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -47,10 +64,10 @@ public class MovieQuickCommentDao {
 	public static void main(String args[]){
 		MovieQuickCommentDao mqcd = new MovieQuickCommentDao();
 		MovieQuickComment mqc = new MovieQuickComment();
-		List<MovieQuickComment> mqcs = mqcd.getQuickCommentByCommentId(1);
+		List<MovieQuickComment> mqcs = mqcd.getQuickCommentByCommentId(25);
 		Iterator<MovieQuickComment> iterator = mqcs.iterator();
 		while(iterator.hasNext()){
-			System.out.println(iterator.next().getCommentTitle());
+			System.out.println(iterator.next().getCommentContent());
 		}
 /*		mqc.setCommentContent("qqqqqqccccccc1");
 		mqc.setCommentTitle("qc1");

@@ -65,7 +65,7 @@ public class Band implements Serializable{
 	public void setBandNation(String bandNation) {
 		this.bandNation = bandNation;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name = "typeId")
 	public MusicType getMusicType() {
 		return musicType;
@@ -85,7 +85,7 @@ public class Band implements Serializable{
 	public void setBandLanguage(String bandLanguage) {
 		this.bandLanguage = bandLanguage;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name = "companyId")
 	public Company getCompany() {
 		return company;
@@ -105,7 +105,7 @@ public class Band implements Serializable{
 	public void setBandPic(String bandPic) {
 		this.bandPic = bandPic;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;

@@ -38,8 +38,7 @@ public class ActivityClassifiedDao {
 
 	public List<ActivityClassified> getAllActivityClassified() {// 找出所有活动分类
 		String hql = "from ActivityClassified";
-		return TribusHibernateSessionFactory.currentSession().createQuery(
-				hql).list();
+		return TribusHibernateSessionFactory.currentSession().createQuery(hql).list();
 
 	}
 	public Integer getClassifiedIdByTag(String tagName) {// 通过标签名找出对应分类Id

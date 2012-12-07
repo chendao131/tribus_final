@@ -57,10 +57,10 @@ public class StarTypeDao {
 		}
 		return st;		
 	}
-/*	public static void main(String args[]){
+	public static void main(String args[]){
 		StarTypeDao std = new StarTypeDao();
 		//StarType st = std.getTypeByName("actor");
-		StarType st = std.getStarTypeById(3);
-		System.out.println(st.getTypeName());
-	}*/
+		StarType st = std.getStarTypeById(2);
+		System.out.println(st.getTypeName()+"*"+st.getTypeId());
+	}
 }

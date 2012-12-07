@@ -139,7 +139,6 @@
 					}
 				}).click(function(evt) {
 					self.score.removeAttr('value');
-
 					if (self.opt.click) {
 			          self.opt.click.call(self, null, evt);
 			        }
@@ -167,15 +166,24 @@
 				}
 
 				$this.data('score', value);
-
 				methods.setTarget.call(self, value, true);
 
 				if (self.opt.mouseover) {
 					self.opt.mouseover.call(self, value, evt);
 				}
 			}).click(function(evt) {
+			     $(".selectTwo").addClass("click_done");
+			     $(".selectOne").removeClass("click_done");
 				self.score.val((self.opt.half || self.opt.precision) ? $this.data('score') : this.alt);
-
+				var dataString = "rate=" +$this.data('score');
+				$.ajax({  
+						  type: "POST",  
+						  url: "http://localhost:8080/tribus_final/music/rateMusic/"+$('#item_rate_id').val()+".action",  
+						  data: dataString,  
+						  success: function() {  
+						  }  
+				});
+				
 				if (self.opt.click) {
 					self.opt.click.call(self, self.score.val(), evt);
 				}
@@ -437,7 +445,7 @@
 		mouseover		: undefined,
 		noRatedMsg		: 'not rated yet',
 		number			: 5,
-		path			: 'img/',
+		path			: 'http://localhost:8080/tribus_final/view/music/img/',
 		precision		: false,
 		round			: { down: .25, full: .6, up: .76 },
 		readOnly		: false,

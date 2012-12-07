@@ -2,15 +2,17 @@ package dao;
 
 import hibernate.TribusHibernateSessionFactory;
 
-import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import model.Message;
-import model.MovieComment;
+import model.User;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -18,7 +20,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import util.IntArrayToString;
-import vo.ActivityGoingTempResult;
+import vo.MessageVO;
 
 public class MessageDao {
 	
@@ -47,6 +49,60 @@ public class MessageDao {
 		}
 		
 		return readAndUnread;
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param resourId
+	 */
+	public void remind(int type,int resourId){
+		String com = "musicComment,movieComment,bookComment,activityComment"+
+		"select userId from activity_comment where activityId = ?"+
+		"select userId from movie_comment where movieId = ?"+
+		"";			
+						
+		
+	}
+	
+	
+	public List<MessageVO> searchAllMail(String nameOrContent,int userId) throws ParseException{
+		
+		Session session = TribusHibernateSessionFactory.currentSession();
+		String hql = "select u.userAlias , m.messageRead, m.messageTitle,m.messageToUserId ," +
+				" m.messageFromUserId ," +
+				" m.messageContent,m.messageDate ,m.messageId " +
+				" from message m, user_account u " +
+				" where m.messageToUserId = ? " +
+				"  and u.userId = m.messageFromUserId  and " +
+				" (m.messageContent like '%"+nameOrContent+"%' " +
+                " or m.messageTitle like '%"+nameOrContent+"%' or u.userAlias like '%"+nameOrContent+"%') ";
+		 
+		List l = session.createSQLQuery(hql).setInteger(0, userId).list();
+		List<MessageVO> res = new ArrayList<MessageVO>(); 
+		if(l!=null){
+			Iterator itr = l.iterator();
+			while(itr.hasNext()){
+				MessageVO mv = new MessageVO();
+				Object[] obj = (Object[])itr.next();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+				Date d = sdf.parse(obj[6].toString());				
+				mv.setMessageFromUserAlias(obj[0].toString());
+				mv.setMessageContent(obj[5].toString());
+				mv.setMessageDate(d);
+				mv.setMessageTitle(obj[2].toString());
+				mv.setMessageRead("true".equals(obj[1].toString()) ? true:false);
+				mv.setMessageId(Integer.parseInt(obj[7].toString()));
+				/**
+				 * useless
+				 */
+				mv.setMessageToUserAlias(obj[0].toString());
+				res.add(mv);
+			}
+		}
+		
+		return res;
 	}
 	
 	public Map<Integer,String> getUserNameById(){
@@ -83,8 +139,9 @@ public class MessageDao {
 			if(m.getMessageFromUserId() > 0){c.add(Restrictions.eq("messageFromUserId",m.getMessageFromUserId()));}
 			if(m.getMessageContent()!=null){c.add(Restrictions.eq("messageContent", m.getMessageContent()));}
 			if(m.getMessageToUserId() > 0){c.add(Restrictions.eq("messageToUserId", m.getMessageToUserId()));}
-			if(m.getType() != null){c.add(Restrictions.eq("type", m.getType()));}	
-			if(m.isRead()){c.add(Restrictions.eq("isRead", m.isRead()));}
+						
+			if(m.getMessageType() != null){c.add(Restrictions.eq("type", m.getMessageType()));}	
+			if(m.getMessageRead()!=null){c.add(Restrictions.eq("messageRead", m.getMessageRead()));}
 									
 			return c.list();  														
 						
@@ -106,9 +163,10 @@ public class MessageDao {
 			if(m.getMessageFromUserId() > 0){c.add(Restrictions.eq("messageFromUserId",m.getMessageFromUserId()));}
 			if(m.getMessageContent()!=null){c.add(Restrictions.eq("messageContent", m.getMessageContent()));}
 			if(m.getMessageToUserId() > 0){c.add(Restrictions.eq("messageToUserId", m.getMessageToUserId()));}
-			if(m.getType() != null){c.add(Restrictions.eq("type", m.getType()));}	
-			if(m.isRead()){c.add(Restrictions.eq("isRead", m.isRead()));}
-									
+			if(m.getMessageId() != 0){c.add(Restrictions.eq("messageId", m.getMessageId()));}
+			if(m.getMessageType() != null){c.add(Restrictions.eq("type", m.getMessageType()));}	
+			if(m.getMessageRead()!=null){c.add(Restrictions.eq("messageRead", m.getMessageRead()));}
+			
 			Message m1 = (Message)c.uniqueResult();  														
 			return m1;
 			
@@ -209,43 +267,150 @@ public class MessageDao {
 	}
 	
 	
-	public List<Message> getUserInboxMessageAll(int id){
+	public List<MessageVO> getUserInboxMessageAll(int id) throws ParseException{
 		Session session = TribusHibernateSessionFactory.currentSession();
-		String hql = "from Message where messageToUserId = :id";
-		List<Message> l = session.createQuery(hql).setInteger("id", id).list();
-		return l;
+		String hql = "select u.userAlias , m.messageRead, m.messageTitle,m.messageToUserId ," +
+				" m.messageFromUserId ," +
+				" m.messageContent,m.messageDate ,m.messageId " +
+				" from message m, user_account u " +
+				" where m.messageToUserId = ? " +
+				"  and u.userId = m.messageFromUserId    ";
+		List l = session.createSQLQuery(hql).setInteger(0, id).list();
+		List<MessageVO> res = new ArrayList<MessageVO>(); 
+		if(l!=null){
+			Iterator itr = l.iterator();
+			while(itr.hasNext()){
+				MessageVO mv = new MessageVO();
+				Object[] obj = (Object[])itr.next();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+				Date d = sdf.parse(obj[6].toString());				
+				mv.setMessageFromUserAlias(obj[0].toString());
+				mv.setMessageContent(obj[5].toString());
+				mv.setMessageDate(d);
+				mv.setMessageTitle(obj[2].toString());
+				mv.setMessageRead("true".equals(obj[1].toString()) ? true:false);
+				mv.setMessageId(Integer.parseInt(obj[7].toString()));
+				mv.setMessageFromUserId(Integer.parseInt(obj[4].toString()));
+				mv.setMessageToUserId(Integer.parseInt(obj[3].toString()));
+				/**
+				 * useless
+				 */
+				mv.setMessageToUserAlias(obj[0].toString());
+				res.add(mv);
+			}
+		}
+		
+		return res;
 	}
 	
 	
-	public List<Message> getUserInboxMessageAllUnread(int id){
+	public List<MessageVO> getUserInboxMessageAllUnread(int id) throws ParseException{
 		Session session = TribusHibernateSessionFactory.currentSession();
-		String hql = "from Message where messageToUserId = :id and read = 0";
-		List<Message> l = session.createQuery(hql).setInteger("id", id).list();
-		return l;
+		String hql = "select u.userAlias ,m.messageTitle,m.messageToUserId , m.messageFromUserId ," +
+				"       m.messageContent,m.messageDate,m.messageRead, m.messageId " +
+				"				 from message m, user_account u " +
+				"                where m.messageToUserId = ? and m.messageRead = ? " +
+				"                and u.userId = m.messageFromUserId                ";
+		List l = session.createSQLQuery(hql).setInteger(0, id).setString(1, "false").list();
+		List<MessageVO> res = new ArrayList<MessageVO>(); 
+		
+		if(l != null){
+			Iterator itr = l.iterator();
+			while(itr.hasNext()){
+				Object[] obj = (Object[])itr.next();
+				
+				MessageVO mv = new MessageVO();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+				Date d = sdf.parse(obj[5].toString());				
+				mv.setMessageFromUserAlias(obj[0].toString());
+				mv.setMessageContent(obj[4].toString());
+				mv.setMessageDate(d);
+				mv.setMessageTitle(obj[1].toString());
+				mv.setMessageRead(false);
+				mv.setMessageId(Integer.parseInt(obj[7].toString()));
+				mv.setMessageFromUserId(Integer.parseInt(obj[3].toString()));
+				mv.setMessageToUserId(Integer.parseInt(obj[2].toString()));
+				/**
+				 * useless
+				 */
+				mv.setMessageToUserAlias(obj[0].toString());
+				res.add(mv);
+			}
+		}
+		
+		
+		return res;
 	}
 	
 	
-	public List<Message> getUserInboxMessageRead(){
-		return null;
-	}
 	
-	public List<Message> getUserInboxMessageUnRead(){
-		return null;
-	}
 
 	
-	public List<Message> getUserOutboxMessageAll(int id){
-		Session session = TribusHibernateSessionFactory.currentSession();
-		String hql = "from Message where messageFromUserId = :id";
-		List<Message> l = session.createQuery(hql).setInteger("id", id).list();
-		return l;
+	public List<MessageVO> getUserOutboxMessageAll(int id) throws ParseException{
+		
+		String sql = "select u.userAlias , m.messageTitle,m.messageToUserId , m.messageFromUserId ," +
+				" m.messageContent,m.messageDate,m.messageId  " +
+				" from message m, user_account u " +
+				"  where m.messageFromUserId = ? " +
+				" and u.userId = m.messageToUserId   ";
+		
+		Session session = TribusHibernateSessionFactory.currentSession();		
+		List l = session.createSQLQuery(sql).setInteger(0, id).list();
+		List<MessageVO> res = new ArrayList<MessageVO>();
+		
+		if(l != null && l.size() > 0){
+			Iterator itr = l.iterator();
+			while(itr.hasNext()){
+				Object[] obj = (Object[])itr.next();
+				
+				MessageVO mv = new MessageVO();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+				Date d = sdf.parse(obj[5].toString());				
+				mv.setMessageFromUserAlias(obj[0].toString());
+				mv.setMessageContent(obj[4].toString());
+				mv.setMessageDate(d);
+				mv.setMessageTitle(obj[1].toString());
+				mv.setMessageRead(true);
+				mv.setMessageId(Integer.parseInt(obj[6].toString()));
+				mv.setMessageToUserId(Integer.parseInt(obj[2].toString()));
+				mv.setMessageFromUserId(Integer.parseInt(obj[3].toString()));
+				/**
+				 * useless
+				 */
+				mv.setMessageToUserAlias(obj[0].toString());
+				res.add(mv);
+			}			
+		}
+		
+		return res;
 	}
 	
-	public List<Message> getUserOutboxMessageRead(){
+	private List<Message> getUserOutboxMessageRead(){
 		return null;
 	}
 	
-	public List<Message> getUserOutboxMessageUnRead(){
+	private List<Message> getUserOutboxMessageUnRead(){
 		return null;
+	}
+	
+	public static void main(String args[]){
+		MessageDao md = new MessageDao();
+		try {
+			Message m = new Message();
+			m.setMessageRead("false");
+			Message mm = md.getMessageByCondition(m);
+			System.out.println(mm.getMessageId());
+			
+			List<MessageVO> l = md.getUserInboxMessageAllUnread(1);
+			for (MessageVO messageVO : l) {
+				System.out.println(messageVO.getMessageFromUserAlias());
+			}
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

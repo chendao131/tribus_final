@@ -1,9 +1,16 @@
 package vo;
 
 public class SingleReviewRelatedArticle {
+	private Integer itemId;
 	private String itemName;
 	private String commentTitle;
 	private String commentDate;
+	public Integer getItemId() {
+		return itemId;
+	}
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
+	}
 	public String getItemName() {
 		return itemName;
 	}
@@ -22,5 +29,4 @@ public class SingleReviewRelatedArticle {
 	public void setCommentDate(String commentDate) {
 		this.commentDate = commentDate;
 	}
-
 }

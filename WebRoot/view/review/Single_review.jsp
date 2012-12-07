@@ -28,7 +28,7 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li><a href="${my_domain}/activity/index.action">CITY</a></li>
+                    	<li><a href="${my_domain}/activity/index.action">EVENT</a></li>
                     	<li class="current_page_item"><a href="${my_domain }/movie/movieHomePage.action" title="MOVIE">MOVIE</a></li>
                         <li><a href="${my_domain }/book/bookHomePage.action" title="BOOK">BOOK</a></li>
                         <li><a href="${my_domain }/music/musicHomePage.action" title="MUSIC">MUSIC</a></li>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="address">
                         	<h3><c:out value="${userName}" /></h3>
-                            <span><c:out value="${userCity }" /></span>
+                            <span><c:out value="${userCity}" /></span>
                         </div>
                     </div><!--//end #social_box-->
                 </div><!--//end #social_media-->
@@ -137,48 +137,83 @@
                             </ul>
                         </div><!--//end .realted_article-->
                         
-                        <div id="comment_box_area"><!--start comment_box_area-->
+                         <div id="comment_box_area"><!--start comment_box_area-->
                         
                         	<div class="comment_box"><!--start comment_box-->
                             	<div class="arrow_author2"></div>
                             	<div class="comment_first_content"><!--start comment_first_content-->
                                 	<div class="pic_author">
                                     	<div class="arrow_author1"></div>
-                                        <img src="${my_local}/review/img/pic_author1.png" alt="" width="73" height="73" />
+                                        <img src="img/pic_author1.png" alt="" width="73" height="73" />
                                     </div>
                                     <div class="author_total_rgt">
                                     	<div class="author_speech">
                                             <textarea rows="10" cols="10" onclick="if(this.value=='Name Says : ...')(this.value='')"  onblur="if(this.value=='')(this.value='Name Says : ...')">Name Says : ...</textarea>
                                         </div>
                                         <div class="author_icon">
-                                        	<span><img src="${my_local}/review/img/icon_album.jpg" alt="" width="20" height="19" /></span>
+                                        	<span><img src="img/icon_album.jpg" alt="" width="20" height="19" /></span>
                                             <div class="btn_done"><a href="#">Done</a></div>
                                         </div>
                                     </div>
                                 </div><!--//end .comment_first_content-->
                             </div><!--//end .comment_box-->
                             
-                            <c:forEach items="${singleReviewQuickComments}" var="thisQuickComment">
                             <div class="comment_box bg_differ"><!--start comment_box-->
                             	<div class="comment_scnd_content"><!--start comment_scnd_content-->
                                 	<div class="pic_author">
-                                        <img src="${my_local}/review/img/pic_author2.png" alt="" width="72" height="72" />
+                                        <img src="img/pic_author2.png" alt="" width="72" height="72" />
                                     </div>
                                     <div class="author_total_rgt">
                                     	<div class="author_speech">
-                                        	<h3><c:out value="${thisQuickComment.userName}" /> (New York)</h3>
+                                        	<h3>Pierce Tetro Cooper (New York)</h3>
                                             <div class="edit_tools">
-                                        	<label  class="text_label"><c:out value="${thisQuickComment.commentContent}" /></label>
+                                        	<label  class="text_label">Am I actually goin to see you there or are you too big<br />time to mingle wit us little people?</label>
                                             <div style="display: block;" class="edit"></div>
                                             <input type="text" />
                                          </div>
-                                            <span><c:out value="${thisQuickComment.commentDate}" /></span>
+                                            <span>Feb.18, 2012  at 1:43pm</span>
                                         </div>
                                     </div>
                                 </div><!--//end .comment_scnd_content-->
                             </div><!--//end .comment_box-->
-                            </c:forEach>
                             
+                            <div class="comment_box"><!--start comment_box-->
+                            	<div class="comment_scnd_content"><!--start comment_scnd_content-->
+                                	<div class="pic_author">
+                                        <img src="img/pic_author3.png" alt="" width="72" height="72" />
+                                    </div>
+                                    <div class="author_total_rgt">
+                                    	<div class="author_speech">
+                                        	<h3>Pierce Tetro Cooper (New York)</h3>
+                                            <div class="edit_tools">
+                                        	<label  class="text_label">Am I actually goin to see you there or are you too big<br />time to mingle wit us little people?</label>
+                                            <div style="display: block;" class="edit"></div>
+                                            <input type="text" />
+                                         </div>
+                                            <span>Feb.18, 2012  at 1:43pm</span>
+                                        </div>
+                                    </div>
+                                </div><!--//end .comment_scnd_content-->
+                            </div><!--//end .comment_box-->
+                            
+                            <div class="comment_box bg_differ"><!--start comment_box-->
+                            	<div class="comment_scnd_content"><!--start comment_scnd_content-->
+                                	<div class="pic_author">
+                                        <img src="img/pic_author4.png" alt="" width="72" height="72" />
+                                    </div>
+                                    <div class="author_total_rgt">
+                                    	<div class="author_speech">
+                                        	<h3>Pierce Tetro Cooper (New York)</h3>
+                                              <div class="edit_tools">
+                                                <label  class="text_label">Am I actually goin to see you there or are you too big<br />time to mingle wit us little people?</label>
+                                                <div style="display: block;" class="edit"></div>
+                                                <input type="text" />
+                                             </div>
+                                            <span class="color_differ">Feb.18, 2012  at 1:43pm</span>
+                                        </div>
+                                    </div>
+                                </div><!--//end .comment_scnd_content-->
+                            </div><!--//end .comment_box-->
                         </div><!--//end #comment_box_area-->
                         <div id="comment_pagination">
                         	<a href="#" class="prev"></a>

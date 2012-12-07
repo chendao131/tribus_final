@@ -7,6 +7,7 @@ public class HomePageFriendRecommend {
 	private Integer friendId;
 	private String friendName;
 	private Integer rating;
+	private String timeSpan;
 	public Integer getItemId() {
 		return itemId;
 	}
@@ -42,6 +43,12 @@ public class HomePageFriendRecommend {
 	}
 	public void setRating(Integer rating) {
 		this.rating = rating;
+	}
+	public String getTimeSpan() {
+		return timeSpan;
+	}
+	public void setTimeSpan(String timeSpan) {
+		this.timeSpan = timeSpan;
 	}
 	
 }

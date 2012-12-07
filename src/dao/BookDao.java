@@ -18,35 +18,23 @@ import vo.BookMarkVo;
 import model.Book;
 import model.BookMark;
 import model.Music;
+import model.Singer;
 import model.User;
 
 @Repository
 public class BookDao {
 	@SuppressWarnings("unchecked")
 	public List<Book> searchBookByName(String name){
-		//String sql = "from Movie where tags.tagName = :movieTag";
-		//String[] tags = {"Drama"};
-		/*String hql = "select m from Movie m "+
-						"join m.tags t "+
-						"where t.tagName in (:tags)";*/
-		String hql = "from Book";
+		String hql ="select b from Book b where lower(b.bookName) like :name order by b.bookPublishDate desc";
+		List<Book> books = null;
 		Session session = TribusHibernateSessionFactory.currentSession();
-		List<Book> allBooks = new ArrayList<Book>();
-		List<Book> result = new ArrayList<Book>();
 		try{
-			allBooks = session.createQuery(hql).list();
-			 Iterator<Book> iterator = allBooks.iterator();
-			 while(iterator.hasNext()){
-				 Book b = iterator.next();
-				 if(b.getBookName().indexOf(name)!=-1){
-					 result.add(b);
-				 }
-			 }
-			 System.out.println("success");
+			books = session.createQuery(hql).setString("name", "%"+name.toLowerCase()+"%").list();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		return result;
+		return books;	
+		
 	}
 	
 	public int save(Book b) {
@@ -96,7 +84,7 @@ public class BookDao {
 	public List<Book> getBooksWantedByUserId(int id){
 		String sql = "select b.* from book b, book_mark bm, user_account u" +
 				" where b.bookId = bm.bookId and u.userId = bm.userId" +
-				" and bm.bookLike = 1 and u.userId = ?";
+				" and bm.bookRead = 1 and u.userId = ?";
 		Session session = TribusHibernateSessionFactory.currentSession();
 		return session.createSQLQuery(sql).addEntity(Book.class).setInteger(0, id).list();
 	}
@@ -104,7 +92,7 @@ public class BookDao {
 	public List<Book> getBooksReadByUserId(int id){
 		String sql = "select b.* from book b, book_mark bm, user_account u" +
 		" where b.bookId = bm.bookId and u.userId = bm.userId" +
-		" and bm.bookRead = 1 and u.userId = ?";
+		" and bm.bookRead = 2 and u.userId = ?";
 		Session session = TribusHibernateSessionFactory.currentSession();
 		return session.createSQLQuery(sql).addEntity(Book.class).setInteger(0, id).list(); 		
 	}
@@ -185,12 +173,10 @@ public class BookDao {
 	public List<Book> getBookByTag(String bookTag){
 		List<Book> bs = new ArrayList<Book>();
 		Book b = null;
-		String hql = "select b from Book b "+
-				"join b.tags t "+
-				"where t.tagName = :bookTag";
+		String hql = "select b from Book b join b.tags t where lower(t.tagName) like :bookTag";
 		try {
 			Session session = TribusHibernateSessionFactory.currentSession();
-			bs = session.createQuery(hql).setString("bookTag", bookTag)
+			bs = session.createQuery(hql).setString("bookTag", "%"+bookTag.toLowerCase()+"%")
 					.list();
 			b = bs.get(0);
 			System.out.println("success");
@@ -198,7 +184,7 @@ public class BookDao {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
 		}
-		return bs.subList(0, 9);		
+		return bs.subList(0, 6);
 	}
 	
 	public List<Book> getBooksByUserId(int id){
@@ -230,6 +216,26 @@ public class BookDao {
 			System.out.println(e.getMessage());
 		}
 		return -1;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Book> searchBookByTag(String bookTag){
+		//String sql = "from Movie where tags.tagName = :movieTag";
+		//String[] tags = {"Drama"};
+		/*String hql = "select m from Movie m "+
+						"join m.tags t "+
+						"where t.tagName in (:tags)";*/
+		String hql = "select b from Book b "+
+				"join b.tags t "+
+				"where lower(t.tagName) like :bookTag";
+		List<Book> books = new ArrayList<Book>();
+		Session session = TribusHibernateSessionFactory.currentSession();
+		try{
+			 books = session.createQuery(hql).setString("bookTag", "%"+bookTag+"%").list();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return books;
 	}
 	public static void main(String args[]){
 		BookDao bd = new BookDao();

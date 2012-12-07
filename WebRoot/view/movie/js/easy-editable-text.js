@@ -2,13 +2,15 @@ $(document).ready(function(){
 	
 	$('.edit').click(function(){
 		$(this).hide();
+		prevContent = $(this).prev().html();
 		$(this).prev().hide();
 		$(this).next().show();
-		$(this).next().select();
+		//$(this).next().select();
+		$(this).next().val(prevContent);
 	});
 	
 	
-	$('input[type="text"]').blur(function() {  
+	$('.edit_tools input[type="text"]').blur(function() {  //alert(prevContent)
          if ($.trim(this.value) == ''){  
 			 this.value = (this.defaultValue ? this.defaultValue : '');  
 		 }
@@ -21,7 +23,7 @@ $(document).ready(function(){
 		 $(this).prev().prev().show();
      });
 	  
-	  $('input[type="text"]').keypress(function(event) {
+	  $('.edit_tools input[type="text"]').keypress(function(event) {
 		  if (event.keyCode == '13') {
 			  if ($.trim(this.value) == ''){  
 				 this.value = (this.defaultValue ? this.defaultValue : '');  

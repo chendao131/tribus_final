@@ -34,7 +34,7 @@ public class MusicCommentDraft implements Serializable {
 	public void setDraftId(int draftId) {
 		this.draftId = draftId;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "userId")
 	public User getUser() {
 		return user;
@@ -60,7 +60,7 @@ public class MusicCommentDraft implements Serializable {
 	public void setDraftDate(Date draftDate) {
 		this.draftDate = draftDate;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "musicId")
 	public Music getMusic() {
 		return music;

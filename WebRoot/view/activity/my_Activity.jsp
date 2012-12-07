@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,model.User,vo.MyActivity,model.Activity" pageEncoding="utf-8"%>
+<%@ page language="java" import="java.util.*,model.User,vo.MyActivity,model.Activity,config.GlobleConfig" pageEncoding="utf-8"%>
 <%@ taglib uri="/WEB-INF/tld/c-rt.tld" prefix="c"%>
 <%
 String path = request.getContextPath();
@@ -8,12 +8,14 @@ User user=(User)session.getAttribute("user");
 List<MyActivity> activity=(List<MyActivity>) request.getAttribute("activityList");
 String detail=null;
 String condition=(String)request.getAttribute("condition");
+request.setAttribute("path1",GlobleConfig.pathPath);
+request.setAttribute("path2",GlobleConfig.pathPath1);
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <base href="<%=basePath%>">
+    
     
     <title>My JSP 'my_Activity.jsp' starting page</title>
     
@@ -25,9 +27,9 @@ String condition=(String)request.getAttribute("condition");
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="../tribus/view/activity/font/font.css" />
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="../tribus/view/activity/css/style.css" />
-    <link rel="stylesheet" type="text/css" media="screen,projection" href="../tribus/view/activity/css/css3.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${path1}activity/font/font.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${path1}activity/css/style.css" />
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="${path1}activity/css/css3.css" />
     <!--[if lt IE 10]>
    		<script src="js/PIE.js" type="text/javascript"></script>
     <![endif]-->
@@ -36,7 +38,7 @@ String condition=(String)request.getAttribute("condition");
  <script type="text/javascript">
 function search(){
 var a =document.getElementById("txt1");
-window.location.href="activity/search.action?searchCondition="+a.value;
+window.location.href="${path2}activity/search.action?searchCondition="+a.value;
 }
 
 
@@ -114,27 +116,37 @@ function getResult() {
   </head>
   
   <body>
- <div id="wrapper">=$<!--start wrapper-->
+ <div id="wrapper"><!--start wrapper-->
     	<div id="header"><!--start header-->
-        	<div class="logo"><a href="index.html"><img src="../tribus/view/activity/img/logo.png" alt="" /></a></div>
+        	<div class="logo"><a href="${path2}activity/index.action"><img src="${path1}activity/img/logo.png" alt="" /></a></div>
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li class="current_page_item"><a href="#">CITY</a></li>
-                    	<li><a href="#" title="MOVIE">MOVIE</a></li>
-                        <li><a href="#" title="BOOK">BOOK</a></li>
-                        <li><a href="#" title="MUSIC">MUSIC</a></li>
-                        <li><a href="#" title="MY TRIBUS">MY TRIBUS</a></li>
+                    	<li class="current_page_item">
+										<a href="${path2}activity/index.action">CITY</a>
+									</li>
+									<li>
+										<a href="${path2}movie/movieHomePage.action" title="MOVIE">MOVIE</a>
+									</li>
+									<li>
+										<a href="${path2}book/bookHomePage.action" title="BOOK">BOOK</a>
+									</li>
+									<li>
+										<a href="${path2}music/musicHomePage.action" title="MUSIC">MUSIC</a>
+									</li>
+									<li>
+										<a href="${path2}user/my.action" title="user/my.action">MY TRIBUS</a>
+									</li>
                     </ul>
                     <div class="header_search">
-                    	<form action="#">
-                        	<p class="txt_header"><input type="text" /></p>
+                    	<form action="${path2}user/searchAll.action">
+                        	<p class="txt_header"><input id="search" name="search" type="text" /></p>
                             <p class="submit_header"><input type="submit" value=" " /></p>
                         </form>
                     </div>
                     <div class="header_icon_area">
-                    	<span class="space_btm"><a href="#"><img src="../tribus/view/activity/img/icon_header1.png" alt="" /></a></span>
-                        <span><a href="#"><img src="../tribus/view/activity/img/icon_header2.png" alt="" /></a></span>
+                    	<span class="space_btm"><a href="#"><img src="${path1}activity/img/icon_header1.png" alt="" /></a></span>
+                       <span><a href="${path2}user/editForm.action"><img src="${path1}activity/img/icon_header2.png" alt="" width="12" height="13" /></a></span>
                     </div>
                 </div></div></div>
             </div><!--//end #header_rgt-->
@@ -142,26 +154,26 @@ function getResult() {
         <div id="main_area"><!--start main_area-->
         	<div id="saerch_area"><!--start saerch_area-->
             	<div id="search_bg" class="space_lft"><!--start search_bg-->
-                	<form action="#">
-                    	<p class="search_text"><input type="text" value="Search by tag" onclick="if(this.value=='Search by tag')(this.value='')"  onblur="if(this.value=='')(this.value='Search by tag')" /></p>
+                	<form action="${path2}activity/search.action">
+                    	<p class="search_text"><input id="searchCondition" name="searchCondition" type="text" value="Seach activity, activity time, activity location" onClick="if(this.value=='Seach activity, activity time, activity location')(this.value='')"  onblur="if(this.value=='')(this.value='Seach activity, activity time, activity location')" /></p>
                         <p class="search_submit"><input type="submit" value=" " /></p>
                     </form>
                 </div><!--//end #search_bg-->
                 <div id="social_media"><!--start social_media-->
                 	<div id="social_lftcol">
-                    	<a href="#"><img src="../tribus/view/activity/img/icon_facebook.jpg" alt="" /></a>
-                        <a href="#"><img src="../tribus/view/activity/img/icon_tweet.jpg" alt="" /></a>
+                    	<a href="#"><img src="${path1}activity/img/icon_facebook.jpg" alt="" /></a>
+                        <a href="#"><img src="${path1}activity/img/icon_tweet.jpg" alt="" /></a>
                     </div>
                     <div id="social_box"><!--start social_box-->
                     	<div id="message">
-                        	<a href="#"><img src="../tribus/view/activity/img/icon_message1.jpg" alt="" /><span>5</span></a>
-                            <a href="#"><img src="../tribus/view/activity/img/icon_message2.jpg" alt="" /></a>
-                            <a href="#"><img src="../tribus/view/activity/img/icon_message3.jpg" alt="" /></a>
-                            <a href="#"><img src="../tribus/view/activity/img/icon_message4.jpg" alt="" /></a>
+                        	<a href="${path2}userMail/box/0.action"><img src="${path1}activity/img/icon_message1.jpg" alt="" width="22" height="22" /><span></span></a>
+                            <a href="${path2}user/about.action"><img src="${path1}activity/img/icon_message2.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${path2}user/police.action"><img src="${path1}activity/img/icon_message3.jpg" alt="" width="22" height="22" /></a>
+                            <a href="${path2}user/logout.action"><img src="${path1}activity/img/icon_message4.jpg" alt="" width="22" height="22" /></a>
                         </div>
                         <div class="address">
-                        	<h3><%if(user!=null){ %><a href="user/my/<%=user.getUserId()%>">welcome back,<%=user.getUserAlias()%></a><%}else{ %><a href="user/login.action">login</a><%} %></h3>
-                            <span>New York City</span>
+                        	<h3><%if(user!=null){ %><a href="user/my/<%=user.getUserId()%>"><%=user.getUserAlias()%></a><%}else{ %><a href="user/login.action">login</a><%} %></h3>
+                            <span>${userProf.profCity}</span>
                         </div>
                     </div><!--//end #social_box-->
                 </div><!--//end #social_media-->
@@ -169,14 +181,11 @@ function getResult() {
             <div id="main_content"><!--start main_content-->
             	<div id="content"><!--start content-->
                 	<div id="title_my_activity"><!--start title_my_activity-->
-                    	<h2>More Activity By <%if(user!=null){ %><a href="user/my/<%=user.getUserId()%>">welcome back,<%=user.getUserAlias()%></a><%}else{ %><a href="user/login.action">login</a><%} %></h2>
+                    	<h2>More Activity By <%if(user!=null){ %><a href="user/my/<%=user.getUserId()%>"><%=user.getUserAlias()%></a><%}%></h2>
                     	<div id="fiona_inner">
-                            <img src="../tribus/view/activity/img/pic_activity.jpg" alt="" />
+                            <img src="${path1}activity/img/pic_activity.jpg" alt="" />
                             <div class="activity_rgt">
-                                <a href="#" class="activity_btn1"></a>
-                                <a href="#" class="activity_btn2">This Week</a>
-                                <a href="#" class="activity_btn2">Next Week</a>
-                                <a href="#" class="activity_btn3"></a>
+   
                             </div>
                         </div>
                     </div><!--//end #title_my_activity-->
@@ -195,26 +204,13 @@ function getResult() {
                                         <p>By <a href="user/my/<%=activity.get(i).getUser().getUserId() %>"><%=activity.get(i).getUser().getUserAlias() %></a> Published <%=activity.get(i).getActivity().getRecordDate() %> </p>
                                         <div class="feature_social"><!--start feature_social-->
                                             <div class="activity_icon">
-                                                <a href="#"><img src="../tribus/view/activity/img/icon_facebook.jpg" alt="" /></a>
-                                                <a href="#"><img src="../tribus/view/activity/img/icon_tweet.jpg" alt="" /></a>
+                                                <a href="#"><img src="${path1}activity/img/icon_facebook.jpg" alt="" /></a>
+                                                <a href="#"><img src="${path1}activity/img/icon_tweet.jpg" alt="" /></a>
                                             </div>
                                             <div class="feature_list">
                                                 <ul>
-                          <li>
-                              
-                               
-				                   <%if(activity.get(i)!=null &&activity.get(i).getOwner()==null) {%>
-				<input id="bt<%=i%>" type="button" name="Submit" value="<%if(activity.get(i).getFollowed()!=null &&activity.get(i).getFollowed().equals("true")){%>unfollow<%}else{%>Follow<%}%>" 
-			onclick="followActivity('activity/followActivity.action?activityId=<%=activity.get(i).getActivity().getActivityId() %>','bt<%=i %>')"/><%}else{ %>you are the host<%} %>
-				                
-				                     </li>
-				                    
-				                    <li>
-				                  <%if(activity.get(i)!=null && activity.get(i).getOwner()==null) { %>
-				                  <input id="at<%=i%>" type="button" name="Submit" value="<%if(activity.get(i).getJoined()!=null &&activity.get(i).getJoined().equals("true")){%>unjoin<%}else{%>join<%}%>" 
-			onclick="joinActivity('activity/joinActivity.action?activityId=<%=activity.get(i).getActivity().getActivityId() %>','at<%=i %>')"/> <%}else{ %>you are the host<%} %>  
-				                    
-				                    </li>
+              <li><a href="addWishList/city/${activityInfo.activityId}.action">+ Wish List</a></li>
+                                              <li><a href="addTribusList/city/${activityInfo.activityId}.action">+ Tribus List</a></li>
                                                 </ul>
                                             </div>
                                         </div><!--//end .feature_social-->
@@ -256,7 +252,7 @@ function getResult() {
                           </c:forEach>
                             <div class="clear"></div>
                         </div><!--//end .small_img_widget-->
-                        <div class="next_small_img"><a href="#"><img src="../tribus/view/activity/img/tripple_arrow3.jpg" alt="" /></a></div>
+                      
                     </div><!--//end .widget-->
                    
                    
@@ -264,19 +260,19 @@ function getResult() {
                     	<h2>Guess You Like</h2>
                     	<c:forEach items="${recommentActivity}" var="item">
                         <div class="widget_gallery">
-                        	<a href="activity/info.action?activityId=${item.activityId }"><img src="${item.activityPic }" alt="" width=222 height=133/></a>
-                            <h3><a href="activity/info.action?activityId=${item.activityId}">${item.activityName }</a></h3>
+                        	<a href="${path2}activity/info.action?activityId=${item.activityId }"><img src="${item.activityPic }" alt="" width=222 height=133/></a>
+                            <h3><a href="${path2}activity/info.action?activityId=${item.activityId}">${item.activityName }</a></h3>
                         </div>
                        </c:forEach>
                        
-                        <div class="next_big_img"><a href="#"><img src="../tribus/view/activity/img/tripple_arrow3.jpg" alt="" /></a></div>
+                        <div class="next_big_img"><a href="#"><img src="${path1}activity/img/tripple_arrow3.jpg" alt="" /></a></div>
                     </div><!--//end .widget-->
                     <div class="widget"><!--start widget-->
                     	<h2>Top Citys</h2>
                         <div class="widget_info">
                         	<ul>
                         	<c:forEach items="${topTribusCity}" var="item">
-                            	<li><a href="activity/byCityTag.action?city=${item}">${item}</a></li>
+                            	<li><a href="${path2}activity/byCityTag.action?city=${item}">${item}</a></li>
                                </c:forEach>
                             </ul>
                          

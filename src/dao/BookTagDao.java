@@ -15,6 +15,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class BookTagDao {
+	
+	public void test(){
+		System.out.println("this is test");
+	}
+	
 	public int save(BookTag bt) {
 		Session session = TribusHibernateSessionFactory.currentSession();
 		Transaction tx = session.beginTransaction();

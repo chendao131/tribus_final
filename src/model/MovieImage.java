@@ -23,7 +23,7 @@ public class MovieImage implements Serializable{
 	private String imageName;
 	private String imageDescription;
 	private String imagePath;
-	private MovieAlbum movieAlbum;
+	private Movie movie;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -51,12 +51,12 @@ public class MovieImage implements Serializable{
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-	@JoinColumn(name = "albumId")
-	public MovieAlbum getMovieAlbum() {
-		return movieAlbum;
+	@ManyToOne
+	@JoinColumn(name = "movieId")
+	public Movie getMovie() {
+		return movie;
 	}
-	public void setMovieAlbum(MovieAlbum movieAlbum) {
-		this.movieAlbum = movieAlbum;
+	public void setMovie(Movie movie) {
+		this.movie = movie;
 	}
 }

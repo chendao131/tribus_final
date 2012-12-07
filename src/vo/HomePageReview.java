@@ -65,10 +65,11 @@ public class HomePageReview {
 	public void setCommentContent(String commentContent) {
 		this.commentContent = commentContent;
 	}
-	public Integer getUserRating() {
+	public Integer getUserRate() {
 		return userRate;
 	}
-	public void setUserRating(Integer userRate) {
+	public void setUserRate(Integer userRate) {
 		this.userRate = userRate;
 	}
+
 }

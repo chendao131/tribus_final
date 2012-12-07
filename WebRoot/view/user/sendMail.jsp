@@ -30,7 +30,7 @@
             <div id="header_rgt"><!--start header_rgt-->
             	<div id="menu_bg"><div id="menu_lft"><div id="menu_rgt">
                     <ul>
-                    	<li class="current_page_item"><a href="my.action">CITY</a></li>
+                    	<li class="current_page_item"><a href="my.action">EVENT</a></li>
                     	<li><a href="#" title="MOVIE">MOVIE</a></li>
                         <li><a href="#" title="BOOK">BOOK</a></li>
                         <li><a href="#" title="MUSIC">MUSIC</a></li>
@@ -128,7 +128,7 @@
                     </div><!--//end #gallery-->
                 </div><!--//end #album_content-->
             </div><!--//end #common_maincontent-->
-            <div id="footer"><p>Copyright @ Tribus.us 2012.      <span>All rights reserved</span> </p></div>
+            <div id="footer"><div id="footer"><p> &copy;2012 goTribus |<span>All rights reserved</span> </p></div></div>
         </div><!--//end #main_area-->
     </div><!--//end #wrapper-->
 </body>

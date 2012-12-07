@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import hibernate.TribusHibernateSessionFactory;
 import model.Book;
 import model.BookMark;
+import model.MovieMark;
 import model.MusicMark;
 import model.User;
 
@@ -14,6 +16,150 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class BookMarkDao {
+	@SuppressWarnings("unchecked")
+	public Timestamp getMarkDateByBookAndUserId(int bookId, int userId){
+		Session session = TribusHibernateSessionFactory.currentSession();
+		try{
+			String hql = "select bm.markDate from BookMark bm where bm.book.bookId = :bookId and bm.user.userId = :userId";
+			List<Timestamp> ts = session.createQuery(hql).
+								setInteger("bookId", bookId).setInteger("userId", userId).list();
+			return ts.get(0);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}	
+	
+	@SuppressWarnings("unchecked")
+	public BookMark getMarkByBookAndUserId(int bookId, int userId){
+		Session session = TribusHibernateSessionFactory.currentSession();
+		try{
+			String hql = "from BookMark bm where bm.book.bookId = :bookId and bm.user.userId = :userId";
+			List<BookMark> bms = session.createQuery(hql).
+								setInteger("bookId", bookId).setInteger("userId", userId).list();
+			return bms.get(0);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	public int deleteRate(Integer bookId, Integer userId){
+		int saveSuccess=0;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		Transaction tx = session.beginTransaction();
+		try{
+			String hql = "from BookMark bm where bm.book.bookId = :bookId and bm.user.userId = :userId";
+			List<BookMark> bms = session.createQuery(hql).
+								setInteger("bookId", bookId).setInteger("userId", userId).list();
+			BookDao bd = new BookDao();
+			UserDao ud = new UserDao();
+			if(bms.size()!=0){
+				BookMark bm = bms.get(0);
+				bm.setBookGrade(0);
+				session.update(bm);
+			}
+			tx.commit();
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			tx.rollback();			
+		}
+		return saveSuccess;
+	}
+	
+	public int rateByBookIdAndUserId(Integer bookId, Integer userId , Integer rate){
+		int saveSuccess=0;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		Transaction tx = session.beginTransaction();
+		try{
+			String hql = "from BookMark bm where bm.book.bookId = :bookId and bm.user.userId = :userId";
+			List<BookMark> bms = session.createQuery(hql).
+								setInteger("bookId", bookId).setInteger("userId", userId).list();
+			BookDao bd = new BookDao();
+			UserDao ud = new UserDao();
+			if(bms.size()!=0){
+				BookMark bm = bms.get(0);
+				bm.setBookGrade(rate);
+				session.update(bm);
+			}else{
+				BookMark bm = new BookMark();
+				bm.setBookRead(0);
+				bm.setBookLike(0);
+				bm.setBook(bd.getBookById(bookId));
+				bm.setBookGrade(rate);
+				bm.setUser(ud.getUserById(userId));
+				session.save(bm);
+			}
+
+			tx.commit();
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			tx.rollback();			
+		}
+		return saveSuccess;
+	}
+	
+	public int markWatchDoneByBookIdAndUserId(Integer bookId, Integer userId){
+		int saveSuccess=0;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		Transaction tx = session.beginTransaction();
+		try{
+			String hql = "from BookMark bm where bm.book.bookId = :bookId and bm.user.userId = :userId";
+			List<BookMark> bms = session.createQuery(hql).
+								setInteger("bookId", bookId).setInteger("userId", userId).list();
+			BookDao bd = new BookDao();
+			UserDao ud = new UserDao();
+			if(bms.size()!=0){
+				BookMark bm = bms.get(0);
+				bm.setBookRead(2);
+				session.update(bm);
+			}else{
+				BookMark bm = new BookMark();
+				bm.setBook(bd.getBookById(bookId));
+				bm.setBookRead(2);
+				bm.setUser(ud.getUserById(userId));
+				session.save(bm);
+			}
+			
+			session.flush();
+			tx.commit();
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			tx.rollback();			
+		}
+		return saveSuccess;
+	}
+	
+	public int markWatchWantedByBookIdAndUserId(Integer bookId, Integer userId){
+		int saveSuccess=0;
+		Session session = TribusHibernateSessionFactory.currentSession();
+		Transaction tx = session.beginTransaction();
+		try{
+			String hql = "from BookMark bm where bm.book.bookId = :bookId and bm.user.userId = :userId";
+			List<BookMark> bms = session.createQuery(hql).
+								setInteger("bookId", bookId).setInteger("userId", userId).list();
+			BookDao bd = new BookDao();
+			UserDao ud = new UserDao();
+			if(bms.size()!=0){
+				BookMark bm = bms.get(0);
+				bm.setBookRead(1);
+				session.update(bm);
+			}else{
+				BookMark bm = new BookMark();
+				bm.setBook(bd.getBookById(bookId));
+				bm.setBookRead(1);
+				bm.setUser(ud.getUserById(userId));
+				session.save(bm);
+			}
+			session.flush();
+			tx.commit();
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			tx.rollback();			
+		}
+		return saveSuccess;
+	}
+	
 	public int save(BookMark bm){
 		Session session = TribusHibernateSessionFactory.currentSession();
 		Transaction tx = session.beginTransaction();
@@ -82,10 +228,20 @@ public class BookMarkDao {
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-		return -1;
+		return 0;
 	}
 	
-	public static void main(String args[]){
+	public void deleteBookMark(BookMark bm){		
+			Session session = TribusHibernateSessionFactory.currentSession();
+			Transaction tx = session.beginTransaction( );
+			try {
+				session.delete( bm );
+				tx.commit( );
+			} catch ( Exception e ) {
+				e.printStackTrace();
+				tx.rollback( );			
+			}		
+	}	public static void main(String args[]){
 		BookMarkDao bmd = new BookMarkDao();
 		System.out.println(bmd.getBookGradeByUserIdandBookId(1, 2522));
 		//System.out.println(bmd.getLikeBookByUserId(2).size());

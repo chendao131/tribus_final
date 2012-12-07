@@ -10,8 +10,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+//<p> ?2012 goTribus |<span>All rights reserved</span> </p>
 
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +28,8 @@ import model.ActivityComment;
 import model.ActivityFollow;
 import model.ActivityGoing;
 import model.ActivityPic;
+import model.ActivityPicComment;
+import model.UserProfile;
 
 import model.User;
 
@@ -49,8 +55,12 @@ import dao.ActivityCommentDao;
 import dao.ActivityDao;
 import dao.ActivityFollowDao;
 import dao.ActivityGoingDao;
+import dao.ActivityPicCommentDao;
 import dao.ActivityPicDao;
 import dao.FollowDao;
+import dao.TribusListDao;
+import dao.UserPrevilageDao;
+import dao.WishListDao;
 
 import dao.UserDao;
 
@@ -62,33 +72,25 @@ public class ActivityController {
 	private ActivityDao activityDao = new ActivityDao();
 	private ActivityFollowDao activityFollowDao = new ActivityFollowDao();
 	private ActivityGoingDao activityGoingDao = new ActivityGoingDao();
-	private FollowDao followDao = new FollowDao();	
+	private FollowDao followDao = new FollowDao();
+	private UserPrevilageDao userPrevilageDao = new UserPrevilageDao();;
 	private ActivityPicDao activityPicDao = new ActivityPicDao();
 	private ActivityAlbumDao activityAlbumDao = new ActivityAlbumDao();
 	private ActivityCommentDao activityCommentDao = new ActivityCommentDao();
 	private ActivityClassifiedDao activityClassifiedDao = new ActivityClassifiedDao();
+	private ActivityPicCommentDao activityPicCommentDao = new ActivityPicCommentDao();
+	private WishListDao wishListDao = new WishListDao();
+	private TribusListDao tribusListDao = new TribusListDao();
 	private UserDao userDao = new UserDao();
-	
-	private FollowDao fd = new FollowDao();
 	private Integer userId = 123;
-
-	@RequestMapping("creat")
-	public ModelAndView indexActivity() {
-
-		ModelAndView view = new ModelAndView();
-		view.setViewName("activity/creat");
-
-		return view;
-	}
 
 	@RequestMapping("activityCreatInit")
 	// 创建活动
 	public ModelAndView activityCreateInit(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView view = new ModelAndView();
-		List<ActivityClassified> ac = activityClassifiedDao
-				.getAllActivityClassified();
-		System.out.println(ac.size());
+		List<ActivityClassified> ac = activityClassifiedDao.getAllActivityClassified();
+		
 		view.addObject("activityClassified", ac);// 将activityList放入容器
 		view.setViewName("activity/create_activity");// 设置对应的视图view/activity/myActivity.jsp
 
@@ -103,26 +105,27 @@ public class ActivityController {
 		String activityName = request.getParameter("activityName");
 		Date activityStartTime = null;
 		Date activityFinishTime = null;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String start=request.getParameter("activitystartDate");
+		String finish=request.getParameter("activityfinishDate");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		try {
 
-			activityStartTime = dateFormat.parse(request
-					.getParameter("activitystartDate"));
-			activityFinishTime = dateFormat.parse(request
-					.getParameter("activityfinishDate"));
+			activityStartTime = dateFormat.parse(request.getParameter("activitystartDate"));
+			activityFinishTime = dateFormat.parse(request.getParameter("activityfinishDate"));
+			System.out.println("!!!!!!!!!!!!!!!!!"+activityStartTime);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Integer classifiedId;
-		if(request.getParameter("classifiedId")==null){
-			classifiedId=6;
-		}else{
-		 classifiedId = Integer.parseInt(request
-				.getParameter("classifiedId"));}
+		if (request.getParameter("activityClassified") == null) {
+			classifiedId = 6;
+		} else {
+			classifiedId = Integer.parseInt(request
+					.getParameter("activityClassified"));
+		}
 		String activityDuration = request.getParameter("activityDuration");
 		String activityDetail = request.getParameter("activityDetail");
-
 
 		Double activityFees = Double.parseDouble(request
 				.getParameter("activityFees"));
@@ -131,8 +134,8 @@ public class ActivityController {
 		String activityStreet = request.getParameter("activityStreet");
 		// List<String> activityPic = new ArrayList(Arrays.asList(request
 		// .getParameterValues("pic")));// 从页面空间取出pic绝对路径
-		String activityPic = request.getParameter("hidden_para2");// 从页面空间取出pic绝对路径
-
+		String activityPic = request.getParameter("file_url");// 从页面空间取出pic绝对路径
+String activityClassified=request.getParameter("activityClassified");
 		Date recordDate = new Date();
 
 		Activity activity = new Activity();
@@ -142,11 +145,9 @@ public class ActivityController {
 		activity.setActivityDetail(activityDetail);
 		activity.setActivityDuration(activityDuration);
 		activity.setActivityFees(activityFees);
+		activity.setClassifiedId(Integer.parseInt(activityClassified));
 		activity.setActivityFinishTime(activityFinishTime);
 
-		// activity.setActivityLati(activityLati);
-		// activity.setActivityLongi(activityLongi);
-//		activity.setActivityMaxNumber(activityMaxNumber);
 		activity.setActivityName(activityName);
 
 		activity.setActivityPic(activityPic);
@@ -158,14 +159,17 @@ public class ActivityController {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
-			userId = 123;
+			userId = 1;
 		} else {
 			userId = user.getUserId();
 		}
+		
 		activity.setUserId(userId);
 		activity.setRecordDate(recordDate);
 		if (activityDao.addActivity(activity)) {// 持久化活动对象
-			return "activity/creatSuccess";
+			String activityId = activityDao.getMaxId();
+
+			return "redirect:info.action?activityId=" + activityId;
 
 		} else {
 			return "activity/error";
@@ -186,8 +190,10 @@ public class ActivityController {
 		// 从request取出我的userId
 		HttpSession session = request.getSession();
 		User u = (User) session.getAttribute("user");
+
 		if (u == null) {
-			userId = 123;
+			User user = userDao.getUserById(13);
+			session.setAttribute("user", user);
 		} else {
 			userId = u.getUserId();
 		}
@@ -204,7 +210,7 @@ public class ActivityController {
 
 		// 得到好友关注同城列表
 
-		List<User> friendList = fd.getAllFriends(userId);
+		List<User> friendList = followDao.getAllFriends(userId);
 		List<Activity> friendActivityList = new ArrayList();
 		Iterator iterator2 = friendList.iterator();
 
@@ -225,11 +231,6 @@ public class ActivityController {
 
 		}// 得到好友关注同城列表friendsActivity
 
-		if (u == null) {
-			userId = 123;
-		} else {
-			userId = u.getUserId();
-		}
 		// 得到用户最近的当月活动
 		List<ActivityGoing> latestActivity = activityGoingDao
 				.getActivityGoingByCondition(0, userId);// 得到活动参与表对象
@@ -257,72 +258,92 @@ public class ActivityController {
 		}// 至此得到了当前用户未来参加activity的list，然后继续判断
 		Calendar ca = Calendar.getInstance();
 		int month = ca.get(Calendar.MONTH);// 获取月份
-
+		List days = new ArrayList();// 创建当前月份未参加活动结果集
 		if (activityAfterFilter.size() == 0
 				|| activityAfterFilter.get(0).getActivityStartTime().getMonth() != month) {// 如果最终结果集为零或者结果集中任何一个元素都不在当月
 
 			view.addObject("latestActivity", null);// 当月无活动
 		} else {
+			Iterator iterator = activityAfterFilter.iterator();// 遍历其中的活动
+			// 找出当月未参加的
+			Calendar c = Calendar.getInstance();
+			int m = c.get(Calendar.MONTH);// 取出当前月份
+			while (iterator.hasNext()) {
+				Activity a = (Activity) iterator.next();
+				Date startTime = a.getActivityStartTime();
 
+				if (startTime.getMonth() == m) {// 找出当月未参加的，之所以这样是因为可能此”此未参加活动之列表“里有一些是之后月份的活动
+					days.add(a.getActivityStartTime().getDate());
+				}
+
+			}
+
+			view.addObject("days", days);// 将本月未参加之活动的 日期（day）组成list放入页面
 			view.addObject("latestActivity", activityAfterFilter.get(0));
 		}
 		List activityGoingNumbersList = activityGoingDao
-				.getActivityGoingAsNumbers();// 取出三个人最多的活动
+				.getActivityGoingAsNumbers();// 取出三个参加人数最多的活动
 		List activityGoingMaxList = new ArrayList();// 创建 volist
-		Iterator iteratorGoing = activityGoingNumbersList.iterator();
-		while (iteratorGoing.hasNext()) {
-			ActivityGoingMax activityGoingMax = new ActivityGoingMax();
-			ActivityGoingTempResult tempResult = (ActivityGoingTempResult) iteratorGoing
-					.next();
-			activityGoingMax.setActivityId(activityDao.getActivityById(// vo对象组装开始
-					tempResult.getActivityId()).getActivityId());
-			activityGoingMax.setPicPath(activityDao.getActivityById(
-					tempResult.getActivityId()).getActivityPic());
-			activityGoingMax.setNumbers(tempResult.getNumber());
-			activityGoingMax.setActivityName(activityDao.getActivityById(
-					tempResult.getActivityId()).getActivityName());
-			activityGoingMax.setUserName(userDao.getUserById(
-					activityDao.getActivityById(tempResult.getActivityId())
-							.getUserId()).getUserAlias());
-			activityGoingMax.setActivityStartTime(activityDao.getActivityById(
-					tempResult.getActivityId()).getActivityStartTime());// vo对象组装完成
-			activityGoingMaxList.add(activityGoingMax);// vo对象添加list
+		if (activityGoingNumbersList.size() < 3) {
+			// do nothing
+		} else {
+
+			Iterator iteratorGoing = activityGoingNumbersList.iterator();
+			while (iteratorGoing.hasNext()) {
+				ActivityGoingMax activityGoingMax = new ActivityGoingMax();
+				ActivityGoingTempResult tempResult = (ActivityGoingTempResult) iteratorGoing
+						.next();
+				Activity a = activityDao.getActivityById(tempResult
+						.getActivityId());
+				activityGoingMax.setActivityId(a.getActivityId());// vo对象组装开始
+				activityGoingMax.setPicPath(a.getActivityPic());
+				activityGoingMax.setNumbers(tempResult.getNumber());
+				activityGoingMax.setActivityName(a.getActivityName());
+				activityGoingMax.setUserName(userDao.getUserById(
+						activityDao.getActivityById(tempResult.getActivityId())
+								.getUserId()).getUserAlias());
+				activityGoingMax.setActivityStartTime(activityDao
+						.getActivityById(tempResult.getActivityId())
+						.getActivityStartTime());// vo对象组装完成
+				activityGoingMaxList.add(activityGoingMax);// vo对象添加list
+			}
 		}
 		// 得到活动最多的3个城市
 		List commentListRandom = new ArrayList();// 随机评论表
 		List<ActivityComment> activityCommentList = activityCommentDao
-				.getActivityCommentRandom();//随即取出一个评论list
+				.getActivityCommentRandom();// 随即取出一个评论list
 		Iterator commentIterator = activityCommentList.iterator();
 		while (commentIterator.hasNext()) {
 			ActivityComment activityComment = (ActivityComment) commentIterator
 					.next();
-			List<ActivityComment> ActivityCommentSonList=activityCommentDao.getActivityCommentByCondition(activityComment.getActivityId(), 0);//对某一条活动找出所有此活动的评论
-			
+			List<ActivityComment> ActivityCommentSonList = activityCommentDao
+					.getActivityCommentByCondition(activityComment
+							.getActivityId(), 0);// 对某一条活动找出所有此活动的评论
+
 			Iterator aCommentsIterator = ActivityCommentSonList.iterator();
-			
+
 			List<UserComments> comments = new ArrayList();
 			while (aCommentsIterator.hasNext()) {
 				ActivityComment aComment = (ActivityComment) aCommentsIterator
 						.next();
 				UserComments userComments = new UserComments();
-				userComments.setUserComment(aComment
-						.getCommentContent());
+				userComments.setUserComment(aComment.getCommentContent());
 				userComments.setUserId(aComment.getUserId());
-				userComments.setUserPic(userDao.getUserById(
-						aComment.getUserId()).getUserPic());
+				User uu = userDao.getUserById(aComment.getUserId());
+				userComments.setUserPic(uu.getUserPic());
 				comments.add(userComments);// 组装好评论List
-					
 			}
 			FriendComment friendComment = new FriendComment();
-			Activity a =activityDao.getActivityById(activityComment.getActivityId());//找出这个评论记录对应的活动
+			Activity a = activityDao.getActivityById(activityComment
+					.getActivityId());// 找出这个评论记录对应的活动
 			friendComment.setActivity(a);
-			if(comments.size()>4){
-				comments=comments.subList(0, 4);
+			if (comments.size() > 4) {
+				comments = comments.subList(0, 4);
 			}
 			friendComment.setUserComment(comments);
 			commentListRandom.add(friendComment);// 添加对象,加进list
 		}
-		
+
 		List activityTagsList = activityClassifiedDao
 				.getAllActivityClassified();
 		if (activityGoingMaxList.size() > 4) {
@@ -343,7 +364,8 @@ public class ActivityController {
 				User fu = (User) followeeUserIterator.next();
 				List<ActivityGoing> activityGoingList = activityGoingDao
 						.getActivityGoingByCondition(0, fu.getUserId());
-				if (activityGoingList == null) {// 如果为空说明 这傻逼没有参加过任何活动
+				if (activityGoingList == null || activityGoingList.size() == 0) {// 如果为空说明
+																					// 这傻逼没有参加过任何活动
 					continue;
 				} else {// 拿出一个user对象的参加的一个活动
 					// 去activitiyGoing，查处对应的活动Id
@@ -354,7 +376,6 @@ public class ActivityController {
 					List aComments = activityCommentDao
 							.getActivityCommentByCondition(a.getActivityId(), 0);
 					Iterator aCommentsIterator = aComments.iterator();
-				
 
 					while (aCommentsIterator.hasNext()) {
 						ActivityComment aComment = (ActivityComment) aCommentsIterator
@@ -366,9 +387,7 @@ public class ActivityController {
 						userComments.setUserPic(userDao.getUserById(
 								aComment.getUserId()).getUserPic());
 						comments.add(userComments);// 组装好评论List
-						
 
-						
 					}
 					FriendComment friendComment = new FriendComment();
 					friendComment.setActivity(a);
@@ -398,6 +417,13 @@ public class ActivityController {
 		//			
 		// }
 
+		Integer flag = 0;
+
+		User currentUser = (User) session.getAttribute("user");// 得到当前用户对象
+		if (currentUser != null) {
+			flag = 1;
+		}
+		view.addObject("flag", flag);
 		List topTribusCity = activityDao.getTopTribusCity();
 		view.addObject("activityTagsList", activityTagsList);// 将所有标签list放入容器
 		view.addObject("topTribusCity", topTribusCity);// 放入topTribusCity
@@ -412,7 +438,7 @@ public class ActivityController {
 		} else {
 			view.addObject("commentListRandom", commentListRandom1);// 将好友随机评论列表放入容器传回页面
 		}
-		view.addObject("user", u);//将session里面的user对象传到页面
+		view.addObject("user", u);// 将session里面的user对象传到页面
 		view.setViewName("activity/index");// 设置视图地址为http：//www.tribus.com/view/activity/index.jsp
 		return view;// 返回视图
 
@@ -423,8 +449,7 @@ public class ActivityController {
 	public ModelAndView activityInfo(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView view = new ModelAndView();
-		Integer activityId = Integer.parseInt(request
-				.getParameter("activityId"));// 从request取出活动activityId
+		Integer activityId = Integer.parseInt(request.getParameter("activityId"));// 从request取出活动activityId
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
@@ -443,7 +468,7 @@ public class ActivityController {
 			userList.add(userDao.getUserById(activityGoing.getUserId()));// 把f参加此活动的user添加到list
 		}
 
-	List<User> friends = followDao.getAllFriends(userId);// 得到此userId所有followee对象
+		List<User> friends = followDao.getAllFriends(userId);// 得到此userId所有followee对象
 
 		List<User> friendFollow = new ArrayList<User>(); // 创建空容器"好友参加活动list"
 
@@ -456,10 +481,10 @@ public class ActivityController {
 		List<ActivityAlbum> activityAlbumList = new ArrayList();
 		activityAlbumList = activityAlbumDao.getActivityAlbumByCondition(
 				activityId, 0);// 根据一个活动的id得到相册list
-		Integer flag=0;
+		Integer flag = 0;
 		if (activityAlbumList.size() > 10) {// 如不满10则补齐佢
-			activityAlbumList=activityAlbumList.subList(0, 10);
-flag=1;
+			activityAlbumList = activityAlbumList.subList(0, 10);
+			flag = 1;
 		}
 		GetLatLong getLatLong = new GetLatLong();
 		String[] location = getLatLong.getLatlng(activity.getActivityStreet()
@@ -470,6 +495,19 @@ flag=1;
 		String followed = null;
 		String joined = null;
 		String owner = null;
+
+		String wish = null;
+		String tribus = null;
+
+		if (tribusListDao.isAddResource("city", activityId, userId)) {
+
+			tribus = "ok";
+			view.addObject("tribus", tribus);// 将tribus 值放入容器传回页面
+		}
+		if (wishListDao.isAddResource("city", activityId, userId)) {
+			wish = "ok";
+			view.addObject("wish", wish);// 将wish值放入容器传回页面
+		}
 
 		if (userId == activity.getUserId()) {// 判断当前用户是否是此活动的发起者
 			owner = "true";
@@ -506,13 +544,53 @@ flag=1;
 			userComment.setUserId(activityComment.getUserId());
 			userCommentList.add(userComment);
 		}
-String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.getClassifiedId());
+		String activtiyClassified = activityClassifiedDao
+				.getClassifiedTagById(activity.getClassifiedId());
+
+		int page;
+
+		if (request.getParameter("page") == null) {
+			page = 1;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
+		} // 和 一个评论list
+		List result = getListByPage(userCommentList, 4, page);// 4条一页 得到第page页！
+
+		int pageNumbers = getPageNumber(userCommentList, 4);// 4条一页 ，得到一共几页
+		String[] pages = new String[pageNumbers];
+		for (Integer i = 0; i < pageNumbers; i++) {
+			pages[i] = i + 1 + "";
+		}
+
+		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
+
+		Integer flagg = 0;
+		User establishUser = userDao.getUserById(activity.getUserId());// 得到照片上传者对象
+
+		User currentUser = (User) session.getAttribute("user");// 得到当前用户对象
+		if (currentUser != null) {
+			if (currentUser.getUserId() == establishUser.getUserId())// 说明当前用户就是此活动发起用户
+			// 所以有图片上传的权限
+			{
+				flagg = 1;
+
+			}
+		}
+		UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		User u=userDao.getUserById(activity.getUserId());//s找出用户发起者
+		
+		view.addObject("flagg", flagg);
 		List recommentActivity = activityDao.getAllActivity();// 取推荐活动
-		recommentActivity = recommentActivity.subList(7, 10);// 取推荐活动
-		view.setViewName("activity/info");// 设置对应的视图view/activity/info.jsp
+		if (recommentActivity.size() >= 10) {
+			recommentActivity = recommentActivity.subList(7, 10);// 取推荐活动
+		}
+//		/view.setViewName("activity/info");// 设置对应的视图view/activity/info.jsp
 		view.addObject("activityAlbum", activityAlbumList);// 将相册list放入容器，传回页面
 		view.addObject("flag", flag);// 若相册listsize大于10 此值为1 反之则为0将其放入容器，传回页面
-		view.addObject("activityClassified", activtiyClassified);// 将activtiyClassified放入容器 传回页面
+		view.addObject("activityClassified", activtiyClassified);// 将activtiyClassified放入容器
+		// 传回页面
+		view.addObject("user",u);
 		view.addObject("activityLat", location[2]);// 将地址纬度放入容器，传回页面
 		view.addObject("activityLong", location[3]);// 将地址经度放入容器，传回页面
 		view.addObject("activityInfo", activity);// 将activity放入容器 传回页面
@@ -521,7 +599,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		view.addObject("joined", joined);// 将joined状态放入容器传回页面
 		view.addObject("owner", owner);// 将owner状态放入容器传回页面
 		view.addObject("userList", userList);// 将所有参加此活动的用户放入容器，传回页面
-		view.addObject("userCommentList", userCommentList);// 将留言VO对象放入容器传回页面
+		view.addObject("userCommentList", result);// 将留言VO对象放入容器传回页面
 		view.addObject("recommentActivity", recommentActivity);// 将推荐活动list放入容器传回页面
 		view.addObject("activityId", activityId);// 将activityId状态放入容器传回页面
 
@@ -531,7 +609,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 	}// 返回视图
 
 	@RequestMapping("friendsActivity")
-	// 同城详细主页
+	// 好友活动主页
 	public ModelAndView friendsActivity(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView view = new ModelAndView();
@@ -542,23 +620,27 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		} else {
 			userId = user.getUserId();
 		}
-		List<Activity> activityListByFriend=new ArrayList();
+		List<Activity> activityListByFriend = new ArrayList();
 		List<User> friends = followDao.getAllFriends(userId);// 得到此userId所有followee对象
-		Iterator iterator=friends.iterator();
-		while(iterator.hasNext()){
-			User u=(User) iterator.next();
-			List<ActivityGoing> activityGoingList=activityGoingDao.getActivityGoingByCondition(0, u.getUserId());//得到某一个好友的所有参加的活动List
-			Iterator<ActivityGoing> activityGoingListIterator=activityGoingList.iterator();
-			while(activityGoingListIterator.hasNext()){//遍历某个好友参加的所有活动goingList
-				ActivityGoing activityGoing=activityGoingListIterator.next();//得到某一好友参加的的某一个活动going对象
-				Activity activity=activityDao.getActivityById(activityGoing.getActivityId());//得到某一好友参加的的某一个activity对象
-				activityListByFriend.add(activity);//添加到结果集中
+		Iterator iterator = friends.iterator();
+		while (iterator.hasNext()) {
+			User u = (User) iterator.next();
+			List<ActivityGoing> activityGoingList = activityGoingDao
+					.getActivityGoingByCondition(0, u.getUserId());// 得到某一个好友的所有参加的活动List
+			Iterator<ActivityGoing> activityGoingListIterator = activityGoingList
+					.iterator();
+			while (activityGoingListIterator.hasNext()) {// 遍历某个好友参加的所有活动goingList
+				ActivityGoing activityGoing = activityGoingListIterator.next();// 得到某一好友参加的的某一个活动going对象
+				Activity activity = activityDao.getActivityById(activityGoing
+						.getActivityId());// 得到某一好友参加的的某一个activity对象
+				activityListByFriend.add(activity);// 添加到结果集中
 			}
 		}
 
 		String followed = null;
 		String joined = null;
 		String owner = null;
+
 		Integer page;
 		if (request.getParameter("page") == null) {
 			page = 1;
@@ -566,11 +648,12 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
 		}
 
-		List<SuperActivity> superActivityList = new ArrayList();//vo 对象 最终传回页面的list
-		Iterator activityListByFriendIterator=activityListByFriend.iterator();
-		while(activityListByFriendIterator.hasNext()){
-			
-			Activity a=(Activity)activityListByFriendIterator.next();
+		List<SuperActivity> superActivityList = new ArrayList();// vo 对象
+		// 最终传回页面的list
+		Iterator activityListByFriendIterator = activityListByFriend.iterator();
+		while (activityListByFriendIterator.hasNext()) {
+
+			Activity a = (Activity) activityListByFriendIterator.next();
 			List followList = activityFollowDao.getActivityFollowByCondition(a
 					.getActivityId(), userId);// 从数据库给出双条件查询，探测出此用户是否关注此活动
 
@@ -596,12 +679,9 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 			s.setFollowed(followed);
 			s.setJoined(joined);
 			s.setOwner(owner);
-			superActivityList.add(s);//最终的结果集（其实还需要做一步分页处理）传回页面
+			superActivityList.add(s);// 最终的结果集（其实还需要做一步分页处理）传回页面
 		}
-		
-		
-		
-		
+
 		List recommentActivity = activityDao.getAllActivity();// 取推荐活动
 		recommentActivity = recommentActivity.subList(7, 10);// 取推荐活动
 		List result = new ArrayList();// 最终的结果集
@@ -617,16 +697,18 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 			for (Integer i = 0; i < pageNumbers; i++) {
 				pages[i] = i + 1 + "";
 			}
-		}
+		}UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
 		List topTribusCity = activityDao.getTopTribusCity();
-		view.addObject("topTribusCity", topTribusCity);//top tribus city放入容器传回页面
+		view.addObject("topTribusCity", topTribusCity);// top tribus
+		// city放入容器传回页面
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		view.addObject("activityList", result);// 将得到的结果（指定页码位置）放入容器 传回页面！
-	view.addObject("followed", followed);// 将followed状态放入容器传回页面
+		view.addObject("followed", followed);// 将followed状态放入容器传回页面
 		view.addObject("joined", joined);// 将joined状态放入容器传回页面
 		view.addObject("owner", owner);// 将owner状态放入容器传回页面
 		view.addObject("recommentActivity", recommentActivity);// 将推荐活动list放入容器传回页面
-	
+
 		view.setViewName("activity/friends_activity");
 		return view;
 	}
@@ -644,13 +726,13 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		return view;// 返回视图
 	}
 
-	@RequestMapping("search")
-	// 搜索框
-	public ModelAndView searchActivity(HttpServletRequest request,
+	@RequestMapping("getRecommends")
+	public ModelAndView getRecommends(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView view = new ModelAndView();
 		String condition = request.getParameter("searchCondition");// 从搜索框里取出条件
 		Integer page;
+
 		if (request.getParameter("page") == null) {
 			page = 1;
 		} else {
@@ -659,15 +741,17 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		String followed = null;
 		String joined = null;
 		String owner = null;
-		List<Activity> activityList = activityDao
-				.getActivityByAbstractCondition(condition);
+		List<Activity> activityList = activityDao.getAllActivity();
 		List<SuperActivity> superActivityList = new ArrayList();// 最终传回页面的list
 		Iterator activityListIterator = activityList.iterator();
+		String wish = null;
+		String tribus = null;
+		HttpSession session1 = request.getSession();
+		User user = (User) session1.getAttribute("user");
 		while (activityListIterator.hasNext()) {
 			Activity a = (Activity) activityListIterator.next();
 
-			HttpSession session = request.getSession();
-			User user = (User) session.getAttribute("user");
+		
 			if (user == null) {
 				userId = 123;
 			} else {
@@ -693,7 +777,21 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 					joined = "false";// 表示未join
 				}
 			}
+
+			if (tribusListDao.isAddResource("city", a.getActivityId(), userId)) {
+
+				tribus = "ok";
+			} else {
+				tribus = "+ Tribus List";
+			}
+			if (wishListDao.isAddResource("city", a.getActivityId(), userId)) {
+				wish = "ok";
+			} else {
+				wish = "+ Wish List";
+			}
 			SuperActivity s = new SuperActivity();
+			s.setWish(wish);
+			s.setTribus(tribus);
 			s.setActivity(a);
 			s.setFollowed(followed);
 			s.setJoined(joined);
@@ -714,6 +812,8 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 				pages[i] = i + 1 + "";
 			}
 		}
+		UserProfile userProfile=(UserProfile)session1.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		view.addObject("activityList", result);// 将得到的结果（指定页码位置）放入容器 传回页面！
 		view.addObject("condition", condition);// 将搜索条件放入容器传回页面 留作分页之用
@@ -721,6 +821,226 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		view.addObject("joined", joined);// 将joined状态放入容器传回页面
 		view.addObject("owner", owner);// 将owner状态放入容器传回页面
 		view.setViewName("activity/search_result");// 设置对应的视图view/activity/view.jsp
+		return view;
+	}
+
+	@RequestMapping("search")
+	// 搜索框
+	public ModelAndView searchActivity(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView view = new ModelAndView();
+		String condition = request.getParameter("searchCondition");// 从搜索框里取出条件
+		Integer page;
+
+		if (request.getParameter("page") == null) {
+			page = 1;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
+		}
+		String followed = null;
+		String joined = null;
+		String owner = null;
+		String tribus = null;
+		String wish = null;
+		HttpSession session1 = request.getSession();
+		User user = (User) session1.getAttribute("user");
+		List<Activity> activityList = activityDao
+				.getActivityByAbstractCondition(condition);
+		List<SuperActivity> superActivityList = new ArrayList();// 最终传回页面的list
+		Iterator activityListIterator = activityList.iterator();
+		while (activityListIterator.hasNext()) {
+			Activity a = (Activity) activityListIterator.next();
+
+			if (user == null) {
+				userId = 123;
+			} else {
+				userId = user.getUserId();
+			}
+			List followList = activityFollowDao.getActivityFollowByCondition(a
+					.getActivityId(), userId);// 从数据库给出双条件查询，探测出此用户是否关注此活动
+
+			if (userId == a.getUserId()) {// 判断当前用户是否是此活动的发起者
+				owner = "true";
+			} else {
+				if (followList.size() > 0) {
+					followed = "true";// 表示已关注
+				} else {
+					followed = "false";// 表示未关注
+				}
+				List goingList = activityGoingDao.getActivityGoingByCondition(a
+						.getActivityId(), userId);// 从数据库给出双条件查询，探测出当前用户是否参加此活动
+
+				if (goingList.size() > 0) {
+					joined = "true";// 表示已join
+				} else {
+					joined = "false";// 表示未join
+				}
+			}
+			if (tribusListDao.isAddResource("city", a.getActivityId(), userId)) {
+
+				tribus = "ok";
+			} else {
+				tribus = "+ Tribus List";
+			}
+			if (wishListDao.isAddResource("city", a.getActivityId(), userId)) {
+				wish = "ok";
+			} else {
+				wish = "+ Wish List";
+			}
+			SuperActivity s = new SuperActivity();
+			s.setWish(wish);
+			s.setTribus(tribus);
+
+			s.setActivity(a);
+			s.setFollowed(followed);
+			s.setJoined(joined);
+			s.setOwner(owner);
+			superActivityList.add(s);
+		}
+		List result = new ArrayList();// 最终的结果集
+		String[] pages = null;
+		if (superActivityList.size() == 0) {// 如果结果集为空的时候
+
+		} else {
+			result = getListByPage(superActivityList, 4, page);// 4条一页 得到第page页！
+
+			int pageNumbers = getPageNumber(superActivityList, 4);// 4条一页
+			// ，得到一共几页
+			pages = new String[pageNumbers];
+			for (Integer i = 0; i < pageNumbers; i++) {
+				pages[i] = i + 1 + "";
+			}
+		}
+		UserProfile userProfile=(UserProfile)session1.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
+		view.addObject("activityList", result);// 将得到的结果（指定页码位置）放入容器 传回页面！
+		view.addObject("condition", condition);// 将搜索条件放入容器传回页面 留作分页之用
+		view.addObject("followed", followed);// 将followed状态放入容器传回页面
+		view.addObject("joined", joined);// 将joined状态放入容器传回页面
+		view.addObject("owner", owner);// 将owner状态放入容器传回页面
+		view.setViewName("activity/search_result");// 设置对应的视图view/activity/view.jsp
+		return view;
+	}
+
+	@RequestMapping("searchByDay")
+	// 日期搜索（针对自己的那个日历条）
+	public ModelAndView searchByDate(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView view = new ModelAndView();
+
+		Integer page;
+
+		if (request.getParameter("page") == null) {
+			page = 1;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
+		}
+		String d = request.getParameter("day");
+		String m = request.getParameter("month");
+		HttpSession session = request.getSession();
+		User u = (User) session.getAttribute("user");
+		userId = u.getUserId();
+		String followed = null;
+		String joined = null;
+		String owner = null;
+		String wish=null;
+		String tribus=null;
+
+		List<SuperActivity> superActivityList = new ArrayList();// 最终传回页面的list
+		List activityBeforeFilter = new ArrayList();
+		List activityAfterFilter = new ArrayList();// 未来的当月的活动结果集 不过没有进行分页
+		if (d != null && m != null) {
+			Integer day = Integer.parseInt(d);
+			Integer month = Integer.parseInt(m) - 1;// 从零开始计算
+			Calendar cal = Calendar.getInstance();
+			int year = cal.get(Calendar.YEAR) - 1900;//
+			if (u != null) {
+				List<ActivityGoing> activityGoingList = activityGoingDao
+						.getActivityGoingByDate(u.getUserId());// 从活动参加者表里取出
+				// 用户参加的所有活动list
+				Iterator iterator = activityGoingList.iterator();
+				while (iterator.hasNext()) {
+					ActivityGoing activityGoing = (ActivityGoing) iterator
+							.next();
+					Activity activity = activityDao
+							.getActivityById(activityGoing.getActivityId());// 找到对应的活动对象
+					activityBeforeFilter.add(activity);// 现在将当前用户所有的活动 参加的未参加的
+					// ,今世的上辈子的都他妈在里面了
+				}
+				Iterator iterator2 = activityBeforeFilter.iterator();
+				while (iterator2.hasNext()) {
+					Activity activity = (Activity) iterator2.next();
+
+					if (activity.getActivityStartTime().getDate() == day
+							&& activity.getActivityStartTime().getMonth() == month
+							&& activity.getActivityStartTime().getYear() == year) {// 找出指定一天的活动
+						// activityAfterFilter.add(activity);
+
+						List followList = activityFollowDao
+								.getActivityFollowByCondition(activity
+										.getActivityId(), userId);// 从数据库给出双条件查询，探测出此用户是否关注此活动
+
+						if (userId == activity.getUserId()) {// 判断当前用户是否是此活动的发起者
+							owner = "true";
+						} else {
+							if (followList.size() > 0) {
+								followed = "true";// 表示已关注
+							} else {
+								followed = "false";// 表示未关注
+							}
+							List goingList = activityGoingDao
+									.getActivityGoingByCondition(activity
+											.getActivityId(), userId);// 从数据库给出双条件查询，探测出当前用户是否参加此活动
+
+							if (goingList.size() > 0) {
+								joined = "true";// 表示已join
+							} else {
+								joined = "false";// 表示未join
+							}
+						}
+						if(tribusListDao.isAddResource("city", activity.getActivityId(), userId)){
+							
+							tribus="ok";		
+						}else{tribus="+ Tribus List";}
+						if(wishListDao.isAddResource("city", activity.getActivityId(), userId)){
+							wish="ok";		
+						}else{wish="+ Wish List";}
+						SuperActivity s = new SuperActivity();
+						s.setWish(wish);
+						s.setTribus(tribus);
+						
+						s.setActivity(activity);
+						s.setFollowed(followed);
+						s.setJoined(joined);
+						s.setOwner(owner);
+						superActivityList.add(s);
+
+					}
+				}
+
+			}
+		}
+		List result = new ArrayList();// 最终的结果集
+		String[] pages = null;
+		if (superActivityList.size() == 0) {// 如果结果集为空的时候
+
+		} else {
+			result = getListByPage(superActivityList, 5, page);// 5条一页 得到第page页！
+
+			int pageNumbers = getPageNumber(superActivityList, 5);// 5条一页
+			// ，得到一共几页
+			pages = new String[pageNumbers];
+			for (Integer i = 0; i < pageNumbers; i++) {
+				pages[i] = i + 1 + "";
+			}
+		}UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
+		view.addObject("activityList", result);// 将得到的结果（指定页码位置）放入容器 传回页面！
+		view.addObject("day", d);// 将得到的结果（指定页码位置）放入容器 传回页面！
+		view.addObject("month", m);// 将得到的结果（指定页码位置）放入容器 传回页面！
+		view.setViewName("activity/search_result_date");// 设置对应的视图view/activity/view.jsp
 		return view;
 	}
 
@@ -743,14 +1063,14 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 
 		String followed = null;
 		String joined = null;
-		String owner = null;
+		String owner = null;	HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		List<SuperActivity> superActivityList = new ArrayList();// 最终传回页面的list
 		Iterator activityListIterator = activityList.iterator();
 		while (activityListIterator.hasNext()) {
 			Activity a = (Activity) activityListIterator.next();
 
-			HttpSession session = request.getSession();
-			User user = (User) session.getAttribute("user");
+		
 			if (user == null) {
 				userId = 123;
 			} else {
@@ -792,7 +1112,8 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		String[] pages = new String[pageNumbers];
 		for (Integer i = 0; i < pageNumbers; i++) {
 			pages[i] = i + 1 + "";
-		}
+		}UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		view.addObject("activityList", result);// 将得到的结果（指定页码位置）放入容器 传回页面！
 		view.addObject("city", activityCity);// 将此时的搜索条件放回页面，留着分页再用
@@ -867,7 +1188,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		if (goingList.size() > 0) {// 此时是join的状态，说明用户想执行解join操作
 
 			if (activityGoingDao.delActivityGoing(goingList.get(0))) {
-				response.getWriter().write("join");// 标志传回页面，活动变为Join状态
+				response.getWriter().write("Join");// 标志传回页面，活动变为Join状态
 			}
 
 		} else {// 此时是未join的状态，说明用户想执行加join操作
@@ -887,7 +1208,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 						userId).size() == 0) {// 说明没有加关注，所以此时添加关注
 					activityFollowDao.addActivityFollow(activityFollow);
 				}
-				response.getWriter().write("unjoin");// 标志传回页面，活动变为going状态
+				response.getWriter().write("unJoin");// 标志传回页面，活动变为going状态
 
 			} else {
 				response.getWriter().write("fail to join!sorry");// 标志传回页面(join失败）
@@ -920,6 +1241,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		activityCommentDao.addActivityComment(activityComment);
 		view.setViewName("redirect:info.action?activityId=" + activityId);// 设置对应的视图view/activity/info.jsp
 		return view;
+
 	}
 
 	@RequestMapping("addPicIndex")
@@ -937,6 +1259,22 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		} else {
 			size = "1";
 		}
+		Integer flag = 0;
+		User user = userDao.getUserById(activityDao.getActivityById(activityId)
+				.getUserId());// 得到照片上传者对象
+		HttpSession session = request.getSession();
+
+		User currentUser = (User) session.getAttribute("user");// 得到当前用户对象
+		if (currentUser != null) {
+			if (currentUser.getUserId() == user.getUserId())// 说明当前用户就是此活动发起用户
+			// 所以有图片上传的权限
+			{
+				flag = 1;
+
+			}
+		}UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		view.addObject("flag", flag);
 		view.addObject("size", size);// 如果没有创建相册 则放入此值 传回页面。以作检查
 		view.addObject("activityAlbumList", activityAlbumList);// 将得到的结果放入容器
 		view.addObject("activityId", activityId);// 将activityId放入容器
@@ -1207,6 +1545,21 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 			pages[i] = i + 1 + "";
 		}
 
+		Integer flag = 0;
+		User user = userDao.getUserById(activityDao.getActivityById(activityId)
+				.getUserId());// 得到照片上传者对象
+
+		User currentUser = (User) session.getAttribute("user");// 得到当前用户对象
+		if (currentUser != null) {
+			if (currentUser.getUserId() == user.getUserId())// 说明当前用户就是此活动发起用户
+			// 所以有图片上传的权限
+			{
+				flag = 1;
+
+			}
+		}UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		view.addObject("flag", flag);
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		view.addObject("activityId", activityId);
 		view.addObject("activityAlbumList", result);
@@ -1313,7 +1666,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		}
 		String activityId = request.getParameter("activityId");
 		// 传回页面！
-		view.setViewName("redirect:info.action?activityId=" + activityId);// 设置对应的视图view/activity/showPicList.jsp
+		view.setViewName("redirect:info.action?activityId=" + activityId);// 设置对应的视图
 		return view;
 
 	}
@@ -1329,7 +1682,15 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		List activityAlbumList = activityAlbumDao.getActivityAlbumByCondition(
 				0, albumId);
 		List result = new ArrayList();// 最终的结果集
+		Integer activityId = 0;
+		if (activityAlbumDao.getActivityAlbumByCondition(0, albumId) == null) {// 如果相册查询
+			// 结果为空
 
+		} else {
+			activityId = activityAlbumDao.getActivityAlbumByCondition(0,
+					albumId).get(0).getActivityId();
+
+		}
 		int page;
 		if (request.getParameter("page") == null) {
 			page = 1;
@@ -1343,26 +1704,132 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 			pages[i] = i + 1 + "";
 		}
 
+		Integer flag = 0;
+		User user = userDao.getUserById(activityPics.get(0).getUserId());// 得到照片上传者对象
+		HttpSession session = request.getSession();
+		User currentUser = (User) session.getAttribute("user");// 得到当前用户对象
+		if (currentUser != null) {
+			if (currentUser.getUserId() == user.getUserId())// 说明当前用户就是此活动发起用户
+			// 所以有图片上传的权限
+			{
+				flag = 1;
+
+			}
+		}
+		view.addObject("flag", flag);
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		view.addObject("activityAlbum", activityAlbumList.get(0));
 		view.addObject("activityPics", result);// 将activityPics放入容器
+		view.addObject("activityId", activityId);//
 		// 传回页面！
 		view.setViewName("activity/showPicList");// 设置对应的视图view/activity/showPicList.jsp
 		return view;
 
 	}
 
-	@RequestMapping("showPic")
-	// 上传活动图片
-	public ModelAndView showPic(HttpServletRequest request,
+	@RequestMapping("addPicComment")
+	// 对照片进行评论
+	public ModelAndView addPicComment(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		ModelAndView view = new ModelAndView();
 		Integer activityPicId = Integer.parseInt(request
 				.getParameter("activityPicId"));
+		Integer activityId = Integer.parseInt(request
+				.getParameter("activityId"));
+		String albumName = request.getParameter("albumName");
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			userId = 123;
+		} else {
+			userId = user.getUserId();
+		}
+		String commentContent = request.getParameter("commentContent");// 取出当前的留言内容
+		ActivityPicComment activityPicComment = new ActivityPicComment();
+		activityPicComment.setActivityPicId(activityPicId);
+		activityPicComment.setCommentContent(commentContent);
+		activityPicComment.setUserId(userId);
+		activityPicCommentDao.addActivityPicComment(activityPicComment);
+		view.setViewName("redirect:showPic.action?activityPicId="
+				+ activityPicId + "&albumName=" + albumName + "&activityId="
+				+ activityId);// 设置对应的视图
+		return view;
+
+	}
+
+	@RequestMapping("showPic")
+	// 显示活动图片
+	public ModelAndView showPic(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		ModelAndView view = new ModelAndView();
+		Integer activityId = Integer.parseInt(request
+				.getParameter("activityId"));
+		Integer activityPicId = Integer.parseInt(request
+				.getParameter("activityPicId"));
+
 		String albumName = request.getParameter("albumName");
 		List<ActivityPic> activityPics = activityPicDao
 				.getActivityPicByCondition(activityPicId, 0);// 得到相片id
+
+		List commentList = activityPicCommentDao
+				.getActivityPicCommentByCondition(activityPicId, 0);// 评论dao
+		List userCommentList = new ArrayList();
+		Iterator iteratorComment = commentList.iterator();
+		while (iteratorComment.hasNext()) {
+			ActivityPicComment activityPicComment = (ActivityPicComment) iteratorComment
+					.next();
+			UserComment userComment = new UserComment();// VO对象封装开始
+			userComment.setCommentContent(activityPicComment
+					.getCommentContent());
+			userComment.setCommentDate(activityPicComment.getCommentDate());
+			User user = userDao.getUserById(activityPicComment.getUserId());
+			if (user == null) {
+				continue;
+			}
+			userComment.setUserName(user.getUserAlias());
+			userComment.setUserPic(user.getUserPic());// VO对象封装结束
+			userComment.setUserId(activityPicComment.getUserId());
+			userCommentList.add(userComment);
+		}
+
+		int page;
+
+		if (request.getParameter("page") == null) {
+			page = 1;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
+		} // 和 一个评论list
+		List result = getListByPage(userCommentList, 4, page);// 4条一页 得到第page页！
+
+		int pageNumbers = getPageNumber(userCommentList, 4);// 4条一页 ，得到一共几页
+		String[] pages = new String[pageNumbers];
+		for (Integer i = 0; i < pageNumbers; i++) {
+			pages[i] = i + 1 + "";
+		}
+		// Integer flag=0;//0为有资格上传 1为没有资格上传
+		User user = userDao.getUserById(activityPics.get(0).getUserId());// 得到照片上传者对象
+
+		String wish = null;
+		String tribus = null;
+
+		if (tribusListDao.isAddResource("city", activityId, userId)) {
+
+			tribus = "ok";
+			view.addObject("tribus", tribus);// 将tribus 值放入容器传回页面
+		}
+		if (wishListDao.isAddResource("city", activityId, userId)) {
+			wish = "ok";
+			view.addObject("wish", wish);// 将wish值放入容器传回页面
+		}
+		HttpSession session=request.getSession();
+		UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
+		view.addObject("userCommentList", result);
 		view.addObject("albumName", albumName);
+		view.addObject("activityPicId", activityPics.get(0).getPicId());
+		view.addObject("user", user);
+		view.addObject("activityId", activityId);
 		view.addObject("activityPics", activityPics.get(0));// 将activityPics放入容器
 		// 传回页面！
 		view.setViewName("activity/showPic");// 设置对应的视图view/activity/showPic.jsp
@@ -1373,15 +1840,13 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 	// 按热门标签搜索
 	public ModelAndView searchByTag(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		
 		ModelAndView view = new ModelAndView();
 		String tagName = request.getParameter("tagName");
 		Integer classifiedId = activityClassifiedDao.getClassifiedIdByTag(tagName);
 		List activityList = activityDao.getActivityByClassifiedId(classifiedId);
-		List activityTagsList = activityClassifiedDao.getAllActivityClassified();
+		List activityTagsList = activityClassifiedDao
+				.getAllActivityClassified();
 		List topTribusCity = activityDao.getTopTribusCity();
-		
-		
 		List<User> followList = new ArrayList();// 将来的followList列表
 		List<UserCommentSupper> UserComment = new ArrayList();// userCommetnSupper对象辖有activity对象
 		Integer page;
@@ -1390,7 +1855,7 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		} else {
 			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
 		} // 和 一个评论list
-		
+		Iterator activityListIterator = activityList.iterator();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
@@ -1398,9 +1863,6 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		} else {
 			userId = user.getUserId();
 		}
-				
-		Iterator activityListIterator = activityList.iterator();
-				
 		while (activityListIterator.hasNext()) {
 			UserCommentSupper u = new UserCommentSupper();
 			Activity a = (Activity) activityListIterator.next();
@@ -1436,37 +1898,41 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 						.next();
 				followList.add(userDao.getUserById(activityGoing.getUserId()));
 			}
-		}		
-		
-		List result = new ArrayList();// 最终的结果集
-
-		result = getListByPage(UserComment, 6, page);// 4条一页 得到第page页！
-		while (result.size() < 6) {
-			result.add(null);
 		}
 
-		int pageNumbers = getPageNumber(UserComment, 6);// 4条一页 ，得到一共几页
-		int[] pages = new int[pageNumbers];
-		for (int i = 0; i < pageNumbers; i++) {
-			pages[i] = i + 1 ;
+		List result = new ArrayList();// 最终的结果集
+
+		result = getListByPage(UserComment, 6, page);// 6条一页 得到第page页！
+
+		int pageNumbers = getPageNumber(UserComment, 6);// 6条一页 ，得到一共几页
+		String[] pages = new String[pageNumbers];
+		for (Integer i = 0; i < pageNumbers; i++) {
+			pages[i] = i + 1 + "";
 		}
 
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		List recommendActivity = activityDao.getAllActivity();// 取推荐活动
-		recommendActivity = recommendActivity.subList(1, 4);// 取推荐活动
+		int arrowFlag = 0;
+		if (recommendActivity != null && recommendActivity.size() > 3) {
+			recommendActivity = recommendActivity.subList(0, 3);// 取推荐活动
+			arrowFlag = 1;
+		}UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		view.addObject("arrowFlag", arrowFlag);// 如果是1的话告诉页面他妈的这个List 大于3
+												// 让那个该死的傻逼箭头 显示出来，反之 不显示
 		view.addObject("tagName", tagName);// 取出标签查询条件 放入容器传回页面，留作分页之途
 		view.addObject("recommendActivity", recommendActivity);// 将recommendActivity放入容器//
 		// // 传回页面！
 		view.addObject("followList", followList);// 将followList放入容器// 传回页面！
 		view.addObject("topTribusCity", topTribusCity);// 将热门城市放入容器// 传回页面！
-		view.addObject("activityList", result);// 将activityList放入容器// 传回页面！
+		view.addObject("activityList", UserComment);// 将activityList放入容器// 传回页面！
 		view.addObject("activityTagsList", activityTagsList);// 将所有标签list放入容器
-		view.setViewName("activity/tagResult");// 设置对应的视图view/activity/showPic.jsp
+		view.setViewName("activity/tag_search");// 设置对应的视图view/activity/showPic.jsp
 		return view;
 	}
 
 	@RequestMapping("myActivity")
-	// 上传活动图片
+	// 
 	public ModelAndView myActivity(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		ModelAndView view = new ModelAndView();
@@ -1559,7 +2025,8 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		for (Integer i = 0; i < pageNumbers; i++) {
 			pages[i] = i + 1 + "";
 		}
-
+		UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
 		User user = userDao.getUserById(userId);// 得到当前用户对象
 		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
 		view.addObject("user", user);// 将user放入容器
@@ -1569,6 +2036,107 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 		view.addObject("activityList", result);// 将activityList放入容器
 		// 传回页面！
 		view.setViewName("activity/my_Activity");// 设置对应的视图view/activity/myActivity.jsp
+		return view;
+
+	}
+	@RequestMapping("yourActivity")
+	// 
+	public ModelAndView yourActivity(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		ModelAndView view = new ModelAndView();
+		HttpSession session = request.getSession();
+		String owner = null;// Host状态
+		String joined = null;// 加入状态
+		String followed = null;// 关注状态
+		userId=Integer.parseInt(request.getParameter("userId"));
+
+		List<ActivityGoing> activityGoingList = activityGoingDao.getActivityGoingByCondition(0, userId);// 得到当前用户going的活动
+		List<MyActivity> activityList = new ArrayList();
+		Iterator activityGoingListIterator = activityGoingList.iterator();
+		while (activityGoingListIterator.hasNext()) {
+			ActivityGoing af = (ActivityGoing) activityGoingListIterator.next();
+			Activity activity = activityDao.getActivityById(af.getActivityId());
+
+			List activityCommentList = activityCommentDao
+					.getActivityCommentByCondition(activity.getActivityId(), 0);// 得到评论列表
+			Iterator activityCommentListIterator = activityCommentList
+					.iterator();// 遍历列表 去userDao里找出对应的User，然后组装生成 uc list
+			List<UserComments> userCommentsList = new ArrayList();// 得到volist
+			while (activityCommentListIterator.hasNext()) {
+				ActivityComment ac = (ActivityComment) activityCommentListIterator
+						.next();
+				UserComments uc = new UserComments();// 开始组装uc
+				uc.setUserComment(ac.getCommentContent());
+				uc.setUserId(ac.getUserId());
+				uc.setUserPic(userDao.getUserById(ac.getUserId())
+						.getUserAlias());// uc组装结束
+				userCommentsList.add(uc);// 添加到vo list
+
+				List followList = activityFollowDao
+						.getActivityFollowByCondition(activity.getActivityId(),
+								userId);// 从数据库给出双条件查询，探测出此用户是否关注此活动
+				if (userId == activity.getUserId()) {// 判断当前用户是否是此活动的发起者
+					owner = "true";
+				} else {
+					if (followList.size() > 0) {
+						followed = "true";// 表示已关注
+					} else {
+						followed = "false";// 表示未关注
+					}
+					List goingList = activityGoingDao
+							.getActivityGoingByCondition(activity
+									.getActivityId(), userId);// 从数据库给出双条件查询，探测出此用户是否关注此活动
+
+					if (goingList.size() > 0) {
+						joined = "true";// 表示已join
+					} else {
+						joined = "false";// 表示未join
+					}
+				}
+			}
+
+			MyActivity myActivity = new MyActivity();
+			myActivity.setActivity(activity);// 组装vo，放进活动类属性
+			myActivity.setUser(userDao.getUserById(activity.getUserId()));// 组装vo,放进用户类属性
+			myActivity.setUserComments(userCommentsList);// 组装vo，放进评论list属性
+			myActivity.setFollowed(followed);
+			myActivity.setJoined(joined);
+			myActivity.setOwner(owner);
+			activityList.add(myActivity);
+		}
+
+		List recommentActivity = activityDao.getAllActivity();// 取推荐活动
+		recommentActivity = recommentActivity.subList(7, 10);// 取推荐活动
+		List topTribusCity = activityDao.getTopTribusCity();
+		List<User> friends = followDao.getAllFriends(userId);// 得到此userId所有followee对象
+
+		List result = new ArrayList();// 最终的结果集
+
+		int page;
+
+		if (request.getParameter("page") == null) {
+			page = 1;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));// 对应第几页
+		} // 和 一个评论list
+		result = getListByPage(activityList, 4, page);// 4条一页 得到第page页！
+
+		int pageNumbers = getPageNumber(activityList, 4);// 4条一页 ，得到一共几页
+		String[] pages = new String[pageNumbers];
+		for (Integer i = 0; i < pageNumbers; i++) {
+			pages[i] = i + 1 + "";
+		}
+		UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
+		User user = userDao.getUserById(userId);// 得到当前用户对象
+		view.addObject("pageNumbers", pages);// 将一共多少页放入容器传回页面
+		view.addObject("user", user);// 将user放入容器
+		view.addObject("friends", friends);// 将friends放入容器
+		view.addObject("topTribusCity", topTribusCity);// 将topTribusCity放入容器
+		view.addObject("recommentActivity", recommentActivity);// 将recommentActivity放入容器
+		view.addObject("activityList", result);// 将activityList放入容器
+		// 传回页面！
+		view.setViewName("activity/your_Activity");// 设置对应的视图view/activity/myActivity.jsp
 		return view;
 
 	}
@@ -1584,6 +2152,9 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 				.getActivityPicByCondition(activityPicId, 0);// 得到相片id
 		view.addObject("activityPics", activityPics.get(0));// 将activityPics放入容器
 		// 传回页面！
+		HttpSession session=request.getSession();
+		UserProfile userProfile=(UserProfile)session.getAttribute("userProf");
+		view.addObject("userProf",userProfile);
 		view.setViewName("activity/showPic");// 设置对应的视图view/activity/showPic.jsp
 		return view;
 	}
@@ -1626,14 +2197,19 @@ String activtiyClassified=activityClassifiedDao.getClassifiedTagById(activity.ge
 	// 分页函数，每个元素 有两个属性 一个是实际属性，一个是所在页数
 	public List getListByPage(List l, int watershed, int p) { // 待搞的list，每页显示多少条目.，想取第幾頁的值
 		int pageNumbers = getPageNumber(l, watershed);
-		if (p == pageNumbers) {// 最后一页
 
-			return l.subList((p - 1) * watershed, l.size());// 截取最后一页
+		if (l.size() != 0) {
+			if (p == pageNumbers) {// 最后一页
 
+				return l.subList((p - 1) * watershed, l.size());// 截取最后一页
+
+			} else {
+				return l.subList((p - 1) * watershed, p * watershed);// from//
+				// 最后一页之前的
+
+			}
 		} else {
-			return l.subList((p - 1) * watershed, p * watershed);// from//
-			// 最后一页之前的
-
+			return l;
 		}
 
 	}

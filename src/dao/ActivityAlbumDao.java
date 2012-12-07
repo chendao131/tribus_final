@@ -63,4 +63,6 @@ public class ActivityAlbumDao {
 
 		return Integer.parseInt(TribusHibernateSessionFactory.currentSession().createSQLQuery(sql).uniqueResult().toString());
 	}
+	
+	
 }

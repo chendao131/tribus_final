@@ -1,10 +1,14 @@
 package dao;
 
 import hibernate.TribusHibernateSessionFactory;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import model.User;
 import model.UserPrevilage;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -25,13 +29,14 @@ public class UserPrevilageDao {
 		return false;
 	}
 
-	public List<UserPrevilage> getAllUsersByActivityId(int activityId) {
+	public List<User> getAllUsersByActivityId(int activityId) {
 
 		Session session = TribusHibernateSessionFactory.currentSession();
 
-		return session.createSQLQuery("select * from user_previlage where activityId = ?").addEntity(
-				UserPrevilage.class).setInteger(
-						0, activityId).list();
+		return session.createSQLQuery(
+				"select * from user_previlage where activityId = '"
+						+ activityId + "'").addEntity(UserPrevilage.class)
+				.list();
 
 	}
 
