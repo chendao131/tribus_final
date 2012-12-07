@@ -91,7 +91,6 @@ public class BookController {
 		
 		b.setBookName(request.getParameter("bookName"));
 		b.setBookAuthor(request.getParameter("bookAuthor"));
-		System.out.println("why:"+request.getParameter("bookAuthor"));
 		if(!GenericValidator.isBlankOrNull(request.getParameter("bookPage")))
 			b.setBookPages(Integer.valueOf(request.getParameter("bookPage")));
 		b.setBookPic(request.getParameter("successful_img_path"));
@@ -100,7 +99,6 @@ public class BookController {
 		if(!GenericValidator.isBlankOrNull(request.getParameter("bookBrief")))
 			b.setBookBrief(request.getParameter("bookBrief"));
 		b.setBookISBN(request.getParameter("bookISBN"));
-		System.out.println(b.getBookPic());
 		bd.save(b);
 		
 		return "redirect:/book/"+b.getBookId()+".action";
@@ -158,17 +156,12 @@ public class BookController {
 		int userId = u.getUserId();
 		
 		String mark = request.getParameter("mark");
-		System.out.println(mark);
 		if(mark.equals("wanted")){
-			System.out.println("1");
 			BookMarkDao bmd = new BookMarkDao();
 			bmd.markWatchWantedByBookIdAndUserId(bookId, userId);
-			System.out.println("wanted success");
 		}else if(mark.equals("done")){
-			System.out.println("2");
 			BookMarkDao bmd = new BookMarkDao();
 			bmd.markWatchDoneByBookIdAndUserId(bookId, userId);
-			System.out.println("done success");
 		}
 	}
 	
@@ -179,7 +172,6 @@ public class BookController {
 		int userId = u.getUserId();
 		MovieMarkDao mmd = new MovieMarkDao();
 		mmd.rateByMovieIdAndUserId(movieId, userId, Integer.parseInt(request.getParameter("rate")));
-		System.out.println(movieId+"*"+userId+"*"+request.getParameter("rate"));
 	}
 	
 	@RequestMapping("search/{type}")
@@ -188,19 +180,11 @@ public class BookController {
 		
 		String redirect = null;
 		String name = request.getParameter("single_search_name");
-		System.out.println("this:"+name);
 		switch(type){
 		case 1: redirect = "redirect:/book/search/Books="+name+".action";break;
 		case 2: redirect = "redirect:/book/search/Celebrities="+name+".action";break;
 		case 3: redirect = "redirect:/book/search/List="+name+".action";break;
 		}
-		System.out.println(redirect);
-/*		if(type == "movie")
-			redirect = "redirect:/movie/search/Movies="+name+".action";
-		else if(type == "celebrity")
-			redirect = "redirect:/movie/search/Celebrities="+name+".action";
-		else 
-			redirect = "redirect:/movie/search/TribusLists="+name+".action";*/
 		return redirect;
 	}
 	
@@ -395,7 +379,6 @@ public class BookController {
 	@RequestMapping("saveBookEdition/{bookId}")
 	public String saveBookEdition(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("bookId")int bookId){
-		System.out.println("33");
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		BookDao bd = new BookDao();
@@ -446,7 +429,6 @@ public class BookController {
 			sr.setItemRate(bmd.getAverageGrade(b.getBookId()));
 			searchResults.add(sr);
 		}
-		System.out.println(searchResults.size());
 		
 		MessageDao mgd = new MessageDao();
 		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
@@ -457,12 +439,10 @@ public class BookController {
 			e.printStackTrace();
 		}
 		mv.addObject("unreadMail", unreadInboxmails !=null ? unreadInboxmails.size(): 0);
-		
 		mv.addObject("searchString", bookName);
 		mv.addObject("searchResults", searchResults);
 		mv.addObject("userName", u.getUserAlias());
 		mv.addObject("userCity", up.getProfCity());
-		
 		return mv;
 	}
 	

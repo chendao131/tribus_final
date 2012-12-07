@@ -188,7 +188,6 @@ public class BookMarkDao {
 			while(iterator.hasNext()){
 				bookIDs.add(iterator.next().getBook().getBookId());
 			}
-			System.out.println("success");
 			return bookIDs;
 		}catch(Exception e){
 			System.out.println(e.getMessage());
@@ -205,7 +204,6 @@ public class BookMarkDao {
 			List<BookMark> bookMarks = session.createQuery(hql).
 								setInteger("userId", userId).setInteger("bookId",bookId).list();
 			bm = bookMarks.get(0);
-			System.out.println("success");
 			return bm.getBookGrade();
 		}catch(Exception e){
 			System.out.println(e.getMessage());
@@ -243,11 +241,6 @@ public class BookMarkDao {
 			}		
 	}	public static void main(String args[]){
 		BookMarkDao bmd = new BookMarkDao();
-		System.out.println(bmd.getBookGradeByUserIdandBookId(1, 2522));
-		//System.out.println(bmd.getLikeBookByUserId(2).size());
-		//List<Integer> bookIDs = bmd.getLikeBookByUserId(2);
-		//System.out.println(bookIDs.size());
-		//System.out.println(bookIDs.get(0));
 /*		BookMark bm = new BookMark();
 		UserDao ud = new UserDao();
 		User u = ud.getUserById(1);

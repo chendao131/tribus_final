@@ -139,7 +139,6 @@ public class MovieController {
 		Set<MovieTag> tags = new HashSet<MovieTag>();
 		StarringDao sd= new StarringDao();
 		StarTypeDao std = new StarTypeDao();
-		System.out.println("input director is:"+request.getParameter("movieDirector"));
 		String directors[] = request.getParameter("movieDirector").split(",");
 		for(int i=0; i<directors.length; i++){
 			Starring s = sd.getStarringByName(directors[i]);
@@ -154,7 +153,6 @@ public class MovieController {
 				stars.add(newStar);
 			}
 		}
-		System.out.println("input director is:"+request.getParameter("movieActor"));
 		String actors[] = request.getParameter("movieActor").split(",");
 		for(int i=0; i<actors.length; i++){
 			Starring s = sd.getStarringByName(actors[i]);
@@ -222,17 +220,12 @@ public class MovieController {
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		String mark = request.getParameter("mark");
-		System.out.println(mark);
 		if(mark.equals("wanted")){
-			System.out.println("1");
 			MovieMarkDao mmd = new MovieMarkDao();
 			mmd.markWatchWantedByMovieIdAndUserId(movieId, userId);
-			System.out.println("wanted success");
 		}else if(mark.equals("done")){
-			System.out.println("2");
 			MovieMarkDao mmd = new MovieMarkDao();
 			mmd.markWatchDoneByMovieIdAndUserId(movieId, userId);
-			System.out.println("done success");
 		}
 	}
 	
@@ -244,7 +237,6 @@ public class MovieController {
 		MovieMarkDao mmd = new MovieMarkDao();
 		mmd.rateByMovieIdAndUserId(movieId, userId, Integer.parseInt(request.getParameter("rate")));
 		mmd.markWatchDoneByMovieIdAndUserId(movieId, userId);
-		System.out.println(movieId+"*"+userId+"*"+request.getParameter("rate"));
 	}
 	
 	@RequestMapping("deleteRate/{movieId}")
@@ -254,7 +246,6 @@ public class MovieController {
 		int userId = u.getUserId();
 		MovieMarkDao mmd = new MovieMarkDao();
 		mmd.deleteRate(movieId, userId);
-		System.out.println("21");
 	}
 	
 	@RequestMapping("editMovie/{movieId}")
@@ -335,7 +326,6 @@ public class MovieController {
 			}
 				
 		}
-		System.out.println("input director is:"+request.getParameter("movieActor"));
 		String actors[] = request.getParameter("movieActor").split(",");
 		for(int i=0; i<actors.length; i++){
 			Starring s = sd.getStarringByName(actors[i]);
@@ -495,19 +485,11 @@ public class MovieController {
 		
 		String redirect = null;
 		String name = request.getParameter("single_search_name");
-		System.out.println("this:"+name);
 		switch(type){
 		case 1: redirect = "redirect:/movie/search/Movies="+name+".action";break;
 		case 2: redirect = "redirect:/movie/search/Celebrities="+name+".action";break;
 		case 3: redirect = "redirect:/movie/search/List="+name+".action";break;
 		}
-		System.out.println(redirect);
-/*		if(type == "movie")
-			redirect = "redirect:/movie/search/Movies="+name+".action";
-		else if(type == "celebrity")
-			redirect = "redirect:/movie/search/Celebrities="+name+".action";
-		else 
-			redirect = "redirect:/movie/search/TribusLists="+name+".action";*/
 		return redirect;
 	}
 	
@@ -515,7 +497,6 @@ public class MovieController {
 	@RequestMapping("search/Movies={movieName}")
 	public ModelAndView searchMoviesByName(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("movieName")String movieName){
-		System.out.println("444");
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		UserProfileDao upd = new UserProfileDao();
@@ -714,7 +695,6 @@ public class MovieController {
 		UserProfile up = upd.getUserProfileById(meId);
 		MovieCommentDao mcd = new MovieCommentDao();
 		MovieComment mc = mcd.getMovieCommentByCommentId(commentId);
-		System.out.println(mc.getUser().getUserId());
 		int userId = mc.getUser().getUserId();
 		int movieId = mc.getMovie().getMovieId();
 		ModelAndView mv = new ModelAndView("review/Single_review");
@@ -742,7 +722,6 @@ public class MovieController {
 		
 		//get related article
 		List<SingleReviewRelatedArticle> relatedArticles = new ArrayList<SingleReviewRelatedArticle>();
-		System.out.println(movieId);
 		List<MovieComment> movieComments = mcd.getMovieCommentById(movieId);
 		Iterator<MovieComment> iterator = movieComments.iterator();
 		mc = null;
@@ -759,7 +738,6 @@ public class MovieController {
 		//get quick comment
 		MovieQuickCommentDao mqcd = new MovieQuickCommentDao();
 		List<MovieQuickComment> mqcs = mqcd.getQuickCommentByCommentId(commentId);
-		System.out.println("000:"+mqcs.size());
 		Iterator<MovieQuickComment> iterator1 = mqcs.iterator();
 		MovieQuickComment mqc = new MovieQuickComment();
 		List<SingleReviewQuickComment> singleReviewQuickComments = new ArrayList<SingleReviewQuickComment>();
@@ -772,17 +750,8 @@ public class MovieController {
 			singleReviewQuickComment.setCommentDate(DateToString.convertDateToString(mqc.getCommentDate()));
 			singleReviewQuickComment.setCommentTitle(mqc.getCommentTitle());
 			singleReviewQuickComment.setUserPic(mqc.getUser().getUserPic());
-			System.out.println("000:"+mqc.getCommentContent());
-			System.out.println("000:"+mqc.getCommentTitle());
-			System.out.println("000:"+DateToString.convertDateToString(mqc.getCommentDate()));
-			System.out.println("000:"+mqc.getUser().getUserPic());	
-			
 			singleReviewQuickComments.add(singleReviewQuickComment);
 		}
-		System.out.println(singleReviewQuickComments.size());
-/*		List<MovieComment> mcs = mcd.getMovieCommentByMovieId(movieId);
-		mv.addObject("movie", md.getMovieById(movieId));
-		mv.addObject("movieComments", mcs);*/
 		MessageDao mgd = new MessageDao();
 		List<MessageVO> unreadInboxmails = new ArrayList<MessageVO>();
 		try {
@@ -858,9 +827,6 @@ public class MovieController {
 		m.setStars(ss);
 
 		Iterator<Starring> it = m.getStars().iterator();
-		while(it.hasNext()){
-			System.out.println(it.next().getStarName());
-		}
 		mv.addObject("movie", m);
 		mv.addObject("stars", m.getStars());
 		
@@ -900,7 +866,6 @@ public class MovieController {
 		int movieId = Integer.parseInt(request.getParameter("movieId"));
 		String movieNameOriginal = request.getParameter("movieNameOriginal");
 
-		System.out.println(movieId+"*"+movieNameOriginal);
 		Movie m = md.getMovieById(Integer.parseInt(request.getParameter("movieId")));
 		m.setMovieNameOriginal("m12311");
 		md.updateMovieNameOriginal(m);
@@ -927,24 +892,18 @@ public class MovieController {
 		int movieId = Integer.parseInt(request.getParameter("movieId"));
 		int userId = Integer.parseInt(request.getParameter("userId"));
 		
-		System.out.println(newComment+"*"+movieId+"*"+userId);
 		MovieComment mc = new MovieComment();
 		mc.setCommentContent(request.getParameter("newComment"));
-		//get instance
 		MovieDao md = new MovieDao();
 		Movie m = md.getMovieById(movieId);
 		UserDao ud = new UserDao();
 		User u = ud.getUserById(userId);
-		
-		//System.out.println(m.getMovieNameOriginal()+"*");
-		//System.out.println(m.getMovieId()+"*"+u.getUserId());
 		mc.setCommentContent(newComment);
 		mc.setMovie(m);
 		mc.setUser(u);
 		
 		MovieCommentDao mcd = new MovieCommentDao();
 		int result = mcd.save(mc);
-		//System.out.println(result);
 	}
 	
 	@RequestMapping("getComment/{movieId}")
@@ -964,10 +923,6 @@ public class MovieController {
 		mcs = mcd.getMovieCommentById(movieId);
 
 		Iterator<MovieComment> it = mcs.iterator();
-		//Iterator<Starring> it = m.getStars().iterator();
-		while(it.hasNext()){
-			System.out.println(it.next().getCommentDate());
-		}
 		mv.addObject("movieComments", mcs);
 		mv.addObject("userName", u.getUserAlias());
 		mv.addObject("userCity", up.getProfCity());
@@ -982,7 +937,6 @@ public class MovieController {
 		UserProfile up = upd.getUserProfileById(userId);
 		
 		String movieId = request.getParameter("movieId");
-		System.out.println(movieId);
 		ModelAndView mv = new ModelAndView("movie/edit/editSuccess");
 		mv.addObject("userName", u.getUserAlias());
 		mv.addObject("userCity", up.getProfCity());
@@ -1059,20 +1013,15 @@ public class MovieController {
 	public void markSubmit(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("movieId")int movieId, 
 			@PathVariable("movieId")int userId){
-//		System.out.println(request.getParameter("watched"));
 		MovieMarkDao mmd = new MovieMarkDao();
 		MovieMark mm = mmd.getMarkByMovieAndUserId(movieId, userId);
 		if(mm.getMovieTagId()==1){
-			System.out.println("1");
 			mm.setMovieTagId(2);
 		}else if(mm.getMovieTagId()==2){
-			System.out.println("2");
 			mm.setMovieTagId(3);
 		}else{
 			mm.setMovieTagId(1);
 		}
-		System.out.println(mmd.updateMark(mm));
-	}
 	
 	@RequestMapping("rating")
 	public String ratingAction(){
@@ -1088,7 +1037,6 @@ public class MovieController {
 		MovieMark mm = mmd.getMarkByMovieAndUserId(movieId, userId);
 		mm.setMovieGrade(Integer.parseInt(rating));
 		int result = mmd.updateMark(mm);
-		System.out.println(result);
 	}
 	
 	@RequestMapping("getAverageGrade/{movieId}")

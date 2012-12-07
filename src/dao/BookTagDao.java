@@ -63,39 +63,10 @@ public class BookTagDao {
 			List<BookTag> bts = session.createQuery(sql).setString("tagName", tagName)
 					.list();
 			bt = bts.get(0);
-			System.out.println(bt.getTagId()+"**"+bt.getTagName());
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
 		}
 		return bt;	
 	}
-/*	public static void main(String args[]){
-		BufferedReader reader = null;
-		BookTagDao btd = new BookTagDao();
-		Hashtable<String,Integer> alltags = new Hashtable<String, Integer>();
-		try {
-			reader = new BufferedReader(new FileReader("C:\\Users\\Leon\\workspace\\thibusCrawler_GetBook_Final\\OutCome\\bookInfo\\FilmInfo2.txt"));
-			String currentLine;
-			while((currentLine = reader.readLine())!=null){
-				if(currentLine.indexOf("subjects:")!=-1){
-					
-					String tags[] = currentLine.split(":")[1].split("&&");
-					for(int i=0; i<tags.length-1; i++){
-						if(!btd.isExist(tags[i])){
-							//alltags.put(tags[i], 1);
-							System.out.println(tags[i]);
-							BookTag bt = new BookTag();
-							bt.setTagName(tags[i]);
-							btd.save(bt);
-						}
-					}
-					
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-	}*/
 }

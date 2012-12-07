@@ -91,10 +91,8 @@ public class BookCommentDao {
 			String hql = "from BookComment where commentId=:commentId";
 			 bcs = session.createQuery(hql).setInteger("commentId",commentId).list();
 			bc = bcs.get(0);
-			System.out.println("success");
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println(e.getMessage());
 		}
 		return bc;			
 	}
@@ -151,7 +149,6 @@ public class BookCommentDao {
 			String hql = "from BookComment where user.userId=:userId and book.bookId=:bookId";
 			 bcs = session.createQuery(hql).setInteger("userId", userId).setInteger("bookId",bookId).list();
 			bc = bcs.get(0);
-			System.out.println("success");
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -168,7 +165,6 @@ public class BookCommentDao {
 			String hql = "from BookComment where book.bookId=:bookId";
 			 bcs = session.createQuery(hql).setInteger("bookId",bookId).list();
 			bc = bcs.get(0);
-			System.out.println("success");
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -177,7 +173,6 @@ public class BookCommentDao {
 	}
 	public static void main(String args[]){
 		BookCommentDao bcd = new BookCommentDao();
-		System.out.println(bcd.getBookCommentByUserIdAndBookId(1, 2522).getBook().getBookPic());
 //		bcd.getBookCommentsByUserId();
 		/*BookComment bc = new BookComment();
 		UserDao ud = new UserDao();

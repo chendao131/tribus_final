@@ -102,17 +102,12 @@ public class MusicController extends ResourceController {
 
 		
 		String mark = request.getParameter("mark");
-		System.out.println(mark);
 		if(mark.equals("wanted")){
-			System.out.println("1");
 			MusicMarkDao mmd = new MusicMarkDao();
 			mmd.markWatchWantedByMusicIdAndUserId(musicId, userId);
-			System.out.println("wanted success");
 		}else if(mark.equals("done")){
-			System.out.println("2");
 			MusicMarkDao mmd = new MusicMarkDao();
 			mmd.markWatchDoneByMusicIdAndUserId(musicId, userId);
-			System.out.println("done success");
 		}
 	}
 	
@@ -124,7 +119,6 @@ public class MusicController extends ResourceController {
 		MusicMarkDao mmd = new MusicMarkDao();
 		mmd.rateByMusicIdAndUserId(musicId, userId, Integer.parseInt(request.getParameter("rate")));
 		mmd.markWatchDoneByMusicIdAndUserId(musicId, userId);
-		System.out.println(musicId+"*"+userId+"*"+request.getParameter("rate"));
 	}
 	
 	@RequestMapping("deleteRate/{musicId}")
@@ -142,26 +136,17 @@ public class MusicController extends ResourceController {
 		
 		String redirect = null;
 		String name = request.getParameter("single_search_name");
-		System.out.println("this:"+name);
 		switch(type){
 		case 1: redirect = "redirect:/music/search/Musics="+name+".action";break;
 		case 2: redirect = "redirect:/music/search/Celebrities="+name+".action";break;
 		case 3: redirect = "redirect:/music/search/List="+name+".action";break;
 		}
-		System.out.println(redirect);
-/*		if(type == "movie")
-			redirect = "redirect:/movie/search/Movies="+name+".action";
-		else if(type == "celebrity")
-			redirect = "redirect:/movie/search/Celebrities="+name+".action";
-		else 
-			redirect = "redirect:/movie/search/TribusLists="+name+".action";*/
 		return redirect;
 	}
 	
 	@RequestMapping("search/Musics={musicName}")
 	public ModelAndView searchMusicsByName(HttpServletRequest request, HttpServletResponse response,  
 			@PathVariable("musicName")String musicName){
-		System.out.println("444");
 		User u = GetSessionUser.getUser(request, response);
 		int userId = u.getUserId();
 		UserProfileDao upd = new UserProfileDao();

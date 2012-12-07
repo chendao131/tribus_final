@@ -138,7 +138,6 @@ public class BookDao {
 			List<Book> bs = session.createQuery(sql).setInteger("bookId", bookId)
 					.list();
 			b = bs.get(0);
-			//System.out.println(b.getBookName());
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -179,7 +178,6 @@ public class BookDao {
 			bs = session.createQuery(hql).setString("bookTag", "%"+bookTag.toLowerCase()+"%")
 					.list();
 			b = bs.get(0);
-			System.out.println("success");
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());

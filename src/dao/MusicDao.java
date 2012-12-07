@@ -111,7 +111,6 @@ public class MusicDao {
 			List<Music> ms = session.createQuery(sql).setInteger("musicId", musicId)
 					.list();
 			m = ms.get(0);
-			//System.out.println(b.getBookName());
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -146,7 +145,6 @@ public class MusicDao {
 				List<Music> ms = session.createQuery(sql).list();
 				hotMusics.add(ms.get(0));
 			}
-			//System.out.println(b.getBookName());
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -163,10 +161,8 @@ public class MusicDao {
 			List<Music> ms = session.createQuery(sql).setString("musicName", musicName)
 					.list();
 			m = ms.get(0);
-			//System.out.println(b.getBookName());
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println(e.getMessage());
 		}
 		return m;		
 	}

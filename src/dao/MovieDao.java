@@ -229,7 +229,6 @@ public class MovieDao {
 		Session session = TribusHibernateSessionFactory.currentSession();
 		try{
 			 recentHotMovies = session.createQuery(sql).list();
-			 System.out.println("success");
 		} catch (Exception e){
 			e.printStackTrace();
 		}
